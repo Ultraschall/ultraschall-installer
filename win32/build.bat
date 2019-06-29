@@ -32,7 +32,7 @@ echo Done.
 
 if not exist ultraschall-plugin (
   echo Downloading Ultraschall REAPER Plug-in...
-  git clone https://github.com/Ultraschall/ultraschall-3.git ultraschall-plugin
+  git clone -b 3.2 https://github.com/Ultraschall/ultraschall-3.git ultraschall-plugin
   if not exist ultraschall-plugin (
     echo Failed to download Ultraschall REAPER Plug-in.
     goto failed
@@ -59,6 +59,21 @@ if not exist ultraschall-portable (
 ) else (
   echo Updating Ultraschall REAPER API...
   pushd ultraschall-portable
+  git pull
+  popd
+)
+echo Done.
+
+if not exist ultraschall-assets (
+  echo Downloading Ultraschall REAPER Resources...
+  git clone -b 3.2 https://github.com/Ultraschall/ultraschall-assets.git ultraschall-assets
+  if not exist ultraschall-assets (
+    echo Failed to download Ultraschall REAPER API.
+    goto failed
+  )
+) else (
+  echo Updating Ultraschall REAPER Resources...
+  pushd ultraschall-assets
   git pull
   popd
 )

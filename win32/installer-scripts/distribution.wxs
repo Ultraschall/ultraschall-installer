@@ -62,11 +62,10 @@
             <Component Id="UltraschallAddonsComponent" Guid="C0213247-331D-4004-A6AA-5943351DD48A" Win64="yes">
               <RemoveFolder Id="RemoveUltraschallAddonsComponent" Directory="UltraschallAddonFolder" On="uninstall" />
               <RegistryValue Root="HKCU" Key="Software\Ultraschall" Name="Uninstall" Type="string" Value="1.0.0.0" KeyPath="yes" />
-              <File Id="ResAppIcon" Name="Ultraschall App-Icon.png" DiskId="1" Source=".\build\ultraschall-plugin\Resources\Ultraschall App-Icon.png" />
-              <File Id="ResWebbanner" Name="Ultraschall Webbanner.pdf" DiskId="1" Source=".\build\ultraschall-plugin\Resources\Ultraschall Webbanner.pdf" />
-              <File Id="ResWebbanner400" Name="Ultraschall Webbanner 400px.png" DiskId="1" Source=".\build\ultraschall-plugin\Resources\Ultraschall Webbanner 400px.png" />
-              <File Id="ResWebbanner800" Name="Ultraschall Webbanner 800px.png" DiskId="1" Source=".\build\ultraschall-plugin\Resources\Ultraschall Webbanner 800px.png" />
-              <File Id="ResWebbanner2000" Name="Ultraschall Webbanner 2000px.jpg" DiskId="1" Source=".\build\ultraschall-plugin\Resources\Ultraschall Webbanner 2000px.jpg" />
+              <File Id="ResAppIcon" Name="Ultraschall App-Icon.png" DiskId="1" Source=".\build\ultraschall-assets\icons\Ultraschall App-Icon.png" />
+              <File Id="ResWebbanner400" Name="Ultraschall Webbanner 400px.png" DiskId="1" Source=".\build\ultraschall-assets\source\us-banner_400.png" />
+              <File Id="ResWebbanner800" Name="Ultraschall Webbanner 800px.png" DiskId="1" Source=".\build\ultraschall-assets\source\us-banner_800.png" />
+              <File Id="ResWebbanner2000" Name="Ultraschall Webbanner 2000px.jpg" DiskId="1" Source=".\build\ultraschall-assets\source\us-banner_2000.png" />
             </Component>
           </Directory>
         </Directory>
