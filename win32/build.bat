@@ -7,7 +7,7 @@ echo *                                                                    *
 echo **********************************************************************
 
 rem Specify build directory
-set ULTRASCHALL_BUILD_DIRECTORY=build
+set ULTRASCHALL_BUILD_DIRECTORY=_build
 
 rem Create folder for intermediate data
 if not exist %ULTRASCHALL_BUILD_DIRECTORY% (
@@ -68,7 +68,7 @@ if not exist ultraschall-assets (
   echo Downloading Ultraschall REAPER Resources...
   git clone -b 3.2 https://github.com/Ultraschall/ultraschall-assets.git ultraschall-assets
   if not exist ultraschall-assets (
-    echo Failed to download Ultraschall REAPER API.
+    echo Failed to download Ultraschall REAPER Resources.
     goto failed
   )
 ) else (

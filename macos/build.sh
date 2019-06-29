@@ -1,161 +1,298 @@
 #!/bin/sh
 
-export ULTRASCHALL_RELEASE=ULTRASCHALL-3.2-build495
-export ULTRASCHALL_RELEASE_DISK_READ_WRITE=$ULTRASCHALL_RELEASE.readwrite.dmg
-export ULTRASCHALL_RELEASE_DISK_READ_ONLY=$ULTRASCHALL_RELEASE.dmg
-export ULTRASCHALL_RELEASE_INTERMEDIATE=$ULTRASCHALL_RELEASE.intermediate
+echo "**********************************************************************"
+echo "*                                                                    *"
+echo "*            BUILDING ULTRASCHALL INSTALLER PACKAGE                  *"
+echo "*                                                                    *"
+echo "**********************************************************************"
 
-# Cleanup old installer image
-if [ -f ./$ULTRASCHALL_RELEASE_DISK_READ_ONLY ]; then
-  rm -f ./$ULTRASCHALL_RELEASE_DISK_READ_ONLY
+# Specify build directory
+ULTRASCHALL_BUILD_DIRECTORY='./_build'
+
+# Create folder for intermediate data
+if [ ! -d $ULTRASCHALL_BUILD_DIRECTORY ]; then
+  mkdir $ULTRASCHALL_BUILD_DIRECTORY
 fi
 
-# Cleanup temporary _intermediate directory
-if [ -d ./_intermediate ]; then
-  rm -rf ._intermediate
+# Enter %ULTRASCHALL_BUILD_DIRECTORY% folder
+pushd $ULTRASCHALL_BUILD_DIRECTORY > /dev/null
+
+if [ ! -d pandoc-tool ]; then
+  echo "Downloading Pandoc Universal Markup Converter..."
+
+  mkdir pandoc-tool && pushd pandoc-tool > /dev/null
+
+  curl -LO https://github.com/jgm/pandoc/releases/download/2.7.3/pandoc-2.7.3-macOS.zip;
+  if [ $? -ne 0 ]; then
+    echo "Failed to download Pandoc Universal Markup Converter."
+    exit -1
+  fi
+  unzip pandoc-2.7.3-macOS.zip;
+  if [ $? -ne 0 ]; then
+    echo "Failed to install Pandoc Universal Markup Converter."
+    exit -1
+  fi
+
+  popd > /dev/null
+  echo "Done."
 fi
-mkdir ./_intermediate
 
-# Cleanup temporary _build directory
-# if [ -d ./_build ]; then
-#   rm -rf ./_build
-# fi
-mkdir -p ./_build
-
-# Cleanup temporary _payload directory
-if [ -d ./_payload ]; then
-  rm -rf ./_payload
+if [ ! -d ultraschall-plugin ]; then
+  echo "Downloading Ultraschall REAPER Plug-in..."
+  git clone -b 3.2 https://github.com/Ultraschall/ultraschall-3.git ultraschall-plugin
+  if [ ! -d ultraschall-plugin ]; then
+    echo "Failed to download Ultraschall REAPER Plug-in."
+    exit -1
+  fi
+else
+  echo "Updating Ultraschall REAPER Plug-in..."
+  pushd ultraschall-plugin > /dev/null
+  git pull
+  popd > /dev/null
 fi
-mkdir -p ./_payload
-mkdir -p ./_payload/Add-ons
+echo "Done."
 
-# Build and copy release notes to _payload directory
-pandoc --from=markdown --to=html --standalone --self-contained --quiet --css=../Tools/ultraschall.css --output=./_payload/README.html ../Docs/Release/README.md
-pandoc --from=markdown --to=html --standalone --self-contained --quiet --css=../Tools/ultraschall.css --output=./_payload/INSTALL.html ../Docs/Release/INSTALL.md
-pandoc --from=markdown --to=html --standalone --self-contained --quiet --css=../Tools/ultraschall.css --output=./_payload/CHANGELOG.html ../Docs/Release/CHANGELOG.md
+if [ ! -d ultraschall-portable ]; then
+  echo "Downloading Ultraschall REAPER API..."
+  git clone https://github.com/Ultraschall/ultraschall-portable.git ultraschall-portable
+  if [ ! -d ultraschall-portable ]; then
+    echo "Failed to download Ultraschall REAPER API."
+    exit -1
+  fi
+else
+  echo "Updating Ultraschall REAPER API..."
+  pushd ultraschall-portable > /dev/null
+  git pull
+  popd > /dev/null
+fi
+echo "Done."
 
-# Copy uninstall script to _payload directory
-cp ../Scripts/Uninstall.command ./_payload/Uninstall.command
+if [ ! -d ultraschall-assets ]; then
+  echo "Downloading Ultraschall REAPER Resources..."
+  git clone -b 3.2 https://github.com/Ultraschall/ultraschall-assets.git ultraschall-assets
+  if [ ! -d ultraschall-assets ]; then
+    echo "Failed to download Ultraschall REAPER Resources."
+    exit -1
+  fi
+else
+  echo "Updating Ultraschall REAPER Resources..."
+  pushd ultraschall-assets > /dev/null
+  git pull
+  popd > /dev/null
+fi
+echo "Done."
 
-# Copy removal script to _payload directory
-cp ../Scripts/Remove\ legacy\ audio\ devices.command ./_payload/Remove\ legacy\ audio\ devices.command
+echo "Creating installer root directory..."
+if [ ! -d installer-root ]; then
+  mkdir installer-root
+fi
+echo "Done."
 
-# Copy resources to _payload 'Add-ons' directory
-cp ../Docs/Release/Keymap.pdf ./_payload/Add-ons/Ultraschall\ Keyboard\ Layout.pdf
-cp ../Docs/Release/Keymap.pptx ./_payload/Add-ons/Ultraschall\ Keyboard\ Layout.pptx
-cp ../Resources/Ultraschall\ App-Icon.png ./_payload/Add-ons/Ultraschall\ App-Icon.png
-cp ../Resources/Ultraschall\ Webbanner.pdf ./_payload/Add-ons/Ultraschall\ Webbanner.pdf
-cp ../Resources/Ultraschall\ Webbanner\ 400px.png ./_payload/Add-ons/Ultraschall\ Webbanner\ 400px.png
-cp ../Resources/Ultraschall\ Webbanner\ 800px.png ./_payload/Add-ons/Ultraschall\ Webbanner\ 800px.png
-cp ../Resources/Ultraschall\ Webbanner\ 2000px.jpg ./_payload/Add-ons/Ultraschall\ Webbanner\ 2000px.jpg
+echo "Copying installer background image..."
+if [ ! -d installer-root/.background ]; then
+  mkdir installer-root/.background
+fi
+cp ../installer-resources/image-background.png installer-root/.background/background.png
+echo "Done."
 
-# Copy REAPER theme to _payload directory
-cp ../Themes/Ultraschall_3.1_MAC.ReaperConfigZip ./_payload/Ultraschall_3.1.ReaperConfigZip
+echo "Building Ultraschall documentation files..."
+pandoc-tool/pandoc-2.7.3/bin/pandoc --from=markdown --to=html --standalone --self-contained --quiet --css=../installer-scripts/ultraschall.css --output=installer-root/README.html ultraschall-plugin/docs/README.md
+pandoc-tool/pandoc-2.7.3/bin/pandoc --from=markdown --to=html --standalone --self-contained --quiet --css=../installer-scripts/ultraschall.css --output=installer-root/INSTALL.html ultraschall-plugin/docs/INSTALL.md
+pandoc-tool/pandoc-2.7.3/bin/pandoc --from=markdown --to=html --standalone --self-contained --quiet --css=../installer-scripts/ultraschall.css --output=installer-root/CHANGELOG.html ultraschall-plugin/docs/CHANGELOG.md
+echo "Done."
 
-# Copy background image to _payload directory
-mkdir ./_payload/.background
-cp ./Resources/backgroundv3.png ./_payload/.background/background.png
+echo "Copying utility scripts..."
+cp ../ultraschall-scripts/Uninstall.command installer-root/Uninstall.command
+echo "Done."
 
-# Create Ultraschall REAPER Extension package
-cd ./_build
-cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release ../../Plugin
+echo "Copying Ultraschall Extras..."
+if [ ! -d installer-root/Extras ]; then
+  mkdir installer-root/Extras
+fi
+cp ultraschall-assets/keyboard-layout/Keymap.pdf "installer-root/Extras/Ultraschall Keyboard Layout.pdf"
+cp ultraschall-assets/source/us-banner_400.png "installer-root/Extras/Ultraschall Badge 400px.png"
+cp ultraschall-assets/source/us-banner_800.png "installer-root/Extras/Ultraschall Badge 800px.png"
+cp ultraschall-assets/source/us-banner_2000.png "installer-root/Extras/Ultraschall Badge 2000px.png"
+echo "Done."
+
+echo "Copying Ultraschall REAPER Theme..."
+cp ../ultraschall-theme/Ultraschall_3.2.ReaperConfigZip installer-root/Ultraschall_3.2.ReaperConfigZip
+echo "Done."
+
+echo "Copying Ultraschall Utilities..."
+if [ ! -d installer-root/Utilities ]; then
+  mkdir installer-root/Utilities
+fi
+cp ../ultraschall-hub/UltraschallHub-2015-11-12.pkg "installer-root/Utilities/Ultraschall Hub.pkg"
+cp "../ultraschall-scripts/Remove legacy audio devices.command" "installer-root/Utilities/Remove legacy audio devices.command"
+echo "Done."
+
+echo "Building Ultraschall REAPER Plug-in"
+pushd ultraschall-plugin > /dev/null
+git describe --tags > ../version.txt
+if [ ! -d build ]; then
+ mkdir build
+fi
+pushd build > /dev/null
+cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release ../
+if [ $? -ne 0 ]; then
+  echo "Failed to configure Ultraschall REAPER Plug-in."
+  exit -1
+fi
 cmake --build . --target reaper_ultraschall --config Release
-cd ..
-pkgbuild --root ./_build/src/Release --scripts ./Scripts/Plugin --identifier fm.ultraschall.Plugin.Extension --install-location /Library/Application\ Support/REAPER/UserPlugins ./_build/UltraschallPlugin.pkg
+if [ $? -ne 0 ]; then
+  echo "Failed to build Ultraschall REAPER Plug-in."
+  exit -1
+fi
+popd > /dev/null
+popd > /dev/null
+echo "Done."
 
-# Download current Ultraschall API files
-git clone https://github.com/Ultraschall/ultraschall-portable.git ./_build/ultraschall-portable
-mkdir -p ./_build/api_root/ultraschall_api
-cp -r ./_build/ultraschall-portable/UserPlugins/ultraschall_api ./_build/api_root
-rm -rf ./_build/ultraschall-portable
+echo "Building ULTRASCHALL REAPER API..."
+if [ ! -d ultraschall-api ]; then
+  mkdir ultraschall-api
+fi
+if [ ! -d ultraschall-api/ultraschall_api ]; then
+  mkdir ultraschall-api/ultraschall_api
+fi
+cp -r ultraschall-portable/UserPlugins/ultraschall_api ultraschall-api
+echo "Done."
 
-# Create Ultraschall API package
-pkgbuild --root ./_build/api_root --identifier fm.ultraschall.api --install-location /Library/Application\ Support/REAPER/UserPlugins ./_build/UltraschallAPI.pkg
+echo "Creating installer packages directory..."
+if [ ! -d installer-packages ]; then
+ mkdir installer-packages
+fi
+echo "Done."
 
-# Create Ultraschall Soundboard package
-pkgbuild --root ./3rdParty/Soundboard/Macintosh --identifier fm.ultraschall.Soundboard.Component --install-location /Library/Audio/Plug-Ins/Components ./_build/UltraschallSoundboard.pkg
+echo "Creating Ultraschall REAPER Plug-in installer package..."
+pkgbuild --root ultraschall-plugin/build/src/Release --identifier fm.ultraschall.reaper.plugin --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/ultraschall-reaper-plugin.pkg
+echo "Done."
 
-# Create ITSR StudioLink package
-pkgbuild --root ./3rdParty/StudioLink/Macintosh --identifier com.itsr.StudioLink.Components --install-location /Library/Audio/Plug-Ins/Components ./_build/StudioLink.pkg
+echo "Creating Ultraschall REAPER API installer package..."
+pkgbuild --root ultraschall-api --identifier fm.ultraschall.reaper.api --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/ultraschall-reaper-api.pkg
+echo "Done."
 
-# Create SWS REAPER Plugin Extension package
-chmod 755 ./3rdParty/SWS/Macintosh/UserPlugins/Scripts/preinstall
-pkgbuild --root ./3rdParty/SWS/Macintosh/UserPlugins/Payload --scripts ./3rdParty/SWS/Macintosh/UserPlugins/Scripts --identifier com.mj-s.sws --install-location /Library/Application\ Support/REAPER/UserPlugins ./_build/SWS_Extension-2.10.0.pkg
+echo "Creating Ultraschall Soundboard installer package..."
+pkgbuild --root ../ultraschall-soundboard/ --identifier fm.ultraschall.soundboard --install-location /Library/Audio/Plug-Ins/Components installer-packages/ultraschall-soundboard.pkg
+echo "Done."
 
-# Create SWS REAPER Plugin Scripts package
-chmod 755 ./3rdParty/SWS/Macintosh/Scripts/Scripts/preinstall
-pkgbuild --root ./3rdParty/SWS/Macintosh/Scripts/Payload --scripts ./3rdParty/SWS/Macintosh/Scripts/Scripts --identifier com.mj-s.sws.Scripts --install-location /Library/Application\ Support/REAPER/Scripts ./_build/SWS_ExtensionScripts-2.10.0.pkg
+echo "Creating StudioLink installer packager..."
+pkgbuild --root ../studio-link --identifier fm.ultraschall.studiolink --install-location /Library/Audio/Plug-Ins/Components installer-packages/studio-link.pkg
+echo "Done."
 
-# Create Ultraschall Resources package
-pkgbuild --root ../Resources --identifier fm.ultraschall.Resources --install-location /Library/Application\ Support/Ultraschall ./_build/UltraschallResources.pkg
+echo "Creating StudioLink OnAir installer packager..."
+pkgbuild --root ../studio-link-onair --identifier fm.ultraschall.studiolink.onair --install-location /Library/Audio/Plug-Ins/Components installer-packages/studio-link-onair.pkg
+echo "Done."
 
-# Create Ultraschall Soundflower Uninstaller package
-pkgbuild --scripts ../Tools/SoundflowerUninstaller/Scripts --nopayload --identifier fm.ultraschall.SoundflowerUninstaller ./_build/UltraschallSoundflowerUninstaller.pkg
+echo "Creating REAPER SWS Extension installer package..."
+pkgbuild --root ../sws-extension --identifier fm.ultraschall.reaper.sws --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/reaper-sws-extension.pkg
+echo "Done."
 
-# Copy Ultraschall Hub package
-cp ./3rdParty/Hub/UltraschallHub-2015-11-12.pkg ./_payload/UltraschallHub.pkg
+echo "Creating intermediate installer package..."
+if [ ! -d ultraschall-product ]; then
+ mkdir ultraschall-product
+fi
+productbuild --distribution ../installer-scripts/distribution.xml --resources ../installer-resources --package-path installer-packages ultraschall-product/ultraschall-intermediate.pkg
+if [ $? -ne 0 ]; then
+  echo "Failed to build intermediate installer package."
+  exit -1
+fi
+echo "Done."
 
-# Create preliminary unsigned installer package
-productbuild --distribution ./Scripts/distribution.xml --resources ./Resources --package-path ./_build ./_payload/Ultraschall-unsigned.pkg
+echo "Creating final installer package..."
+ULTRASCHALL_BUILD_ID=$(<version.txt)
+ULTRASCHALL_BUILD_NAME="ULTRASCHALL-$ULTRASCHALL_BUILD_ID"
+productsign --sign "Developer ID Installer: Heiko Panjas (8J2G689FCZ)" ultraschall-product/ultraschall-intermediate.pkg "installer-root/$ULTRASCHALL_BUILD_NAME.pkg"
+if [ $? -ne 0 ]; then
+  echo "Failed to build final installer package."
+  exit -1
+fi
+echo "Done."
 
-# Create final signed installer package
-productsign --sign "Developer ID Installer: Heiko Panjas (8J2G689FCZ)" ./_payload/Ultraschall-unsigned.pkg ./_payload/$ULTRASCHALL_RELEASE.pkg
-rm -f ./_payload/Ultraschall-unsigned.pkg
+echo "Creating intermediate installer disk image..."
+if [ -f ultraschall-product/ultraschall-intermediate.dmg ]; then
+  rm ultraschall-product/ultraschall-intermediate.dmg
+fi
+hdiutil create -format UDRW -srcfolder installer-root -fs HFS+ -volname $ULTRASCHALL_BUILD_NAME ultraschall-product/ultraschall-intermediate.dmg
+if [ $? -ne 0 ]; then
+  echo "Failed to create intermediate installer disk image."
+  exit -1
+fi
+echo "Done."
 
-# Create installer disk image
-hdiutil create -format UDRW -srcfolder ./_payload -fs HFS+ -volname $ULTRASCHALL_RELEASE ./$ULTRASCHALL_RELEASE_DISK_READ_WRITE
-
-# Mount installer disk image
-mkdir -p ./$ULTRASCHALL_RELEASE_INTERMEDIATE
-hdiutil attach -mountpoint ./$ULTRASCHALL_RELEASE_INTERMEDIATE ./$ULTRASCHALL_RELEASE_DISK_READ_WRITE
-
-# Create signature on uninstall script
-codesign --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" ./$ULTRASCHALL_RELEASE_INTERMEDIATE/Uninstall.command
-
-# Create signature on removal script
-codesign --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" ./$ULTRASCHALL_RELEASE_INTERMEDIATE/Remove\ legacy\ audio\ devices.command
-
-echo Creating disk layout...
-echo '
-   tell application "Finder"
-     tell disk "ULTRASCHALL-3.2-build495.intermediate"
-           open
-           set current view of container window to icon view
-           set toolbar visible of container window to false
-           set statusbar visible of container window to false
-           set the bounds of container window to {100, 100, 800, 540}
-           set viewOptions to the icon view options of container window
-           set arrangement of viewOptions to not arranged
-           set background picture of viewOptions to file ".background:background.png"
-           set position of item "ULTRASCHALL-3.2-build495.pkg" of container window to {50, 30}
-           set position of item "Ultraschall_3.1.ReaperConfigZip" of container window to {200, 30}
-           set position of item "README.html" of container window to {50, 135}
-           set position of item "INSTALL.html" of container window to {200, 135}
-           set position of item "CHANGELOG.html" of container window to {350, 135}
-           set position of item "UltraschallHub.pkg" of container window to {50, 220}
-           set position of item "Add-ons" of container window to {200, 220}
-           set position of item "Uninstall.command" of container window to {50, 320}
-           set position of item "Remove legacy audio devices.command" of container window to {200, 320}
-           close
-           open
-           update without registering applications
-           delay 2
-     end tell
-   end tell
-' | osascript
-echo done.
+echo "Mounting intermediate installer disk image..."
+if [ ! -d ultraschall-intermediate ]; then
+  mkdir ultraschall-intermediate
+fi
+hdiutil attach -mountpoint ultraschall-intermediate ultraschall-product/ultraschall-intermediate.dmg
+if [ $? -ne 0 ]; then
+  echo "Failed to mount intermediate installer disk image."
+  exit -1
+fi
+echo "Done."
 
 sync
 
-# Unmount installer disk image
-hdiutil detach ./$ULTRASCHALL_RELEASE_INTERMEDIATE
+# FIXME
+# codesign --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" ultraschall-intermediate/Uninstall.command
+# codesign --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" "ultraschall-intermediate/Utilities/Remove legacy audio devices.command"
 
-# Convert installer disk image
-hdiutil convert -format UDRO -o ./$ULTRASCHALL_RELEASE_DISK_READ_ONLY ./$ULTRASCHALL_RELEASE_DISK_READ_WRITE
 
-# Clean-up
-rm -rf ./$ULTRASCHALL_RELEASE_INTERMEDIATE
-rm -rf ./$ULTRASCHALL_RELEASE_DISK_READ_WRITE
-rm -rf ./_payload
-rm -rf ./_intermediate
-# rm -rf ./_build
+echo "Creating installer disk window layout..."
+echo "tell application \"Finder\"" > create-window-layout.script
+echo "  tell disk \"ultraschall-intermediate\"" >> create-window-layout.script
+echo "        open" >> create-window-layout.script
+echo "        set current view of container window to icon view" >> create-window-layout.script
+echo "        set toolbar visible of container window to false" >> create-window-layout.script
+echo "        set statusbar visible of container window to false" >> create-window-layout.script
+echo "        set the bounds of container window to {100, 100, 800, 540}" >> create-window-layout.script
+echo "        set viewOptions to the icon view options of container window" >> create-window-layout.script
+echo "        set arrangement of viewOptions to not arranged" >> create-window-layout.script
+echo "        set background picture of viewOptions to file \".background:background.png\"" >> create-window-layout.script
+echo "        set position of item \"$ULTRASCHALL_BUILD_NAME.pkg\" of container window to {50, 30}" >> create-window-layout.script
+echo "        set position of item \"Ultraschall_3.2.ReaperConfigZip\" of container window to {200, 30}" >> create-window-layout.script
+echo "        set position of item \"README.html\" of container window to {50, 140}" >> create-window-layout.script
+echo "        set position of item \"INSTALL.html\" of container window to {200, 140}" >> create-window-layout.script
+echo "        set position of item \"CHANGELOG.html\" of container window to {350, 140}" >> create-window-layout.script
+echo "        set position of item \"Extras\" of container window to {50, 230}" >> create-window-layout.script
+echo "        set position of item \"Uninstall.command\" of container window to {50, 330}" >> create-window-layout.script
+echo "        set position of item \"Utilities\" of container window to {200, 230}" >> create-window-layout.script
+echo "        close" >> create-window-layout.script
+echo "        open" >> create-window-layout.script
+echo "        update without registering applications" >> create-window-layout.script
+echo "        delay 2" >> create-window-layout.script
+echo "  end tell" >> create-window-layout.script
+echo "end tell" >> create-window-layout.script
+osascript create-window-layout.script
+if [ $? -ne 0 ]; then
+  echo "Failed to create installer disk window layout."
+  exit -1
+fi
+echo "Done."
+
+# this is very very required
+sync
+
+echo "Unmounting intermediate installer disk image..."
+hdiutil detach ultraschall-intermediate
+if [ $? -ne 0 ]; then
+  echo "Failed to unmount intermediate installer disk image."
+  exit -1
+fi
+echo "Done."
+
+sync
+
+echo "Finalizing installer disk image..."
+if [ -f "../$ULTRASCHALL_BUILD_NAME.dmg" ]; then
+  rm "../$ULTRASCHALL_BUILD_NAME.dmg"
+fi
+hdiutil convert -format UDRO -o "../$ULTRASCHALL_BUILD_NAME.dmg" ultraschall-product/ultraschall-intermediate.dmg
+if [ $? -ne 0 ]; then
+  echo "Failed to finalize installer disk image."
+  exit -1
+fi
+echo "Done."
+
+popd > /dev/null
+exit 0
