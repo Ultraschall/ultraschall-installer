@@ -89,11 +89,11 @@ if not exist microsoft-redist (
 
 echo Building Ultraschall documentation files...
 if not exist ultraschall-resources mkdir ultraschall-resources
-pandoc-tool\pandoc-2.7.3-windows-x86_64\pandoc.exe --from=markdown --to=html --standalone --quiet --self-contained --css=..\installer-scripts\ultraschall.css --output=ultraschall-resources\README.html ultraschall-plugin\Docs\Release\README.md
+pandoc-tool\pandoc-2.7.3-windows-x86_64\pandoc.exe --from=markdown --to=html --standalone --quiet --self-contained --css=..\installer-scripts\ultraschall.css --output=ultraschall-resources\README.html ultraschall-plugin\docs\README.md
 if not errorlevel 0 goto failed
-pandoc-tool\pandoc-2.7.3-windows-x86_64\pandoc.exe --from=markdown --to=html --standalone --quiet --self-contained --css=..\installer-scripts\ultraschall.css --output=ultraschall-resources\INSTALL.html ultraschall-plugin\Docs\Release\INSTALL.md
+pandoc-tool\pandoc-2.7.3-windows-x86_64\pandoc.exe --from=markdown --to=html --standalone --quiet --self-contained --css=..\installer-scripts\ultraschall.css --output=ultraschall-resources\INSTALL.html ultraschall-plugin\docs\INSTALL.md
 if not errorlevel 0 goto failed
-pandoc-tool\pandoc-2.7.3-windows-x86_64\pandoc.exe --from=markdown --to=html --standalone --quiet --self-contained --css=..\installer-scripts\ultraschall.css --output=ultraschall-resources\CHANGELOG.html ultraschall-plugin\Docs\Release\CHANGELOG.md
+pandoc-tool\pandoc-2.7.3-windows-x86_64\pandoc.exe --from=markdown --to=html --standalone --quiet --self-contained --css=..\installer-scripts\ultraschall.css --output=ultraschall-resources\CHANGELOG.html ultraschall-plugin\docs\CHANGELOG.md
 if not errorlevel 0 goto failed
 echo Done.
 
@@ -101,7 +101,7 @@ echo Building Ultraschall REAPER Plug-in...
 pushd ultraschall-plugin
 if not exist build mkdir build
 pushd build
-cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_BUILD_TYPE=Release ../Plugin
+cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_BUILD_TYPE=Release ../
 if not errorlevel 0 goto failed
 cmake --build . --target reaper_ultraschall --config Release -j
 if not errorlevel 0 goto failed
