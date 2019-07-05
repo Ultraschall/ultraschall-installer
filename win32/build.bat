@@ -11,7 +11,7 @@ set ULTRASCHALL_BUILD_DIRECTORY=_build
 
 rem Create folder for intermediate data
 if not exist %ULTRASCHALL_BUILD_DIRECTORY% (
-    mkdir %ULTRASCHALL_BUILD_DIRECTORY%
+  mkdir %ULTRASCHALL_BUILD_DIRECTORY%
 )
 
 rem Enter %ULTRASCHALL_BUILD_DIRECTORY% folder
@@ -27,27 +27,28 @@ if not exist pandoc-tool (
     echo Failed to download Pandoc Universal Markup Converter.
     goto failed
   )
+  echo Done.
 )
-echo Done.
 
 if not exist ultraschall-plugin (
   echo Downloading Ultraschall REAPER Plug-in...
-  git clone -b 3.2 https://github.com/Ultraschall/ultraschall-3.git ultraschall-plugin
+  git clone -b develop https://github.com/Ultraschall/ultraschall-plugin.git ultraschall-plugin
   if not exist ultraschall-plugin (
     echo Failed to download Ultraschall REAPER Plug-in.
     goto failed
   )
+  echo Done.
 ) else (
   echo Updating Ultraschall REAPER Plug-in...
   pushd ultraschall-plugin
   git pull
   popd
+  echo Done.
 )
 pushd ultraschall-plugin
 git describe --tags > ..\version.txt
 set /p ULTRASCHALL_BUILD_ID= < ..\version.txt
 popd
-echo Done.
 
 if not exist ultraschall-portable (
   echo Downloading Ultraschall REAPER API...
@@ -61,8 +62,8 @@ if not exist ultraschall-portable (
   pushd ultraschall-portable
   git pull
   popd
+  echo Done.
 )
-echo Done.
 
 if not exist ultraschall-assets (
   echo Downloading Ultraschall REAPER Resources...
@@ -71,13 +72,14 @@ if not exist ultraschall-assets (
     echo Failed to download Ultraschall REAPER Resources.
     goto failed
   )
+  echo Done.
 ) else (
   echo Updating Ultraschall REAPER Resources...
   pushd ultraschall-assets
   git pull
   popd
+  echo Done.
 )
-echo Done.
 
 if not exist microsoft-redist (
   echo Copying Microsoft Visual C++ 2019 CRT...
@@ -99,9 +101,9 @@ echo Done.
 
 echo Building Ultraschall REAPER Plug-in...
 pushd ultraschall-plugin
-if not exist build mkdir build
-pushd build
-cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_BUILD_TYPE=Release ../
+if not exist _build mkdir _build
+pushd _build
+cmake -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release ../
 if not errorlevel 0 goto failed
 cmake --build . --target reaper_ultraschall --config Release -j
 if not errorlevel 0 goto failed
@@ -112,7 +114,7 @@ echo Done.
 echo Copying Ultraschall API files...
 if not exist ultraschall-api mkdir ultraschall-api
 pushd ultraschall-api
-xcopy ..\ultraschall-portable\UserPlugins\ultraschall_api /s /e /y /c
+xcopy ..\ultraschall-portable\UserPlugins\ultraschall_api /s /e /y /c > nul
 if not errorlevel 0 goto failed
 popd
 echo Done.
