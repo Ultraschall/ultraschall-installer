@@ -30,9 +30,22 @@ if not exist pandoc-tool (
   echo Done.
 )
 
+if not exist wix-tool (
+  echo Downloading WiX Toolset...
+  mkdir wix-tool && pushd wix-tool
+  curl -LO https://github.com/wixtoolset/wix3/releases/download/wix3111rtm/wix311-binaries.zip
+  unzip wix311-binaries.zip
+  popd
+  if not exist wix-tool\candle.exe (
+    echo Failed to download WiX Toolset.
+    goto failed
+  )
+  echo Done.
+)
+
 if not exist ultraschall-plugin (
   echo Downloading Ultraschall REAPER Plug-in...
-  git clone -b develop https://github.com/Ultraschall/ultraschall-plugin.git ultraschall-plugin
+  git clone --branch develop --depth 1 https://github.com/Ultraschall/ultraschall-plugin.git ultraschall-plugin
   if not exist ultraschall-plugin (
     echo Failed to download Ultraschall REAPER Plug-in.
     goto failed
@@ -52,7 +65,7 @@ popd
 
 if not exist ultraschall-portable (
   echo Downloading Ultraschall REAPER API...
-  git clone https://github.com/Ultraschall/ultraschall-portable.git ultraschall-portable
+  git clone --depth 1 https://github.com/Ultraschall/ultraschall-portable.git ultraschall-portable
   if not exist ultraschall-portable (
     echo Failed to download Ultraschall REAPER API.
     goto failed
@@ -67,7 +80,7 @@ if not exist ultraschall-portable (
 
 if not exist ultraschall-assets (
   echo Downloading Ultraschall REAPER Resources...
-  git clone -b 3.2 https://github.com/Ultraschall/ultraschall-assets.git ultraschall-assets
+  git clone --branch 3.2 --depth 1 https://github.com/Ultraschall/ultraschall-assets.git ultraschall-assets
   if not exist ultraschall-assets (
     echo Failed to download Ultraschall REAPER Resources.
     goto failed
@@ -124,9 +137,9 @@ popd
 
 echo Building installer package...
 set ULTRASCHALL_BUILD_NAME=ULTRASCHALL-%ULTRASCHALL_BUILD_ID%
-candle -nologo -arch x64 -out %ULTRASCHALL_BUILD_DIRECTORY%\%ULTRASCHALL_BUILD_NAME%.wixobj installer-scripts\distribution.wxs
+%ULTRASCHALL_BUILD_DIRECTORY%\wix-tool\candle.exe -nologo -arch x64 -out %ULTRASCHALL_BUILD_DIRECTORY%\%ULTRASCHALL_BUILD_NAME%.wixobj installer-scripts\distribution.wxs
 if not errorlevel 0 goto failed
-light -nologo -sw1076 -ext WixUIExtension -cultures:en-us -spdb %ULTRASCHALL_BUILD_DIRECTORY%\%ULTRASCHALL_BUILD_NAME%.wixobj -out %ULTRASCHALL_BUILD_NAME%.msi
+%ULTRASCHALL_BUILD_DIRECTORY%\wix-tool\light.exe -nologo -sw1076 -ext WixUIExtension -cultures:en-us -spdb %ULTRASCHALL_BUILD_DIRECTORY%\%ULTRASCHALL_BUILD_NAME%.wixobj -out %ULTRASCHALL_BUILD_NAME%.msi
 if not errorlevel 0 goto failed
 echo Done.
 

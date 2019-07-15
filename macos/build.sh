@@ -39,7 +39,7 @@ fi
 
 if [ ! -d ultraschall-plugin ]; then
   echo "Downloading Ultraschall REAPER Plug-in..."
-  git clone -b 3.2 https://github.com/Ultraschall/ultraschall-3.git ultraschall-plugin
+  git clone -b develop https://github.com/Ultraschall/ultraschall-3.git ultraschall-plugin
   if [ ! -d ultraschall-plugin ]; then
     echo "Failed to download Ultraschall REAPER Plug-in."
     exit -1
