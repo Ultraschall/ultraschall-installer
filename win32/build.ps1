@@ -148,7 +148,7 @@ if ($BuildFailed -eq $False) {
     Write-Host "Done."
   }
   else {
-    Write-Host "Ultraschall REAPER Resources..."
+    Write-Host "Updating Ultraschall REAPER Resources..."
     Push-Location $AssetsDirectory
     git pull
     Pop-Location
@@ -161,7 +161,7 @@ if ($BuildFailed -eq $False) {
   if ((Test-Path -PathType Container $RedistDirectory) -eq $False) {
     Write-Host "Copying Microsoft Visual C++ 2019 CRT..."
     New-Item -ItemType Directory -Path $RedistDirectory | Out-Null
-    Copy-Item -Force "${env:ProgramFiles(x86)}/Microsoft Visual Studio/2019/Professional/VC/Redist/MSVC/14.21.27702/MergeModules/Microsoft_VC142_CRT_x64.msm" -Destination $RedistDirectory
+    Copy-Item -Force "${env:ProgramFiles(x86)}/Microsoft Visual Studio/2019/Professional/VC/Redist/MSVC/14.22.27821/MergeModules/Microsoft_VC142_CRT_x64.msm" -Destination $RedistDirectory
     if ((Test-Path -PathType Leaf "$RedistDirectory/Microsoft_VC142_CRT_x64.msm") -eq $False) {
       Write-Host -Foreground Red "Failed to copy Microsoft Visual C++ 2019 CRT."
       $BuildFailed = $True
@@ -204,12 +204,10 @@ if ($BuildFailed -eq $False) {
     New-Item -ItemType Directory -Path $BuildDirectory | Out-Null
   }
   Push-Location $BuildDirectory
-  # ../../cmake-tool/cmake-3.15.0-win64-x64/bin/cmake.exe -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release ../
   & $CMakeProgramPath -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release ../
   if ($LASTEXITCODE -ne 0) {
     $BuildFailed = $True
   }
-  # ../../cmake-tool/cmake-3.15.0-win64-x64/bin/cmake.exe --build . --target reaper_ultraschall --config Release -j
   & $CMakeProgramPath --build . --target reaper_ultraschall --config Release -j
   if ($LASTEXITCODE -ne 0) {
     $BuildFailed = $True
