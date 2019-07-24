@@ -13,7 +13,7 @@ Building on macOS requires Xcode 10.3.
 
 ```bash
 $ cd macos/
-$ ./build.ps1
+$ ./build.sh
 ```
 
 ## Linux
