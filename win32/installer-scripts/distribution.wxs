@@ -20,7 +20,7 @@
       <![CDATA[Installed OR (VersionNT >= 601)]]>
     </Condition>
     <Media Id="1" Cabinet="Ultraschall.cab" EmbedCab="yes" DiskPrompt="CD-ROM #1" />
-    <Property Id="DiskPrompt" Value="Ultraschall 3.1 Installation [1]" />
+    <Property Id="DiskPrompt" Value="Ultraschall 3.2 Installation [1]" />
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="AppDataFolder">
         <Directory Id="ReaperFolder" Name="REAPER">
@@ -34,10 +34,28 @@
               <RegistryValue Root="HKCU" Key="Software\Ultraschall" Name="Uninstall" Type="string" Value="1.0.0.0" KeyPath="yes" />
               <File Id="ReaperUltraschallDll" Name="reaper_ultraschall.dll" DiskId="1" Source=".\_build\ultraschall-plugin\_build\src\Release\reaper_ultraschall.dll" />
               <File Name="reaper_sws64.dll" DiskId="1" Source="..\sws-extension\reaper_sws64.dll" />
+              <File Name="sws_python.py" DiskId="1" Source="..\sws-extension\sws_python.py" />
+              <File Name="reaper_js_ReaScriptAPI64.dll" DiskId="1" Source="..\js-extension\reaper_js_ReaScriptAPI64.dll" />
+              <File Name="reaper_reapack64.dll" DiskId="1" Source="..\reapack-extension\reaper_reapack64.dll" />
             </Component>
+            <Directory Id="VstPluginFolder" Name="FX">
+              <Component Id="VstPluginComponent" Guid="A22C272D-F6F2-4564-B9DD-BF385A80F5B3" Win64="yes">
+                <RemoveFolder Id="RemoveVstPluginComponent" Directory="VstPluginFolder" On="uninstall" />
+                <RegistryValue Root="HKCU" Key="Software\Ultraschall" Name="Uninstall" Type="string" Value="1.0.0.0" KeyPath="yes" />
+                <File Name="studio-link.dll" DiskId="1" Source=".\studio-link\studio-link.dll" />
+                <File Name="studio-link-onair.dll" DiskId="1" Source=".\studio-link-onair\studio-link-onair.dll" />
+                <File Name="Soundboard64.dll" DiskId="1" Source=".\ultraschall-soundboard\Soundboard64.dll" />
+              </Component>
+            </Directory>
           </Directory>
         </Directory>
         <Directory Id="UltraschallFolder" Name="Ultraschall">
+          <Component Id="UninstallComponent" Guid="CE844146-A4E9-493F-9E7D-513C81D17811">
+            <RegistryKey Root="HKCU" Key="Software\Ultraschall\Uninstall">
+              <RegistryValue Value="Uninstall Ultraschall" Type="string" KeyPath="yes" />
+            </RegistryKey>
+            <Shortcut Id="UninstallProduct" Name="Uninstall Ultraschall" Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]" Directory="UltraschallFolder" Description="Uninstall Ultraschall" />
+          </Component>
           <Component Id="UltraschallComponent" Guid="9F68E7D5-9D8E-45B9-9AED-3E1137F2466C" Win64="yes">
             <RemoveFolder Id="RemoveUltraschallComponent" Directory="UltraschallFolder" On="uninstall" />
             <RegistryValue Root="HKCU" Key="Software\Ultraschall" Name="Uninstall" Type="string" Value="1.0.0.0" KeyPath="yes" />
@@ -60,19 +78,6 @@
           </Component>
         </Directory>
       </Directory>
-      <Directory Id="ProgramFiles64Folder" Name="Program Files">
-        <Directory Id="SteinbergFolder" Name="Steinberg">
-          <Directory Id="SteinbergPluginFolder" Name="VstPlugins">
-            <Component Id="SteinbergPluginComponent" Guid="A22C272D-F6F2-4564-B9DD-BF385A80F5B3" Win64="yes">
-              <RemoveFolder Id="RemoveSteinbergPluginComponent" Directory="SteinbergPluginFolder" On="uninstall" />
-              <RegistryValue Root="HKCU" Key="Software\Ultraschall" Name="Uninstall" Type="string" Value="1.0.0.0" KeyPath="yes" />
-              <File Name="studio-link.dll" DiskId="1" Source=".\studio-link\studio-link.dll" />
-              <File Name="studio-link-onair.dll" DiskId="1" Source=".\studio-link-onair\studio-link-onair.dll" />
-              <File Name="Soundboard64.dll" DiskId="1" Source=".\ultraschall-soundboard\Soundboard64.dll" />
-            </Component>
-          </Directory>
-        </Directory>
-      </Directory>
       <Directory Id="DesktopFolder" />
       <Directory Id="ProgramMenuFolder">
         <Directory Id="ShortcutsFolder" Name="Ultraschall">
@@ -92,9 +97,11 @@
     <Feature Id="Complete" Level="1">
       <ComponentRef Id="ReaperComponent" />
       <ComponentRef Id="ReaperPluginsComponent" />
-      <ComponentRef Id="SteinbergPluginComponent" />
+      <ComponentRef Id="VstPluginComponent" />
       <ComponentRef Id="UltraschallComponent" />
+      <ComponentRef Id="UninstallComponent" />
       <ComponentRef Id="ShortcutsComponent" />
+      <ComponentGroupRef Id="UltraschallApiFiles" />
     </Feature>
     <UIRef Id="WixUI_Minimal" />
   </Product>

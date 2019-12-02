@@ -83,6 +83,7 @@ if ($BuildFailed -eq $False) {
   if ((Test-Path -PathType Leaf "./pandoc-tool/pandoc-2.7.3-windows-x86_64/pandoc.exe") -ne $False) {
     $CandleProgramPath = Get-ChildItem "./wix-tool/candle.exe" | Select-Object $_.FullName
     $LightProgramPath = Get-ChildItem "./wix-tool/light.exe" | Select-Object $_.FullName
+    $HeatProgramPath = Get-ChildItem "./wix-tool/heat.exe" | Select-Object $_.FullName
   }
   else {
     Write-Host -Foreground Red "Failed to download WiX Toolset."
@@ -113,6 +114,12 @@ if ($BuildFailed -eq $False) {
 if ($BuildFailed -eq $False) {
   Push-Location $PluginDirectory
   $BuildId = (git describe --tags | Out-String).Trim()
+  if ($BuildId.Length -gt 0) {
+    $BuildId = "ULTRASCHALL_" + $BuildId
+  }
+  else {
+    $BuildFailed = $True
+  }
   Pop-Location
 }
 
@@ -189,7 +196,7 @@ if ($BuildFailed -eq $False) {
     }
   }
   if ((Test-Path -PathType Leaf $ResourcesDirectory/CHANGELOG.html) -eq $False) {
-    ./pandoc-tool/pandoc-2.7.3-windows-x86_64/pandoc.exe --from=markdown --to=html --standalone --quiet --self-contained --css=../installer-scripts/ultraschall.css --output=ultraschall-resources/CHANGELOG.html ultraschall-plugin/docs/CHANGELOG.md
+    & $PandocProgramPath --from=markdown --to=html --standalone --quiet --self-contained --css=../installer-scripts/ultraschall.css --output=ultraschall-resources/CHANGELOG.html ultraschall-plugin/docs/CHANGELOG.md
     if ($LASTEXITCODE -ne 0) {
       $BuildFailed = $True
     }
@@ -223,6 +230,8 @@ if ($BuildFailed -eq $False) {
   if ((Test-Path -PathType Container $APIDirectory) -eq $False) {
     New-Item -ItemType Directory -Path $APIDirectory | Out-Null
   }
+  Copy-Item -Force "./ultraschall-portable/UserPlugins/ultraschall_api.lua" -Destination $APIDirectory
+  Copy-Item -Force "./ultraschall-portable/UserPlugins/ultraschall_api_readme.txt" -Destination $APIDirectory
   Push-Location $APIDirectory
   Copy-Item -Force -Recurse "../ultraschall-portable/UserPlugins/ultraschall_api" -Destination $APIDirectory
   if ((Test-Path -PathType Container $APIDirectory/Scripts) -eq $False) {
@@ -238,20 +247,39 @@ Pop-Location
 Write-Host "Done."
 
 $env:ULTRASCHALL_BUILD_ID = $BuildId
+$env:ULTRASCHALL_API_SOURCE = ".\_build\ultraschall-api"
 
 if ($BuildFailed -eq $False) {
-  Write-Host "Building installer package..."
-  & $CandleProgramPath -nologo -arch x64 -out ./_build/$BuildId.wixobj ./installer-scripts/distribution.wxs
-  if ($LASTEXITCODE -ne 0) {
-    $BuildFailed = $True
+  Write-Host "Compiling API Files..."
+  & $HeatProgramPath dir _build\ultraschall-api -nologo -cg UltraschallApiFiles -ag -scom -sreg -sfrag -srd -dr ReaperPluginsFolder -var env.ULTRASCHALL_API_SOURCE -out ./_build/ultraschall_api.wxs
+  if ($LASTEXITCODE -eq 0) {
+    & $CandleProgramPath -nologo -arch x64 -out ./_build/ultraschall_api.wixobj ./_build/ultraschall_api.wxs
+    if ($LASTEXITCODE -ne 0) {
+      $BuildFailed = $True
+    }
   }
-  & $LightProgramPath -nologo -sw1076 -ext WixUIExtension -cultures:en-us -spdb ./_build/$BuildId.wixobj -out "$BuildId.msi"
-  if ($LASTEXITCODE -ne 0) {
+  else {
     $BuildFailed = $True
   }
   Write-Host "Done."
 }
 
+if ($BuildFailed -eq $False) {
+  Write-Host "Building installer package..."
+  & $CandleProgramPath -nologo -arch x64 -out ./_build/distribution.wixobj ./installer-scripts/distribution.wxs
+  if ($LASTEXITCODE -eq 0) {
+    & $LightProgramPath -nologo -sice:ICE64 -sice:ICE38 -sw1076 -ext WixUIExtension -cultures:en-us -spdb -out "$BuildId.msi" ./_build/distribution.wixobj ./_build/ultraschall_api.wixobj
+    if ($LASTEXITCODE -ne 0) {
+      $BuildFailed = $True
+    }
+  }
+  else {
+    $BuildFailed = $True
+  }
+  Write-Host "Done."
+}
+
+$env:ULTRASCHALL_API_SOURCE = ""
 $env:ULTRASCHALL_BUILD_ID = ""
 
 if ($BuildFailed -eq $False) {
