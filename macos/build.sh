@@ -39,7 +39,7 @@ fi
 
 if [ ! -d ultraschall-plugin ]; then
   echo "Downloading Ultraschall REAPER Plug-in..."
-  git clone -b develop https://github.com/Ultraschall/ultraschall-3.git ultraschall-plugin
+  git clone -b develop https://github.com/Ultraschall/ultraschall-plugin.git ultraschall-plugin
   if [ ! -d ultraschall-plugin ]; then
     echo "Failed to download Ultraschall REAPER Plug-in."
     exit -1
@@ -69,7 +69,7 @@ echo "Done."
 
 if [ ! -d ultraschall-assets ]; then
   echo "Downloading Ultraschall REAPER Resources..."
-  git clone -b 3.2 https://github.com/Ultraschall/ultraschall-assets.git ultraschall-assets
+  git clone https://github.com/Ultraschall/ultraschall-assets.git ultraschall-assets
   if [ ! -d ultraschall-assets ]; then
     echo "Failed to download Ultraschall REAPER Resources."
     exit -1
@@ -185,7 +185,7 @@ pkgbuild --root ../studio-link-onair --identifier fm.ultraschall.studiolink.onai
 echo "Done."
 
 echo "Creating REAPER SWS Extension installer package..."
-pkgbuild --root ../sws-extension --identifier fm.ultraschall.reaper.sws --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/reaper-sws-extension.pkg
+pkgbuild --root ../sws-extension/payload --identifier fm.ultraschall.reaper.sws --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/reaper-sws-extension.pkg
 echo "Done."
 
 echo "Creating intermediate installer package..."
