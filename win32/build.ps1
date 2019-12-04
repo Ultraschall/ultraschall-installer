@@ -6,7 +6,7 @@ Write-Host "********************************************************************
 
 # Specify build directory
 $BuildDirectory = "./_build"
-$BuildId = "R3.2_GENERIC"
+$BuildId = "R4.0_GENERIC"
 $BuildFailed = $False
 
 if ((Test-Path -PathType Container $BuildDirectory) -eq $False) {
