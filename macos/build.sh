@@ -134,7 +134,7 @@ if [ ! -d build ]; then
  mkdir build
 fi
 pushd build > /dev/null
-cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release ../
+cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ../
 if [ $? -ne 0 ]; then
   echo "Failed to configure Ultraschall REAPER Plug-in."
   exit -1
