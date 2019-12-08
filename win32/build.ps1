@@ -6,7 +6,7 @@ Write-Host "********************************************************************
 
 # Specify build directory
 $BuildDirectory = "./_build"
-$BuildId = "R3.2_GENERIC"
+$BuildId = "R4.0_GENERIC"
 $BuildFailed = $False
 
 if ((Test-Path -PathType Container $BuildDirectory) -eq $False) {
@@ -168,7 +168,7 @@ if ($BuildFailed -eq $False) {
   if ((Test-Path -PathType Container $RedistDirectory) -eq $False) {
     Write-Host "Copying Microsoft Visual C++ 2019 CRT..."
     New-Item -ItemType Directory -Path $RedistDirectory | Out-Null
-    Copy-Item -Force "${env:ProgramFiles(x86)}/Microsoft Visual Studio/2019/Professional/VC/Redist/MSVC/14.23.27820/MergeModules/Microsoft_VC142_CRT_x64.msm" -Destination $RedistDirectory
+    Copy-Item -Force "${env:ProgramFiles(x86)}/Microsoft Visual Studio/2019/Professional/VC/Redist/MSVC/14.24.28127/MergeModules/Microsoft_VC142_CRT_x64.msm" -Destination $RedistDirectory
     if ((Test-Path -PathType Leaf "$RedistDirectory/Microsoft_VC142_CRT_x64.msm") -eq $False) {
       Write-Host -Foreground Red "Failed to copy Microsoft Visual C++ 2019 CRT."
       $BuildFailed = $True
@@ -225,7 +225,7 @@ if ($BuildFailed -eq $False) {
 }
 
 if ($BuildFailed -eq $False) {
-  $APIDirectory = "./ultraschall-api"
+  $APIDirectory = "./ultraschall_api"
   Write-Host "Copying Ultraschall API files..."
   if ((Test-Path -PathType Container $APIDirectory) -eq $False) {
     New-Item -ItemType Directory -Path $APIDirectory | Out-Null
@@ -247,11 +247,10 @@ Pop-Location
 Write-Host "Done."
 
 $env:ULTRASCHALL_BUILD_ID = $BuildId
-$env:ULTRASCHALL_API_SOURCE = ".\_build\ultraschall-api"
-
+$env:ULTRASCHALL_API_SOURCE = ".\_build\ultraschall_api"
 if ($BuildFailed -eq $False) {
   Write-Host "Compiling API Files..."
-  & $HeatProgramPath dir _build\ultraschall-api -nologo -cg UltraschallApiFiles -ag -scom -sreg -sfrag -srd -dr ReaperPluginsFolder -var env.ULTRASCHALL_API_SOURCE -out ./_build/ultraschall_api.wxs
+  & $HeatProgramPath dir $env:ULTRASCHALL_API_SOURCE -nologo -cg UltraschallApiFiles -ag -scom -sreg -sfrag -srd -dr ReaperPluginsFolder -var env.ULTRASCHALL_API_SOURCE -out ./_build/ultraschall_api.wxs
   if ($LASTEXITCODE -eq 0) {
     & $CandleProgramPath -nologo -arch x64 -out ./_build/ultraschall_api.wixobj ./_build/ultraschall_api.wxs
     if ($LASTEXITCODE -ne 0) {
