@@ -20,7 +20,7 @@
       <![CDATA[Installed OR (VersionNT >= 601)]]>
     </Condition>
     <Media Id="1" Cabinet="Ultraschall.cab" EmbedCab="yes" DiskPrompt="CD-ROM #1" />
-    <Property Id="DiskPrompt" Value="Ultraschall 3.2 Installation [1]" />
+    <Property Id="DiskPrompt" Value="Ultraschall 4.0 Installation [1]" />
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="AppDataFolder">
         <Directory Id="ReaperFolder" Name="REAPER">
@@ -71,7 +71,7 @@
             <File Name="INSTALL.html" DiskId="1" Source=".\_build\ultraschall-resources\INSTALL.html">
               <Shortcut Id="InstallShortcut" Directory="ShortcutsFolder" Name="INSTALL.html" />
             </File>
-            <File Name="Ultraschall_3.2.ReaperConfigZip" DiskId="1" Source=".\ultraschall-theme\Ultraschall_3.2.ReaperConfigZip">
+            <File Name="Ultraschall_4.0.ReaperConfigZip" DiskId="1" Source=".\ultraschall-theme\Ultraschall_4.0.ReaperConfigZip">
               <Shortcut Id="ThemeDesktopShortcut" Directory="DesktopFolder" Name="Ultraschall REAPER Theme" WorkingDirectory="INSTALLDIR" Icon="Icon.exe" IconIndex="0" />
               <Shortcut Id="ThemeShortcut" Directory="ShortcutsFolder" Name="Ultraschall REAPER Theme" Icon="Icon.exe" IconIndex="0" />
             </File>

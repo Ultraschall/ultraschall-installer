@@ -116,7 +116,7 @@ cp ultraschall-assets/source/us-banner_2000.png "installer-root/Extras/Ultrascha
 echo "Done."
 
 echo "Copying Ultraschall REAPER Theme..."
-cp ../ultraschall-theme/Ultraschall_3.2.ReaperConfigZip installer-root/Ultraschall_3.2.ReaperConfigZip
+cp ../ultraschall-theme/Ultraschall_4.0.ReaperConfigZip installer-root/Ultraschall_4.0.ReaperConfigZip
 echo "Done."
 
 echo "Copying Ultraschall Utilities..."
@@ -250,7 +250,7 @@ echo "        set viewOptions to the icon view options of container window" >> c
 echo "        set arrangement of viewOptions to not arranged" >> create-window-layout.script
 echo "        set background picture of viewOptions to file \".background:background.png\"" >> create-window-layout.script
 echo "        set position of item \"$ULTRASCHALL_BUILD_NAME.pkg\" of container window to {50, 30}" >> create-window-layout.script
-echo "        set position of item \"Ultraschall_3.2.ReaperConfigZip\" of container window to {200, 30}" >> create-window-layout.script
+echo "        set position of item \"Ultraschall_4.0.ReaperConfigZip\" of container window to {200, 30}" >> create-window-layout.script
 echo "        set position of item \"README.html\" of container window to {50, 140}" >> create-window-layout.script
 echo "        set position of item \"INSTALL.html\" of container window to {200, 140}" >> create-window-layout.script
 echo "        set position of item \"CHANGELOG.html\" of container window to {350, 140}" >> create-window-layout.script
