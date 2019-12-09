@@ -232,13 +232,13 @@ if ($BuildFailed -eq $False) {
   }
   Copy-Item -Force "./ultraschall-portable/UserPlugins/ultraschall_api.lua" -Destination $APIDirectory
   Copy-Item -Force "./ultraschall-portable/UserPlugins/ultraschall_api_readme.txt" -Destination $APIDirectory
-  Push-Location $APIDirectory
-  Copy-Item -Force -Recurse "../ultraschall-portable/UserPlugins/ultraschall_api" -Destination $APIDirectory
-  if ((Test-Path -PathType Container $APIDirectory/Scripts) -eq $False) {
+  # Push-Location $APIDirectory
+  Copy-Item -Force -Recurse "./ultraschall-portable/UserPlugins/ultraschall_api" -Destination $APIDirectory
+  if ((Test-Path -PathType Container $APIDirectory/ultraschall_api/Scripts) -eq $False) {
     Write-Host -Foreground Red "Failed to copy Ultraschall API files."
     $BuildFailed = $True
   }
-  Pop-Location
+  # Pop-Location
   Write-Host "Done."
 }
 
