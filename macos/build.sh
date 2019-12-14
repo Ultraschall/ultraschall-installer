@@ -134,7 +134,7 @@ if [ ! -d build ]; then
  mkdir build
 fi
 pushd build > /dev/null
-cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ../
+cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release ../
 if [ $? -ne 0 ]; then
   echo "Failed to configure Ultraschall REAPER Plug-in."
   exit -1
@@ -156,6 +156,8 @@ if [ ! -d ultraschall-api/ultraschall_api ]; then
   mkdir ultraschall-api/ultraschall_api
 fi
 cp -r ultraschall-portable/UserPlugins/ultraschall_api ultraschall-api
+cp ultraschall-portable/UserPlugins/ultraschall_api.lua ultraschall-api/
+cp ultraschall-portable/UserPlugins/ultraschall_api_readme.txt ultraschall-api/
 echo "Done."
 
 echo "Creating installer packages directory..."
@@ -173,19 +175,27 @@ pkgbuild --root ultraschall-api --identifier fm.ultraschall.reaper.api --install
 echo "Done."
 
 echo "Creating Ultraschall Soundboard installer package..."
-pkgbuild --root ../ultraschall-soundboard/ --identifier fm.ultraschall.soundboard --install-location /Library/Audio/Plug-Ins/Components installer-packages/ultraschall-soundboard.pkg
+pkgbuild --root ../ultraschall-soundboard/ --identifier fm.ultraschall.soundboard --install-location "/Library/Application Support/REAPER/UserPlugins/FX" installer-packages/ultraschall-soundboard.pkg
 echo "Done."
 
 echo "Creating StudioLink installer packager..."
-pkgbuild --root ../studio-link --identifier fm.ultraschall.studiolink --install-location /Library/Audio/Plug-Ins/Components installer-packages/studio-link.pkg
+pkgbuild --root ../studio-link --identifier fm.ultraschall.studiolink --install-location "/Library/Application Support/REAPER/UserPlugins/FX" installer-packages/studio-link.pkg
 echo "Done."
 
 echo "Creating StudioLink OnAir installer packager..."
-pkgbuild --root ../studio-link-onair --identifier fm.ultraschall.studiolink.onair --install-location /Library/Audio/Plug-Ins/Components installer-packages/studio-link-onair.pkg
+pkgbuild --root ../studio-link-onair --identifier fm.ultraschall.studiolink.onair --install-location "/Library/Application Support/REAPER/UserPlugins/FX" installer-packages/studio-link-onair.pkg
 echo "Done."
 
 echo "Creating REAPER SWS Extension installer package..."
 pkgbuild --root ../sws-extension/payload --identifier fm.ultraschall.reaper.sws --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/reaper-sws-extension.pkg
+echo "Done."
+
+echo "Creating REAPER JS Extension installer package..."
+pkgbuild --root ../js-extension --identifier fm.ultraschall.reaper.js --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/reaper-js-extension.pkg
+echo "Done."
+
+echo "Creating REAPER ReaPack Extension installer package..."
+pkgbuild --root ../reapack-extension --identifier fm.ultraschall.reaper.reapack --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/reaper-reapack-extension.pkg
 echo "Done."
 
 echo "Creating intermediate installer package..."
@@ -270,7 +280,7 @@ if [ $? -ne 0 ]; then
 fi
 echo "Done."
 
-# this is very very required
+# this is very required
 sync
 
 echo "Unmounting intermediate installer disk image..."
@@ -281,6 +291,7 @@ if [ $? -ne 0 ]; then
 fi
 echo "Done."
 
+# this is also very required
 sync
 
 echo "Finalizing installer disk image..."
