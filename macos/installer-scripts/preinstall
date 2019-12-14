@@ -1,121 +1,74 @@
 #!/bin/sh
 
-#####################################
-#
-# remove ultraschall plug-in
-#
+# ancient stuff
+# TODO
+
+# legacy stuff
+if [ -d /Library/Audio/Plug-Ins/Components/StudioLinkOnAir.component ]; then
+	sudo rm -rf /Library/Audio/Plug-Ins/Components/StudioLinkOnAir.component
+fi
+
+if [ -d /Library/Audio/Plug-Ins/Components/StudioLink.component ]; then
+	sudo rm -rf /Library/Audio/Plug-Ins/Components/StudioLink.component
+fi
+
+if [ -d /Library/Audio/Plug-Ins/Components/Soundboard.component ]; then
+	sudo rm -rf /Library/Audio/Plug-Ins/Components/Soundboard.component
+fi
+
+# current stuff
 if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_ultraschall.dylib ]; then
 	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_ultraschall.dylib
 fi
 
-if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/libmp3lame.dylib ]; then
-	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/libmp3lame.dylib
+if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_js_ReaScriptAPI64.dylib ]; then
+	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_js_ReaScriptAPI64.dylib
 fi
 
-if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/libmp4v2.dylib ]; then
-	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/libmp4v2.dylib
+if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_reapack64.dylib ]; then
+	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_reapack64.dylib
 fi
 
-#####################################
-#
-# remove legacy python scripts
-#
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_delete_last_marker.py ]; then
-  rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_delete_last_marker.py
+if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_sws_extension.dylib ]; then
+	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_sws_extension.dylib
 fi
 
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_einspieler.py ]; then
-  rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_einspieler.py
+if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/sws_python.py ]; then
+	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/sws_python.py
 fi
 
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_import_shownotes.py ]; then
-  rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_import_shownotes.py
+if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/sws_python32.py ]; then
+	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/sws_python32.py
 fi
 
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_notes.py ]; then
-  rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_notes.py
+if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/sws_python64.py ]; then
+	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/sws_python64.py
 fi
 
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit_past.py ]; then
-  rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit_past.py
+if [ -d /Library/Audio/Plug-Ins/Components/StudioLinkOnAir.component ]; then
+	sudo rm -rf /Library/Audio/Plug-Ins/Components/StudioLinkOnAir.component
 fi
 
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit.py ]; then
-  rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit.py
+if [ -d /Library/Audio/Plug-Ins/Components/StudioLink.component ]; then
+	sudo rm -rf /Library/Audio/Plug-Ins/Components/StudioLink.component
 fi
 
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_marker.py ]; then
-  rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_marker.py
+if [ -d /Library/Audio/Plug-Ins/Components/Soundboard.component ]; then
+	sudo rm -rf /Library/Audio/Plug-Ins/Components/Soundboard.component
 fi
 
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_namedmarker.py ]; then
-  rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_namedmarker.py
+if [ -d ~/Library/Application\ Support/REAPER/UserPlugins/FX ]; then
+	rm -rf ~/Library/Application\ Support/REAPER/UserPlugins/FX
 fi
 
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_webserver.py ]; then
-  rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_webserver.py
-fi
-#
-#####################################
-
-#####################################
-#
-# ultraschall_delete_last_marker.Lua
-#
-#####################################
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_delete_last_marker.lua ]; then
-  rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_delete_last_marker.lua
+if [ -d ~/Library/Application\ Support/REAPER/UserPlugins/ultraschall_api ]; then
+	rm -rf ~/Library/Application\ Support/REAPER/UserPlugins/ultraschall_api
 fi
 
-#####################################
-#
-# ultraschall_safemode_start_pause.lua
-#
-#####################################
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_safemode_start_pause.lua ]; then
-  rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_safemode_start_pause.lua
+if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/ultraschall_api.lua ]; then
+	rm -rf ~/Library/Application\ Support/REAPER/UserPlugins/ultraschall_api.lua
 fi
 
-#####################################
-#
-# ultraschall_safemode_start_stop.lua
-#
-#####################################
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_safemode_start_stop.lua ]; then
-  rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_safemode_start_stop.lua
+if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/ultraschall_api_readme.txt ]; then
+	rm -rf ~/Library/Application\ Support/REAPER/UserPlugins/ultraschall_api_readme.txt
 fi
-
-#####################################
-#
-# ultraschall_set_edit_past.lua
-#
-#####################################
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit_past.lua ]; then
-  rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit_past.lua
-fi
-
-#####################################
-#
-# ultraschall_set_edit.lua
-#
-#####################################
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit.lua ]; then
-  rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit.lua
-fi
-
-#####################################
-#
-# ultraschall_set_namedmarker.lua
-#
-#####################################
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_namedmarker.lua ]; then
-  rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_namedmarker.lua
-fi
-
-# if [ -d ~/Library/Application\ Support/REAPER ]; then
-#   TIMESTAMP=$(date +"%Y%m%d%H%M%S")
-#   if [ ! -d ~/Library/Application\ Support/Ultraschall/Backups ]; then
-#     mkdir -p ~/Library/Application\ Support/Ultraschall/Backups
-#   fi
-#   cp -pPR ~/Library/Application\ Support/REAPER ~/Library/Application\ Support/Ultraschall/Backups/REAPER-${TIMESTAMP}
-# fi
