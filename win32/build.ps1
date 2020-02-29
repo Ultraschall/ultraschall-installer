@@ -95,7 +95,7 @@ if ($BuildFailed -eq $False) {
   $PluginDirectory = "./ultraschall-plugin"
   if ((Test-Path -PathType Container $PluginDirectory) -eq $False) {
     Write-Host "Downloading Ultraschall REAPER Plug-in..."
-    git clone --branch develop --depth 1 https://github.com/Ultraschall/ultraschall-plugin.git $PluginDirectory
+    git clone --branch master --depth 1 https://github.com/Ultraschall/ultraschall-plugin.git $PluginDirectory
     if ((Test-Path -PathType Container $PluginDirectory) -eq $False) {
       Write-Host -Foreground Red "Failed to download Ultraschall REAPER Plug-in."
       $BuildFailed = $True
@@ -127,7 +127,7 @@ if ($BuildFailed -eq $False) {
   $PortableDirectory = "./ultraschall-portable"
   if ((Test-Path -PathType Container $PortableDirectory) -eq $False) {
     Write-Host "Downloading Ultraschall REAPER API..."
-    git clone --depth 1 https://github.com/Ultraschall/ultraschall-portable.git $PortableDirectory
+    git clone --branch master --depth 1 https://github.com/Ultraschall/ultraschall-portable.git $PortableDirectory
     if ((Test-Path -PathType Container $PortableDirectory) -eq $False) {
       Write-Host -Foreground Red "Failed to download Ultraschall REAPER API."
       $BuildFailed = $True
@@ -147,7 +147,7 @@ if ($BuildFailed -eq $False) {
   $AssetsDirectory = "./ultraschall-assets"
   if ((Test-Path -PathType Container $AssetsDirectory) -eq $False) {
     Write-Host "Downloading Ultraschall REAPER Resources..."
-    git clone --depth 1 https://github.com/Ultraschall/ultraschall-assets.git $AssetsDirectory
+    git clone --branch master --depth 1 https://github.com/Ultraschall/ultraschall-assets.git $AssetsDirectory
     if ((Test-Path -PathType Container $AssetsDirectory) -eq $False) {
       Write-Host -Foreground Red "Failed to download Ultraschall REAPER Resources."
       $BuildFailed = $True
