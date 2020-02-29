@@ -1,5 +1,14 @@
 #!/bin/sh
 
+BUILD_RELEASE=0
+
+if [ "$1" = "--help" ]; then
+  echo "Usage: build.sh [ --release ]"
+  exit 0
+elif [ "$1" = "--release" ]; then
+  BUILD_RELEASE=1
+fi
+
 echo "**********************************************************************"
 echo "*                                                                    *"
 echo "*            BUILDING ULTRASCHALL INSTALLER PACKAGE                  *"
@@ -39,7 +48,7 @@ fi
 
 if [ ! -d ultraschall-plugin ]; then
   echo "Downloading Ultraschall REAPER Plug-in..."
-  git clone -b develop https://github.com/Ultraschall/ultraschall-plugin.git ultraschall-plugin
+  git clone --branch master --depth 1 https://github.com/Ultraschall/ultraschall-plugin.git ultraschall-plugin
   if [ ! -d ultraschall-plugin ]; then
     echo "Failed to download Ultraschall REAPER Plug-in."
     exit -1
@@ -54,7 +63,7 @@ echo "Done."
 
 if [ ! -d ultraschall-portable ]; then
   echo "Downloading Ultraschall REAPER API..."
-  git clone https://github.com/Ultraschall/ultraschall-portable.git ultraschall-portable
+  git clone --branch master --depth 1 https://github.com/Ultraschall/ultraschall-portable.git ultraschall-portable
   if [ ! -d ultraschall-portable ]; then
     echo "Failed to download Ultraschall REAPER API."
     exit -1
@@ -69,7 +78,7 @@ echo "Done."
 
 if [ ! -d ultraschall-assets ]; then
   echo "Downloading Ultraschall REAPER Resources..."
-  git clone https://github.com/Ultraschall/ultraschall-assets.git ultraschall-assets
+  git clone --branch master --depth 1 https://github.com/Ultraschall/ultraschall-assets.git ultraschall-assets
   if [ ! -d ultraschall-assets ]; then
     echo "Failed to download Ultraschall REAPER Resources."
     exit -1
@@ -210,8 +219,12 @@ fi
 echo "Done."
 
 echo "Creating final installer package..."
-ULTRASCHALL_BUILD_ID=$(<version.txt)
-ULTRASCHALL_BUILD_NAME="ULTRASCHALL-$ULTRASCHALL_BUILD_ID"
+if [ $BUILD_RELEASE -eq 1 ]; then
+  ULTRASCHALL_BUILD_ID="V4.0_RC1"
+else
+  ULTRASCHALL_BUILD_ID=$(<version.txt)
+fi
+ULTRASCHALL_BUILD_NAME="ULTRASCHALL_$ULTRASCHALL_BUILD_ID"
 productsign --sign "Developer ID Installer: Heiko Panjas (8J2G689FCZ)" ultraschall-product/ultraschall-intermediate.pkg "installer-root/$ULTRASCHALL_BUILD_NAME.pkg"
 if [ $? -ne 0 ]; then
   echo "Failed to build final installer package."
@@ -243,10 +256,21 @@ echo "Done."
 
 sync
 
-# FIXME
-# codesign --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" ultraschall-intermediate/Uninstall.command
-# codesign --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" "ultraschall-intermediate/Utilities/Remove legacy audio devices.command"
+echo "Signing uninstall script..."
+codesign --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" ultraschall-intermediate/Uninstall.command
+if [ $? -ne 0 ]; then
+  echo "Failed to sign uninstall script."
+  exit -1
+fi
+echo "Done."
 
+echo "Signing device removal script..."
+codesign --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" "ultraschall-intermediate/Utilities/Remove legacy audio devices.command"
+if [ $? -ne 0 ]; then
+  echo "Failed to sign device removal script."
+  exit -1
+fi
+echo "Done."
 
 echo "Creating installer disk window layout..."
 echo "tell application \"Finder\"" > create-window-layout.script
