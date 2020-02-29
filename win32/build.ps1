@@ -5,6 +5,18 @@ Write-Host "*                                                                   
 Write-Host "**********************************************************************"
 
 # Specify build directory
+$BuildRelease = $False
+
+If ($args.Count -gt 0) {
+  If ($args[0] -eq "--help") {
+    Write-Host "Usage: build.ps1 [ --release ]"
+    Return
+  }
+  ElseIf ($args[0] -eq "--release") {
+    $BuildRelease = $True
+  }
+}
+
 $BuildDirectory = "./_build"
 $BuildId = "R4.0_GENERIC"
 $BuildFailed = $False
@@ -113,7 +125,12 @@ if ($BuildFailed -eq $False) {
 
 if ($BuildFailed -eq $False) {
   Push-Location $PluginDirectory
-  $BuildId = (git describe --tags | Out-String).Trim()
+  if ($BuildRelease -eq $True) {
+    $BuildId = "V4.0_RC1"
+  }
+  Else {
+    $BuildId = (git describe --tags | Out-String).Trim()
+  }
   if ($BuildId.Length -gt 0) {
     $BuildId = "ULTRASCHALL_" + $BuildId
   }
