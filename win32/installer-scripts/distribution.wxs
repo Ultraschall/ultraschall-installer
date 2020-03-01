@@ -30,11 +30,9 @@
           </Component>
           <Directory Id="ReaperPluginsFolder" Name="UserPlugins">
             <Component Id="ReaperPluginsComponent" Guid="C03BAC23-1BA8-4E6D-9B5A-88E09ED2E9E2" Win64="yes">
-              <RemoveFolder Id="RemoveReaperPluginsComponent" Directory="ReaperPluginsFolder" On="uninstall" />
               <RegistryValue Root="HKCU" Key="Software\Ultraschall" Name="Uninstall" Type="string" Value="1.0.0.0" KeyPath="yes" />
               <File Id="ReaperUltraschallDll" Name="reaper_ultraschall.dll" DiskId="1" Source=".\_build\ultraschall-plugin\_build\src\Release\reaper_ultraschall.dll" />
               <File Name="reaper_sws64.dll" DiskId="1" Source="..\sws-extension\reaper_sws64.dll" />
-              <File Name="sws_python.py" DiskId="1" Source="..\sws-extension\sws_python.py" />
               <File Name="reaper_js_ReaScriptAPI64.dll" DiskId="1" Source="..\js-extension\reaper_js_ReaScriptAPI64.dll" />
               <File Name="reaper_reapack64.dll" DiskId="1" Source="..\reapack-extension\reaper_reapack64.dll" />
             </Component>
@@ -44,9 +42,17 @@
                 <RegistryValue Root="HKCU" Key="Software\Ultraschall" Name="Uninstall" Type="string" Value="1.0.0.0" KeyPath="yes" />
                 <File Name="studio-link.dll" DiskId="1" Source=".\studio-link\studio-link.dll" />
                 <File Name="studio-link-onair.dll" DiskId="1" Source=".\studio-link-onair\studio-link-onair.dll" />
-                <File Name="Soundboard64.dll" DiskId="1" Source=".\ultraschall-soundboard\Soundboard64.dll" />
+                <File Name="Soundboard.vst3" DiskId="1" Source=".\ultraschall-soundboard\Soundboard.vst3" />
               </Component>
             </Directory>
+          </Directory>
+          <Directory Id="ReaperScriptsFolder" Name="Scripts">
+            <Component Id="ReaperScriptsComponent" Guid="7C66D35D-F8E2-44E8-BD39-24E16A0C76C3" Win64="yes">
+              <RegistryValue Root="HKCU" Key="Software\Ultraschall" Name="Uninstall" Type="string" Value="1.0.0.0" KeyPath="yes" />
+              <File Name="sws_python.py" DiskId="1" Source="..\sws-extension\sws_python.py" />
+              <File Name="sws_python32.py" DiskId="1" Source="..\sws-extension\sws_python32.py" />
+              <File Name="sws_python64.py" DiskId="1" Source="..\sws-extension\sws_python64.py" />
+            </Component>
           </Directory>
         </Directory>
         <Directory Id="UltraschallFolder" Name="Ultraschall">
@@ -97,6 +103,7 @@
     <Feature Id="Complete" Level="1">
       <ComponentRef Id="ReaperComponent" />
       <ComponentRef Id="ReaperPluginsComponent" />
+      <ComponentRef Id="ReaperScriptsComponent" />
       <ComponentRef Id="VstPluginComponent" />
       <ComponentRef Id="UltraschallComponent" />
       <ComponentRef Id="UninstallComponent" />
