@@ -1,175 +1,6 @@
 #!/bin/sh
 
-# Uninstall Ultraschall REAPER Extension from user domain
-if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_ultraschall.dylib ]; then
-	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_ultraschall.dylib
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/libmp3lame.dylib ]; then
-	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/libmp3lame.dylib
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/libmp4v2.dylib ]; then
-	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/libmp4v2.dylib
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_delete_last_marker.py ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_delete_last_marker.py
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_delete_last_marker.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_delete_last_marker.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_einspieler.py ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_einspieler.py
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_import_shownotes.py ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_import_shownotes.py
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_notes.py ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_notes.py
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit_past.py ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit_past.py
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit_past.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit_past.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit.py ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit.py
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_marker.py ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_marker.py
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_namedmarker.py ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_namedmarker.py
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_webserver.py ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_webserver.py
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/debug.py ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/debug.py
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_delete_last_marker.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_delete_last_marker.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_safemode_start_pause.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_safemode_start_pause.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_safemode_start_stop.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_safemode_start_stop.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit_past.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit_past.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit.lua
-fi
-
-if [ -f /Library/Application\ Support/REAPER/Scripts/ultraschall_set_marker.lua ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/Scripts/ultraschall_set_marker.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_marker.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_marker.lua
-fi
-
-if [ -f /Library/Application\ Support/REAPER/Scripts/ultraschall_set_namedmarker.lua ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/Scripts/ultraschall_set_namedmarker.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_namedmarker.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_set_namedmarker.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_mute_envelope.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_mute_envelope.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_select_studiolink.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_select_studiolink.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_select_track1.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_select_track1.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_select_track2.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_select_track2.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_select_track3.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_select_track3.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_select_track4.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_select_track4.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_select_track5.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_select_track5.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_select_track6.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_select_track6.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_select_track7.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_select_track7.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_select_track8.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/ultraschall_select_track8.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/test.eel ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/test.eel
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/test.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/test.lua
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/Scripts/testing.lua ]; then
-	rm -f ~/Library/Application\ Support/REAPER/Scripts/testing.lua
-fi
-
-# Uninstall SWS REAPER Extension from user domain
-if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_sws.dylib ]; then
-	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_sws.dylib
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_sws_extension.dylib ]; then
-	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_sws_extension.dylib
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/whatsnew.txt ]; then
-	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/whatsnew.txt
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_sws_whatsnew.txt ]; then
-	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_sws_whatsnew.txt
-fi
-
-if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/license.txt ]; then
-	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/license.txt
-fi
-
+# Remove scripts
 if [ -f ~/Library/Application\ Support/REAPER/Scripts/sws_python.py ]; then
 	rm -f ~/Library/Application\ Support/REAPER/Scripts/sws_python.py
 fi
@@ -182,92 +13,130 @@ if [ -f ~/Library/Application\ Support/REAPER/Scripts/sws_python64.py ]; then
 	rm -f ~/Library/Application\ Support/REAPER/Scripts/sws_python64.py
 fi
 
-# Uninstall Ultraschall REAPER Extension from system domain
-if [ -f /Library/Application\ Support/REAPER/UserPlugins/reaper_ultraschall.dylib ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/UserPlugins/reaper_ultraschall.dylib
+# Remove plugins
+if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_js_ReaScriptAPI64.dylib ]; then
+	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_js_ReaScriptAPI64.dylib
 fi
 
-if [ -f /Library/Application\ Support/REAPER/Scripts/ultraschall_delete_last_marker.py ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/Scripts/ultraschall_delete_last_marker.py
+if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_reapack64.dylib ]; then
+	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_reapack64.dylib
 fi
 
-if [ -f /Library/Application\ Support/REAPER/Scripts/ultraschall_einspieler.py ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/Scripts/ultraschall_einspieler.py
+if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_sws-x86_64.dylib ]; then
+	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_sws-x86_64.dylib
 fi
 
-if [ -f /Library/Application\ Support/REAPER/Scripts/ultraschall_import_shownotes.py ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/Scripts/ultraschall_import_shownotes.py
+if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_ultraschall.dylib ]; then
+	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_ultraschall.dylib
 fi
 
-if [ -f /Library/Application\ Support/REAPER/Scripts/ultraschall_notes.py ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/Scripts/ultraschall_notes.py
+if [ -d ~/Library/Application\ Support/REAPER/UserPlugins/FX ]; then
+    if [ -d ~/Library/Application\ Support/REAPER/UserPlugins/FX/Soundboard.component ]; then
+        rm -rf ~/Library/Application\ Support/REAPER/UserPlugins/FX/Soundboard.component
+    fi
+
+    if [ -d ~/Library/Application\ Support/REAPER/UserPlugins/FX/StudioLink.component ]; then
+        rm -rf ~/Library/Application\ Support/REAPER/UserPlugins/FX/StudioLink.component
+    fi
+
+    if [ -d ~/Library/Application\ Support/REAPER/UserPlugins/FX/StudioLinkOnAir.component ]; then
+        rm -rf ~/Library/Application\ Support/REAPER/UserPlugins/FX/StudioLinkOnAir.component
+    fi
+
+    rm -rf ~/Library/Application\ Support/REAPER/UserPlugins/FX
 fi
 
-if [ -f /Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit_past.py ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit_past.py
+# Remove api
+if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/ultraschall_api.lua ]; then
+	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/ultraschall_api.lua
 fi
 
-if [ -f /Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit.py ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/Scripts/ultraschall_set_edit.py
+if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/ultraschall_api_readme.txt ]; then
+	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/ultraschall_api_readme.txt
 fi
 
-if [ -f /Library/Application\ Support/REAPER/Scripts/ultraschall_set_marker.py ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/Scripts/ultraschall_set_marker.py
+if [ -d ~/Library/Application\ Support/REAPER/UserPlugins/ultraschall_api ]; then
+    rm -rf ~/Library/Application\ Support/REAPER/UserPlugins/ultraschall_api
 fi
 
-if [ -f /Library/Application\ Support/REAPER/Scripts/ultraschall_set_namedmarker.py ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/Scripts/ultraschall_set_namedmarker.py
+# Remove theme
+if [ -d ~/Library/Application\ Support/REAPER/ColorThemes/Ultraschall_2 ]; then
+    rm -rf ~/Library/Application\ Support/REAPER/ColorThemes/Ultraschall_2
 fi
 
-if [ -f /Library/Application\ Support/REAPER/Scripts/ultraschall_webserver.py ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/Scripts/ultraschall_webserver.py
+if [ -f ~/Library/Application\ Support/REAPER/ColorThemes/Default_4.0.ReaperThemeZip ]; then
+	rm -f ~/Library/Application\ Support/REAPER/ColorThemes/Default_4.0.ReaperThemeZip
 fi
 
-if [ -f /Library/Application\ Support/REAPER/Scripts/debug.py ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/Scripts/debug.py
+if [ -f ~/Library/Application\ Support/REAPER/ColorThemes/Ultraschall_3.1.ReaperTheme ]; then
+	rm -f ~/Library/Application\ Support/REAPER/ColorThemes/Ultraschall_3.1.ReaperTheme
 fi
 
-# Uninstall SWS REAPER Extension from system domain
-if [ -f /Library/Application\ Support/REAPER/UserPlugins/reaper_sws.dylib ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/UserPlugins/reaper_sws.dylib
+if [ -f ~/Library/Application\ Support/REAPER/ColorThemes/Ultraschall_3.1.ReaperThemeZip ]; then
+	rm -f ~/Library/Application\ Support/REAPER/ColorThemes/Ultraschall_3.1.ReaperThemeZip
 fi
 
-if [ -f /Library/Application\ Support/REAPER/UserPlugins/reaper_sws_extension.dylib ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/UserPlugins/reaper_sws_extension.dylib
+if [ -d ~/Library/Application\ Support/REAPER/FxChains ]; then
+    rm -rf ~/Library/Application\ Support/REAPER/FxChains
 fi
 
-if [ -f /Library/Application\ Support/REAPER/UserPlugins/whatsnew.txt ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/UserPlugins/whatsnew.txt
+if [ -d ~/Library/Application\ Support/REAPER/MenuSets ]; then
+    rm -rf ~/Library/Application\ Support/REAPER/MenuSets
 fi
 
-if [ -f /Library/Application\ Support/REAPER/UserPlugins/reaper_sws_whatsnew.txt ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/UserPlugins/reaper_sws_whatsnew.txt
+if [ -d ~/Library/Application\ Support/REAPER/PreviousConfigFiles ]; then
+    rm -rf ~/Library/Application\ Support/PreviousConfigFiles
 fi
 
-if [ -f /Library/Application\ Support/REAPER/UserPlugins/license.txt ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/UserPlugins/license.txt
+if [ -d ~/Library/Application\ Support/REAPER/ProjectTemplates ]; then
+    rm -rf ~/Library/Application\ Support/REAPER/ProjectTemplates
 fi
 
-if [ -f /Library/Application\ Support/REAPER/Scripts/sws_python.py ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/Scripts/sws_python.py
+if [ -d ~/Library/Application\ Support/REAPER/presets ]; then
+    rm -rf ~/Library/Application\ Support/REAPER/presets
 fi
 
-if [ -f /Library/Application\ Support/REAPER/Scripts/sws_python32.py ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/Scripts/sws_python32.py
+if [ -d ~/Library/Application\ Support/REAPER/ReaPack ]; then
+    rm -rf ~/Library/Application\ Support/REAPER/ReaPack
 fi
 
-if [ -f /Library/Application\ Support/REAPER/Scripts/sws_python64.py ]; then
-	sudo rm -f /Library/Application\ Support/REAPER/Scripts/sws_python64.py
+if [ -d ~/Library/Application\ Support/REAPER/TrackTemplates ]; then
+    rm -rf ~/Library/Application\ Support/REAPER/TrackTemplates
 fi
 
-# Uninstall Ultraschall Virtual Audio Devices from user domain
+if [ -d ~/Library/Application\ Support/REAPER/Scripts/Ultraschall_Gfx ]; then
+    rm -rf ~/Library/Application\ Support/REAPER/Scripts/Ultraschall_Gfx
+fi
+
+if [ -d ~/Library/Application\ Support/REAPER/Scripts/Ultraschall_Slideshows ]; then
+    rm -rf ~/Library/Application\ Support/REAPER/Scripts/Ultraschall_Slideshows
+fi
+
+if [ -d ~/Library/Application\ Support/REAPER/Scripts/Ultraschall_Sounds ]; then
+    rm -rf ~/Library/Application\ Support/REAPER/Scripts/Ultraschall_Sounds
+fi
+
+if [ -d ~/Library/Application\ Support/REAPER/Scripts/Ultraschall_StateInspector ]; then
+    rm -rf ~/Library/Application\ Support/REAPER/Scripts/Ultraschall_StateInspector
+fi
+
+if [ -d ~/Library/Application\ Support/REAPER/Scripts/moonlander ]; then
+    rm -rf ~/Library/Application\ Support/REAPER/Scripts/moonlander
+fi
+
+if [ -d ~/Library/Application\ Support/REAPER/Scripts ]; then
+    rm -f ~/Library/Application\ Support/REAPER/Scripts/*.lua
+    rm -f ~/Library/Application\ Support/REAPER/Scripts/*.png
+fi
+
+# Remove Ultraschall Virtual Audio Devices from user domain
 if [ -d ~/Library/Audio/Plug-Ins/HAL/UltraschallHub.driver ]; then
 	sudo launchctl unload /System/Library/LaunchDaemons/com.apple.audio.coreaudiod.plist
 	rm -rf ~/Library/Audio/Plug-Ins/HAL/UltraschallHub.driver
 	sudo launchctl load /System/Library/LaunchDaemons/com.apple.audio.coreaudiod.plist
 fi
 
-# Uninstall Ultraschall Virtual Audio Devices from system domain
+# Remove Ultraschall Virtual Audio Devices from system domain
 if [ -d /Library/Audio/Plug-Ins/HAL/UltraschallHub.driver ]; then
 	sudo launchctl unload /System/Library/LaunchDaemons/com.apple.audio.coreaudiod.plist
 	sudo rm -rf /Library/Audio/Plug-Ins/HAL/UltraschallHub.driver
@@ -638,4 +507,3 @@ if [ -f /var/db/receipts/com.mj-s.sws.Scripts.plist ]; then
 fi
 
 echo "Uninstall finished. You might close this window."
-

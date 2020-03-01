@@ -195,8 +195,12 @@ echo "Creating StudioLink OnAir installer packager..."
 pkgbuild --root ../studio-link-onair --identifier fm.ultraschall.studiolink.onair --install-location "/Library/Application Support/REAPER/UserPlugins/FX" installer-packages/studio-link-onair.pkg
 echo "Done."
 
-echo "Creating REAPER SWS Extension installer package..."
-pkgbuild --root ../sws-extension/payload --identifier fm.ultraschall.reaper.sws --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/reaper-sws-extension.pkg
+echo "Creating REAPER SWS Extension Plugins installer package..."
+pkgbuild --root ../sws-extension/payload/plugins --identifier fm.ultraschall.reaper.sws.plugins --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/reaper-sws-extension-plugins.pkg
+echo "Done."
+
+echo "Creating REAPER SWS Extension Scripts installer package..."
+pkgbuild --root ../sws-extension/payload/scripts --identifier fm.ultraschall.reaper.sws.scripts --install-location "/Library/Application Support/REAPER/Scripts" installer-packages/reaper-sws-extension-scripts.pkg
 echo "Done."
 
 echo "Creating REAPER JS Extension installer package..."

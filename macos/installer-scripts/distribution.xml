@@ -24,8 +24,11 @@
     <pkg-ref id="fm.ultraschall.studiolink.onair" version="17.0.3">
         studio-link-onair.pkg
     </pkg-ref>
-    <pkg-ref id="fm.ultraschall.reaper.sws" version="2.10.0">
-        reaper-sws-extension.pkg
+    <pkg-ref id="fm.ultraschall.reaper.sws.plugins" version="2.10.0">
+        reaper-sws-extension-plugins.pkg
+    </pkg-ref>
+    <pkg-ref id="fm.ultraschall.reaper.sws.scripts" version="2.10.0">
+        reaper-sws-extension-scripts.pkg
     </pkg-ref>
     <pkg-ref id="fm.ultraschall.reaper.js" version="0.995">
         reaper-js-extension.pkg
@@ -61,7 +64,8 @@
         <pkg-ref id="fm.ultraschall.studiolink.onair" />
     </choice>
     <choice id="fm.ultraschall.reaper.sws" visible="true" title="REAPER SWS Extension" description="REAPER SWS Extension (see https://sws-extension.org)" start_selected="true">
-        <pkg-ref id="fm.ultraschall.reaper.sws" />
+        <pkg-ref id="fm.ultraschall.reaper.sws.plugins" />
+        <pkg-ref id="fm.ultraschall.reaper.sws.scripts" />
     </choice>
     <choice id="fm.ultraschall.reaper.js" visible="true" title="REAPER JS Extension" description="REAPER JS Extension (see https://github.com/juliansader/ReaExtensions)" start_selected="true">
         <pkg-ref id="fm.ultraschall.reaper.js" />
