@@ -157,6 +157,14 @@ popd > /dev/null
 popd > /dev/null
 echo "Done."
 
+echo "Signing ULTRASCHALL REAPER Plug-in..."
+codesign --force --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" ultraschall-plugin/build/src/Release/reaper_ultraschall.dylib
+if [ $? -ne 0 ]; then
+  echo "Failed to sign ULTRASCHALL REAPER Plug-in."
+  exit -1
+fi
+echo "Done."
+
 echo "Building ULTRASCHALL REAPER API..."
 if [ ! -d ultraschall-api ]; then
   mkdir ultraschall-api
