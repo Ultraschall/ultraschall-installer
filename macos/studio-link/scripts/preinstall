@@ -1,0 +1,13 @@
+#!/bin/sh
+
+if [ -d /Library/Audio/Plug-Ins/Components/StudioLink.component ]; then
+	sudo rm -rf /Library/Audio/Plug-Ins/Components/StudioLink.component
+fi
+
+if [ -d ~/Library/Application\ Support/REAPER/UserPlugins/StudioLink.component ]; then
+	rm -rf ~/Library/Application\ Support/REAPER/UserPlugins/StudioLink.component
+fi
+
+if [ -d ~/Library/Application\ Support/REAPER/UserPlugins/FX/StudioLink.component ]; then
+	rm -rf ~/Library/Application\ Support/REAPER/UserPlugins/FX/StudioLink.component
+fi
