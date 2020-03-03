@@ -184,44 +184,44 @@ fi
 echo "Done."
 
 echo "Creating Ultraschall REAPER Plug-in installer package..."
-pkgbuild --root ultraschall-plugin/build/src/Release --identifier fm.ultraschall.reaper.plugin --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/ultraschall-reaper-plugin.pkg
+pkgbuild --root ultraschall-plugin/build/src/Release --scripts ../ultraschall-plugin/scripts --identifier fm.ultraschall.reaper.plugin --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/ultraschall-reaper-plugin.pkg
 echo "Done."
 
 echo "Creating Ultraschall REAPER API installer package..."
-pkgbuild --root ultraschall-api --identifier fm.ultraschall.reaper.api --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/ultraschall-reaper-api.pkg
+pkgbuild --root ultraschall-api --scripts ../ultraschall-api/scripts --identifier fm.ultraschall.reaper.api --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/ultraschall-reaper-api.pkg
 echo "Done."
 
 echo "Creating Ultraschall Soundboard installer package..."
-pkgbuild --root ../ultraschall-soundboard/ --identifier fm.ultraschall.soundboard --install-location "/Library/Application Support/REAPER/UserPlugins/FX" installer-packages/ultraschall-soundboard.pkg
+pkgbuild --root ../ultraschall-soundboard/payload --scripts ../ultraschall-soundboard/scripts --identifier fm.ultraschall.soundboard --install-location "/Library/Application Support/REAPER/UserPlugins/FX" installer-packages/ultraschall-soundboard.pkg
 echo "Done."
 
 echo "Creating StudioLink installer packager..."
-pkgbuild --root ../studio-link --identifier fm.ultraschall.studiolink --install-location "/Library/Application Support/REAPER/UserPlugins/FX" installer-packages/studio-link.pkg
+pkgbuild --root ../studio-link/payload --scripts ../studio-link/scripts --identifier fm.ultraschall.studiolink --install-location "/Library/Application Support/REAPER/UserPlugins/FX" installer-packages/studio-link.pkg
 echo "Done."
 
 echo "Creating StudioLink OnAir installer packager..."
-pkgbuild --root ../studio-link-onair --identifier fm.ultraschall.studiolink.onair --install-location "/Library/Application Support/REAPER/UserPlugins/FX" installer-packages/studio-link-onair.pkg
+pkgbuild --root ../studio-link-onair/payload --scripts ../studio-link-onair/scripts --identifier fm.ultraschall.studiolink.onair --install-location "/Library/Application Support/REAPER/UserPlugins/FX" installer-packages/studio-link-onair.pkg
 echo "Done."
 
 echo "Creating REAPER SWS Extension Plugins installer package..."
-pkgbuild --root ../sws-extension/payload/plugins --identifier fm.ultraschall.reaper.sws.plugins --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/reaper-sws-extension-plugins.pkg
+pkgbuild --root ../sws-extension/payload --scripts ../sws-extension/scripts --identifier fm.ultraschall.reaper.sws.plugins --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/reaper-sws-extension-plugins.pkg
 echo "Done."
 
 echo "Creating REAPER SWS Extension Scripts installer package..."
-pkgbuild --root ../sws-extension/payload/scripts --identifier fm.ultraschall.reaper.sws.scripts --install-location "/Library/Application Support/REAPER/Scripts" installer-packages/reaper-sws-extension-scripts.pkg
+pkgbuild --root ../sws-scripts/payload --scripts ../sws-scripts/scripts --identifier fm.ultraschall.reaper.sws.scripts --install-location "/Library/Application Support/REAPER/Scripts" installer-packages/reaper-sws-extension-scripts.pkg
 echo "Done."
 
 echo "Creating REAPER JS Extension installer package..."
-pkgbuild --root ../js-extension --identifier fm.ultraschall.reaper.js --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/reaper-js-extension.pkg
+pkgbuild --root ../js-extension/payload --scripts ../js-extension/scripts --identifier fm.ultraschall.reaper.js --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/reaper-js-extension.pkg
 echo "Done."
 
 echo "Creating REAPER ReaPack Extension installer package..."
-pkgbuild --root ../reapack-extension --identifier fm.ultraschall.reaper.reapack --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/reaper-reapack-extension.pkg
+pkgbuild --root ../reapack-extension/payload --scripts ../reapack-extension/scripts --identifier fm.ultraschall.reaper.reapack --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/reaper-reapack-extension.pkg
 echo "Done."
 
 echo "Creating intermediate installer package..."
 if [ ! -d ultraschall-product ]; then
- mkdir ultraschall-product
+  mkdir ultraschall-product
 fi
 productbuild --distribution ../installer-scripts/distribution.xml --resources ../installer-resources --package-path installer-packages ultraschall-product/ultraschall-intermediate.pkg
 if [ $? -ne 0 ]; then
