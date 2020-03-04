@@ -122,6 +122,7 @@ cp ultraschall-assets/keyboard-layout/Keymap.pdf "installer-root/Extras/Ultrasch
 cp ultraschall-assets/source/us-banner_400.png "installer-root/Extras/Ultraschall Badge 400px.png"
 cp ultraschall-assets/source/us-banner_800.png "installer-root/Extras/Ultraschall Badge 800px.png"
 cp ultraschall-assets/source/us-banner_2000.png "installer-root/Extras/Ultraschall Badge 2000px.png"
+cp ultraschall-assets/images/Ultraschall-4-Logo.png "installer-root/Extras/Ultraschall-4-Logo.png"
 echo "Done."
 
 echo "Copying Ultraschall REAPER Theme..."
