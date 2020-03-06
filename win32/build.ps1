@@ -126,7 +126,7 @@ if ($BuildFailed -eq $False) {
 if ($BuildFailed -eq $False) {
   Push-Location $PluginDirectory
   if ($BuildRelease -eq $True) {
-    $BuildId = "4.0"
+    $BuildId = "4.0-GM"
   }
   Else {
     $BuildId = (git describe --tags | Out-String).Trim()
