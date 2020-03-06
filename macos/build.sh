@@ -193,15 +193,15 @@ pkgbuild --root ultraschall-api --scripts ../ultraschall-api/scripts --identifie
 echo "Done."
 
 echo "Creating Ultraschall Soundboard installer package..."
-pkgbuild --root ../ultraschall-soundboard/payload --scripts ../ultraschall-soundboard/scripts --identifier fm.ultraschall.soundboard --install-location "/Library/Application Support/REAPER/UserPlugins/FX" installer-packages/ultraschall-soundboard.pkg
+pkgbuild --root ../ultraschall-soundboard/payload --scripts ../ultraschall-soundboard/scripts --identifier fm.ultraschall.soundboard --install-location "/Library/Audio/Plug-Ins/Components" installer-packages/ultraschall-soundboard.pkg
 echo "Done."
 
 echo "Creating StudioLink installer packager..."
-pkgbuild --root ../studio-link/payload --scripts ../studio-link/scripts --identifier fm.ultraschall.studiolink --install-location "/Library/Application Support/REAPER/UserPlugins/FX" installer-packages/studio-link.pkg
+pkgbuild --root ../studio-link/payload --scripts ../studio-link/scripts --identifier fm.ultraschall.studiolink --install-location "/Library/Audio/Plug-Ins/Components" installer-packages/studio-link.pkg
 echo "Done."
 
 echo "Creating StudioLink OnAir installer packager..."
-pkgbuild --root ../studio-link-onair/payload --scripts ../studio-link-onair/scripts --identifier fm.ultraschall.studiolink.onair --install-location "/Library/Application Support/REAPER/UserPlugins/FX" installer-packages/studio-link-onair.pkg
+pkgbuild --root ../studio-link-onair/payload --scripts ../studio-link-onair/scripts --identifier fm.ultraschall.studiolink.onair --install-location "/Library/Audio/Plug-Ins/Components" installer-packages/studio-link-onair.pkg
 echo "Done."
 
 echo "Creating REAPER SWS Extension Plugins installer package..."
@@ -233,7 +233,7 @@ echo "Done."
 
 echo "Creating final installer package..."
 if [ $BUILD_RELEASE -eq 1 ]; then
-  ULTRASCHALL_BUILD_ID="4.0-RC2"
+  ULTRASCHALL_BUILD_ID="4.0-RC3"
 else
   ULTRASCHALL_BUILD_ID=$(<version.txt)
 fi
