@@ -46,6 +46,72 @@ if [ -d ~/Library/Application\ Support/REAPER/UserPlugins/FX ]; then
     rm -rf ~/Library/Application\ Support/REAPER/UserPlugins/FX
 fi
 
+# Remove legacy plugins
+
+if [ -f /Library/Application\ Support/REAPER/UserPlugins/reaper_sws-x86_64.dylib ]; then
+	sudo rm -f /Library/Application\ Support/REAPER/UserPlugins/reaper_sws-x86_64.dylib
+fi
+
+if [ -f /Library/Application\ Support/REAPER/UserPlugins/reaper_sws.dylib ]; then
+	sudo rm -f /Library/Application\ Support/REAPER/UserPlugins/reaper_sws.dylib
+fi
+
+if [ -f /Library/Application\ Support/REAPER/UserPlugins/reaper_sws_extension.dylib ]; then
+	sudo rm -f /Library/Application\ Support/REAPER/UserPlugins/reaper_sws_extension.dylib
+fi
+
+if [ -f /Library/Application\ Support/REAPER/UserPlugins/sws_python.py ]; then
+    sudo rm -f /Library/Application\ Support/REAPER/UserPlugins/sws_python.py
+fi
+
+if [ -f /Library/Application\ Support/REAPER/UserPlugins/sws_python32.py ]; then
+    sudo rm -f /Library/Application\ Support/REAPER/UserPlugins/sws_python32.py
+fi
+
+if [ -f /Library/Application\ Support/REAPER/UserPlugins/sws_python64.py ]; then
+    sudo rm -f /Library/Application\ Support/REAPER/UserPlugins/sws_python64.py
+fi
+
+if [ -f /Library/Application\ Support/REAPER/Scripts/sws_python.py ]; then
+    sudo rm -f /Library/Application\ Support/REAPER/Scripts/sws_python.py
+fi
+
+if [ -f /Library/Application\ Support/REAPER/Scripts/sws_python32.py ]; then
+    sudo rm -f /Library/Application\ Support/REAPER/Scripts/sws_python32.py
+fi
+
+if [ -f /Library/Application\ Support/REAPER/Scripts/sws_python64.py ]; then
+    sudo rm -f /Library/Application\ Support/REAPER/Scripts/sws_python64.py
+fi
+
+if [ -f /Library/Application\ Support/REAPER/UserPlugins/reaper_ultraschall.dylib ]; then
+	sudo rm -f /Library/Application\ Support/REAPER/UserPlugins/reaper_ultraschall.dylib
+fi
+
+if [ -f /Library/Application\ Support/REAPER/UserPlugins/reaper_js_ReaScriptAPI64.dylib ]; then
+	sudo rm -f /Library/Application\ Support/REAPER/UserPlugins/reaper_js_ReaScriptAPI64.dylib
+fi
+
+if [ -f /Library/Application\ Support/REAPER/UserPlugins/reaper_reapack64.dylib ]; then
+	sudo rm -f /Library/Application\ Support/REAPER/UserPlugins/reaper_reapack64.dylib
+fi
+
+if [ -f /Library/Application\ Support/REAPER/UserPlugins/reaper_reapack64.dylib ]; then
+	sudo rm -f /Library/Application\ Support/REAPER/UserPlugins/reaper_reapack64.dylib
+fi
+
+if [ -f /Library/Application\ Support/REAPER/UserPlugins/ultraschall_api_readme.txt ]; then
+	sudo rm -f /Library/Application\ Support/REAPER/UserPlugins/ultraschall_api_readme.txt
+fi
+
+if [ -f /Library/Application\ Support/REAPER/UserPlugins/ultraschall_api.lua ]; then
+	sudo rm -f /Library/Application\ Support/REAPER/UserPlugins/ultraschall_api.lua
+fi
+
+if [ -d /Library/Application\ Support/REAPER/UserPlugins/ultraschall_api ]; then
+	sudo rm -rf /Library/Application\ Support/REAPER/UserPlugins/ultraschall_api
+fi
+
 # Remove api
 if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/ultraschall_api.lua ]; then
 	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/ultraschall_api.lua
