@@ -7,6 +7,6 @@ if [ -d "$HOME/.config/REAPER" ]; then
   cp -r "$HOME/.config/REAPER" "$BACKUP_FOLDER"
 fi
 
+unzip -o ./themes/Ultraschall_4.0.ReaperConfigZip -d "$HOME/.config/REAPER"
 cp -fr ./plugins/* "$HOME/.config/REAPER/UserPlugins"
 cp -fr ./scripts/* "$HOME/.config/REAPER/Scripts"
-gzip -df ./themes/Ultraschall_4.0.ReaperConfigZip "$HOME/.config/REAPER"
