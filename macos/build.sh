@@ -233,7 +233,7 @@ echo "Done."
 
 echo "Creating final installer package..."
 if [ $BUILD_RELEASE -eq 1 ]; then
-  ULTRASCHALL_BUILD_ID="4.0-GM"
+  ULTRASCHALL_BUILD_ID="4.0-AGM"
 else
   ULTRASCHALL_BUILD_ID=$(<version.txt)
 fi
