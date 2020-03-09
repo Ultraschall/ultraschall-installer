@@ -126,13 +126,13 @@ if ($BuildFailed -eq $False) {
 if ($BuildFailed -eq $False) {
   Push-Location $PluginDirectory
   if ($BuildRelease -eq $True) {
-    $BuildId = "4.0-AGM"
+    $BuildId = "4.0"
   }
   Else {
     $BuildId = (git describe --tags | Out-String).Trim()
   }
   if ($BuildId.Length -gt 0) {
-    $BuildId = "ULTRASCHALL-" + $BuildId
+    $BuildId = "Ultraschall-" + $BuildId
   }
   else {
     $BuildFailed = $True
