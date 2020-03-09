@@ -167,101 +167,17 @@ cp ultraschall-api/ultraschall_api.lua installer-package/plugins/ultraschall_api
 cp ultraschall-api/ultraschall_api_readme.txt installer-package/plugins/ultraschall_api_readme.txt
 echo "Done."
 
-popd > /dev/null
-exit 0
+echo "Copying install script..."
+cp ../installer-scripts/install.sh installer-package
+chmod +x installer-package/install.sh
+echo "Done."
 
 echo "Creating installer package..."
 ULTRASCHALL_BUILD_ID=$(<version.txt)
 ULTRASCHALL_BUILD_NAME="ULTRASCHALL-$ULTRASCHALL_BUILD_ID"
-productsign --sign "Developer ID Installer: Heiko Panjas (8J2G689FCZ)" ultraschall-product/ultraschall-intermediate.pkg "installer-root/$ULTRASCHALL_BUILD_NAME.pkg"
+tar -czf "../$ULTRASCHALL_BUILD_NAME.tar.gz" installer-package
 if [ $? -ne 0 ]; then
   echo "Failed to build final installer package."
-  exit -1
-fi
-echo "Done."
-
-echo "Creating intermediate installer disk image..."
-if [ -f ultraschall-product/ultraschall-intermediate.dmg ]; then
-  rm ultraschall-product/ultraschall-intermediate.dmg
-fi
-hdiutil create -format UDRW -srcfolder installer-root -fs HFS+ -volname $ULTRASCHALL_BUILD_NAME ultraschall-product/ultraschall-intermediate.dmg
-if [ $? -ne 0 ]; then
-  echo "Failed to create intermediate installer disk image."
-  exit -1
-fi
-echo "Done."
-
-echo "Mounting intermediate installer disk image..."
-if [ ! -d ultraschall-intermediate ]; then
-  mkdir ultraschall-intermediate
-fi
-hdiutil attach -mountpoint ultraschall-intermediate ultraschall-product/ultraschall-intermediate.dmg
-if [ $? -ne 0 ]; then
-  echo "Failed to mount intermediate installer disk image."
-  exit -1
-fi
-echo "Done."
-
-sync
-
-# FIXME
-# codesign --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" ultraschall-intermediate/Uninstall.command
-# codesign --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" "ultraschall-intermediate/Utilities/Remove legacy audio devices.command"
-
-
-echo "Creating installer disk window layout..."
-echo "tell application \"Finder\"" > create-window-layout.script
-echo "  tell disk \"ultraschall-intermediate\"" >> create-window-layout.script
-echo "        open" >> create-window-layout.script
-echo "        set current view of container window to icon view" >> create-window-layout.script
-echo "        set toolbar visible of container window to false" >> create-window-layout.script
-echo "        set statusbar visible of container window to false" >> create-window-layout.script
-echo "        set the bounds of container window to {100, 100, 800, 540}" >> create-window-layout.script
-echo "        set viewOptions to the icon view options of container window" >> create-window-layout.script
-echo "        set arrangement of viewOptions to not arranged" >> create-window-layout.script
-echo "        set background picture of viewOptions to file \".background:background.png\"" >> create-window-layout.script
-echo "        set position of item \"$ULTRASCHALL_BUILD_NAME.pkg\" of container window to {50, 30}" >> create-window-layout.script
-echo "        set position of item \"Ultraschall_4.0.ReaperConfigZip\" of container window to {200, 30}" >> create-window-layout.script
-echo "        set position of item \"README.html\" of container window to {50, 140}" >> create-window-layout.script
-echo "        set position of item \"INSTALL.html\" of container window to {200, 140}" >> create-window-layout.script
-echo "        set position of item \"CHANGELOG.html\" of container window to {350, 140}" >> create-window-layout.script
-echo "        set position of item \"Extras\" of container window to {50, 230}" >> create-window-layout.script
-echo "        set position of item \"Uninstall.command\" of container window to {50, 330}" >> create-window-layout.script
-echo "        set position of item \"Utilities\" of container window to {200, 230}" >> create-window-layout.script
-echo "        close" >> create-window-layout.script
-echo "        open" >> create-window-layout.script
-echo "        update without registering applications" >> create-window-layout.script
-echo "        delay 2" >> create-window-layout.script
-echo "  end tell" >> create-window-layout.script
-echo "end tell" >> create-window-layout.script
-osascript create-window-layout.script
-if [ $? -ne 0 ]; then
-  echo "Failed to create installer disk window layout."
-  exit -1
-fi
-echo "Done."
-
-# this is very required
-sync
-
-echo "Unmounting intermediate installer disk image..."
-hdiutil detach ultraschall-intermediate
-if [ $? -ne 0 ]; then
-  echo "Failed to unmount intermediate installer disk image."
-  exit -1
-fi
-echo "Done."
-
-# this is also very required
-sync
-
-echo "Finalizing installer disk image..."
-if [ -f "../$ULTRASCHALL_BUILD_NAME.dmg" ]; then
-  rm "../$ULTRASCHALL_BUILD_NAME.dmg"
-fi
-hdiutil convert -format UDRO -o "../$ULTRASCHALL_BUILD_NAME.dmg" ultraschall-product/ultraschall-intermediate.dmg
-if [ $? -ne 0 ]; then
-  echo "Failed to finalize installer disk image."
   exit -1
 fi
 echo "Done."
