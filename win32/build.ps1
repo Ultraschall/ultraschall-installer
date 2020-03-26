@@ -17,8 +17,13 @@ If ($args.Count -gt 0) {
   }
 }
 
+$SourceBranch = "develop"
+if ($BuildRelease -eq $True) {
+  $SourceBranch = "master"
+}
+
 $BuildDirectory = "./_build"
-$BuildId = "R4.0_GENERIC"
+$BuildId = "R4.0.1_GENERIC"
 $BuildFailed = $False
 
 if ((Test-Path -PathType Container $BuildDirectory) -eq $False) {
@@ -107,7 +112,7 @@ if ($BuildFailed -eq $False) {
   $PluginDirectory = "./ultraschall-plugin"
   if ((Test-Path -PathType Container $PluginDirectory) -eq $False) {
     Write-Host "Downloading Ultraschall REAPER Plug-in..."
-    git clone --branch master --depth 1 https://github.com/Ultraschall/ultraschall-plugin.git $PluginDirectory
+    git clone --branch $SourceBranch --depth 1 https://github.com/Ultraschall/ultraschall-plugin.git $PluginDirectory
     if ((Test-Path -PathType Container $PluginDirectory) -eq $False) {
       Write-Host -Foreground Red "Failed to download Ultraschall REAPER Plug-in."
       $BuildFailed = $True
@@ -126,13 +131,17 @@ if ($BuildFailed -eq $False) {
 if ($BuildFailed -eq $False) {
   Push-Location $PluginDirectory
   if ($BuildRelease -eq $True) {
-    $BuildId = "4.0"
+    $BuildId = "4.0.1"
   }
   Else {
     $BuildId = (git describe --tags | Out-String).Trim()
   }
   if ($BuildId.Length -gt 0) {
-    $BuildId = "Ultraschall-" + $BuildId
+    $BuildPrefix = "ULTRASCHALL-"
+    if ($BuildRelease -eq $True) {
+      $BuildPrefix = "Ultraschall-"
+    }
+    $BuildId = $BuildPrefix + $BuildId
   }
   else {
     $BuildFailed = $True
@@ -185,7 +194,7 @@ if ($BuildFailed -eq $False) {
   if ((Test-Path -PathType Container $RedistDirectory) -eq $False) {
     Write-Host "Copying Microsoft Visual C++ 2019 CRT..."
     New-Item -ItemType Directory -Path $RedistDirectory | Out-Null
-    Copy-Item -Force "${env:ProgramFiles(x86)}/Microsoft Visual Studio/2019/Professional/VC/Redist/MSVC/14.24.28127/MergeModules/Microsoft_VC142_CRT_x64.msm" -Destination $RedistDirectory
+    Copy-Item -Force "${env:ProgramFiles(x86)}/Microsoft Visual Studio/2019/Professional/VC/Redist/MSVC/14.25.28508/MergeModules/Microsoft_VC142_CRT_x64.msm" -Destination $RedistDirectory
     if ((Test-Path -PathType Leaf "$RedistDirectory/Microsoft_VC142_CRT_x64.msm") -eq $False) {
       Write-Host -Foreground Red "Failed to copy Microsoft Visual C++ 2019 CRT."
       $BuildFailed = $True
