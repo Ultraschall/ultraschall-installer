@@ -20,7 +20,7 @@
       <![CDATA[Installed OR (VersionNT >= 601)]]>
     </Condition>
     <Media Id="1" Cabinet="Ultraschall.cab" EmbedCab="yes" DiskPrompt="CD-ROM #1" />
-    <Property Id="DiskPrompt" Value="Ultraschall 4.0 Installation [1]" />
+    <Property Id="DiskPrompt" Value="Ultraschall 4.1.0 Installation [1]" />
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="AppDataFolder">
         <Directory Id="ReaperFolder" Name="REAPER">
