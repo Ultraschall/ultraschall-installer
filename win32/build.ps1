@@ -293,7 +293,7 @@ if ($BuildFailed -eq $False) {
   Write-Host "Building installer package..."
   & $CandleProgramPath -nologo -arch x64 -out ./_build/distribution.wixobj ./installer-scripts/distribution.wxs
   if ($LASTEXITCODE -eq 0) {
-    & $LightProgramPath -nologo -sice:ICE64 -sice:ICE38 -sw1076 -ext WixUIExtension -cultures:en-us -spdb -out "$BuildId.msi" ./_build/distribution.wixobj ./_build/ultraschall_api.wixobj
+    & $LightProgramPath -nologo -sice:ICE64 -sice:ICE38 -sice:ICE57 -sw1076 -ext WixUIExtension -cultures:en-us -spdb -out "$BuildId.msi" ./_build/distribution.wixobj ./_build/ultraschall_api.wixobj
     if ($LASTEXITCODE -ne 0) {
       $BuildFailed = $True
     }
