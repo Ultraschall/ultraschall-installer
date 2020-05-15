@@ -4,3 +4,5 @@ _build/
 *.msi
 *.pkg
 *.dmg
+*.tar.gz
+
