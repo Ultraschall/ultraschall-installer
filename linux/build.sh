@@ -39,7 +39,7 @@ fi
 
 if [ ! -d ultraschall-plugin ]; then
   echo "Downloading Ultraschall REAPER Plug-in..."
-  git clone -b develop https://github.com/Ultraschall/ultraschall-plugin.git ultraschall-plugin
+  git clone --branch master --depth 1 https://github.com/Ultraschall/ultraschall-plugin.git ultraschall-plugin
   if [ ! -d ultraschall-plugin ]; then
     echo "Failed to download Ultraschall REAPER Plug-in."
     exit -1
@@ -54,7 +54,7 @@ echo "Done."
 
 if [ ! -d ultraschall-portable ]; then
   echo "Downloading Ultraschall REAPER API..."
-  git clone https://github.com/Ultraschall/ultraschall-portable.git ultraschall-portable
+  git clone --branch master --depth 1 https://github.com/Ultraschall/ultraschall-portable.git ultraschall-portable
   if [ ! -d ultraschall-portable ]; then
     echo "Failed to download Ultraschall REAPER API."
     exit -1
