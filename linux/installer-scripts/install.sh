@@ -6,7 +6,7 @@ if [ -d "$HOME/.config/REAPER" ]; then
   mkdir -p "$BACKUP_FOLDER"
   cp -r "$HOME/.config/REAPER" "$BACKUP_FOLDER"
   if [ $? -eq 0 ]; then
-    echo "Your current REAPER configuration has been save to $BACKUP_FOLDER."
+    echo "Your current REAPER configuration has been saved to $BACKUP_FOLDER."
   else
     echo "Failed to backup your current REAPER configuration. Aborting installation..."
     exit -1
