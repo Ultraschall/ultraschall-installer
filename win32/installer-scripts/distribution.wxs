@@ -20,7 +20,7 @@
       <![CDATA[Installed OR (VersionNT >= 601)]]>
     </Condition>
     <Media Id="1" Cabinet="Ultraschall.cab" EmbedCab="yes" DiskPrompt="CD-ROM #1" />
-    <Property Id="DiskPrompt" Value="Ultraschall 4.0 Installation [1]" />
+    <Property Id="DiskPrompt" Value="Ultraschall 4.1.0 Installation [1]" />
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="AppDataFolder">
         <Directory Id="ReaperFolder" Name="REAPER">
@@ -77,14 +77,20 @@
             <File Name="INSTALL.html" DiskId="1" Source=".\_build\ultraschall-resources\INSTALL.html">
               <Shortcut Id="InstallShortcut" Directory="ShortcutsFolder" Name="INSTALL.html" />
             </File>
-            <File Name="Ultraschall_4.0.ReaperConfigZip" DiskId="1" Source=".\ultraschall-theme\Ultraschall_4.0.ReaperConfigZip">
-              <Shortcut Id="ThemeDesktopShortcut" Directory="DesktopFolder" Name="Ultraschall REAPER Theme" WorkingDirectory="INSTALLDIR" Icon="Icon.exe" IconIndex="0" />
-              <Shortcut Id="ThemeShortcut" Directory="ShortcutsFolder" Name="Ultraschall REAPER Theme" Icon="Icon.exe" IconIndex="0" />
-            </File>
+            <File Id="UltraschallThemeIcon" Name="ultraschall.ico" Source=".\installer-resources\ultraschall.ico" />
           </Component>
         </Directory>
       </Directory>
-      <Directory Id="DesktopFolder" />
+      <Directory Id="DesktopFolder">
+        <Component Id="DesktopComponent" Guid="7E967F6B-0F5A-47F6-BCBC-533604D670A6" Win64="yes">
+          <File Id="UltraschallThemeFile" Name="Ultraschall_4.0.ReaperConfigZip" DiskId="1" Source=".\ultraschall-theme\Ultraschall_4.0.ReaperConfigZip" />
+          <ProgId Id="REAPER.ReaperConfigZip" Description="REAPER Theme File" Advertise="no" Icon="UltraschallThemeIcon">
+            <Extension Id="ReaperConfigZip" ContentType="application/text">
+              <!-- <Verb Id="open" Sequence="10" Command="Open" Argument="%1" /> -->
+            </Extension>
+          </ProgId>
+        </Component>
+      </Directory>
       <Directory Id="ProgramMenuFolder">
         <Directory Id="ShortcutsFolder" Name="Ultraschall">
           <Component Id="ShortcutsComponent" Guid="B7597C7E-0F99-4B16-BF1E-3EC0DAE08664" Win64="yes">
@@ -108,6 +114,7 @@
       <ComponentRef Id="UltraschallComponent" />
       <ComponentRef Id="UninstallComponent" />
       <ComponentRef Id="ShortcutsComponent" />
+      <ComponentRef Id="DesktopComponent" />
       <ComponentGroupRef Id="UltraschallApiFiles" />
     </Feature>
     <UIRef Id="WixUI_Minimal" />

@@ -233,11 +233,11 @@ echo "Done."
 
 echo "Creating final installer package..."
 if [ $BUILD_RELEASE -eq 1 ]; then
-  ULTRASCHALL_BUILD_ID="4.0-GM"
+  ULTRASCHALL_BUILD_ID="4.0"
 else
   ULTRASCHALL_BUILD_ID=$(<version.txt)
 fi
-ULTRASCHALL_BUILD_NAME="ULTRASCHALL-$ULTRASCHALL_BUILD_ID"
+ULTRASCHALL_BUILD_NAME="Ultraschall-$ULTRASCHALL_BUILD_ID"
 productsign --sign "Developer ID Installer: Heiko Panjas (8J2G689FCZ)" ultraschall-product/ultraschall-intermediate.pkg "installer-root/$ULTRASCHALL_BUILD_NAME.pkg"
 if [ $? -ne 0 ]; then
   echo "Failed to build final installer package."
