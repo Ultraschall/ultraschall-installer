@@ -6,6 +6,26 @@ echo "*            BUILDING ULTRASCHALL INSTALLER PACKAGE                  *"
 echo "*                                                                    *"
 echo "**********************************************************************"
 
+# Specify build type
+BUILD_RELEASE=0
+
+if [ "$1" = "--help" ]; then
+  echo "Usage: build.sh [ --release ]"
+  exit 0
+elif [ "$1" = "--release" ]; then
+  BUILD_RELEASE=1
+fi
+
+SOURCE_BRANCH='develop'
+if [ $BUILD_RELEASE = 1 ]; then
+  SOURCE_BRANCH='master'
+fi
+
+echo "Building installer from $SOURCE_BRANCH branch..."
+
+# Specify build id
+ULTRASCHALL_BUILD_ID='R4.1.0_GENERIC'
+
 # Specify build directory
 ULTRASCHALL_BUILD_DIRECTORY='./_build'
 
@@ -39,7 +59,7 @@ fi
 
 if [ ! -d ultraschall-plugin ]; then
   echo "Downloading Ultraschall REAPER Plug-in..."
-  git clone --branch master --depth 1 https://github.com/Ultraschall/ultraschall-plugin.git ultraschall-plugin
+  git clone --branch $SOURCE_BRANCH --depth 1 https://github.com/Ultraschall/ultraschall-plugin.git ultraschall-plugin
   if [ ! -d ultraschall-plugin ]; then
     echo "Failed to download Ultraschall REAPER Plug-in."
     exit -1
@@ -110,7 +130,15 @@ echo "Done."
 
 echo "Building Ultraschall REAPER Plug-in"
 pushd ultraschall-plugin > /dev/null
-git describe --tags > ../version.txt
+
+if [ $BUILD_RELEASE = 1 ]; then
+  ULTRASCHALL_BUILD_ID='Ultraschall-4.1.0'
+else
+  git describe --tags > ../version.txt
+  ULTRASCHALL_BUILD_TAG=$(<../version.txt)
+  ULTRASCHALL_BUILD_ID="ULTRASCHALL_$ULTRASCHALL_BUILD_TAG"
+fi
+
 if [ ! -d build ]; then
  mkdir build
 fi
@@ -173,9 +201,7 @@ chmod +x installer-package/install.sh
 echo "Done."
 
 echo "Creating installer package..."
-ULTRASCHALL_BUILD_ID=$(<version.txt)
-ULTRASCHALL_BUILD_NAME="ULTRASCHALL-$ULTRASCHALL_BUILD_ID"
-tar -czf "../$ULTRASCHALL_BUILD_NAME.tar.gz" installer-package
+tar -czf "../$ULTRASCHALL_BUILD_ID.tar.gz" installer-package
 if [ $? -ne 0 ]; then
   echo "Failed to build final installer package."
   exit -1
