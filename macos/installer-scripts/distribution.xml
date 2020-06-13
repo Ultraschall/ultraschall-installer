@@ -1,76 +1,83 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <installer-gui-script minSpecVersion="1">
-    <title>ULTRASCHALL-4.0</title>
-    <organization>fm.ultraschall</organization>
-    <options customize="never" require-scripts="true" rootVolumeOnly="true" />
-    <domains enable_anywhere="false" enable_localSystem="false" enable_currentUserHome="true" />
-    <os-version min="10.11" />
-    <background file="installer-background.png" mime-type="image/png" />
-    <!-- Define documents displayed at various steps -->
-    <license file="license.html" mime-type="text/html" />
-    <!-- List all component packages -->
-    <pkg-ref id="fm.ultraschall.reaper.plugin" version="3.2.0">
+  <title>ULTRASCHALL-4.1</title>
+  <organization>fm.ultraschall</organization>
+  <options customize="never" require-scripts="true" rootVolumeOnly="true" />
+  <domains enable_anywhere="false" enable_localSystem="false" enable_currentUserHome="true" />
+  <os-version min="10.11" />
+  <background file="installer-background.png" mime-type="image/png" />
+  <!-- Define documents displayed at various steps -->
+  <license file="license.html" mime-type="text/html" />
+  <!-- List all component packages -->
+  <pkg-ref id="fm.ultraschall.reaper.plugin" version="3.2.0">
         ultraschall-reaper-plugin.pkg
-    </pkg-ref>
-    <pkg-ref id="fm.ultraschall.reaper.api" version="3.2.0">
+  </pkg-ref>
+  <pkg-ref id="fm.ultraschall.reaper.api" version="3.2.0">
         ultraschall-reaper-api.pkg
-    </pkg-ref>
-    <pkg-ref id="fm.ultraschall.soundboard" version="3.1.1">
+  </pkg-ref>
+  <pkg-ref id="fm.ultraschall.reaper.theme" version="3.1.1">
+        ultraschall-reaper-theme.pkg
+  </pkg-ref>
+  <pkg-ref id="fm.ultraschall.soundboard" version="3.1.1">
         ultraschall-soundboard.pkg
-    </pkg-ref>
-    <pkg-ref id="fm.ultraschall.studiolink" version="17.0.3">
+  </pkg-ref>
+  <pkg-ref id="fm.ultraschall.studiolink" version="17.0.3">
         studio-link.pkg
-    </pkg-ref>
-    <pkg-ref id="fm.ultraschall.studiolink.onair" version="17.0.3">
+  </pkg-ref>
+  <pkg-ref id="fm.ultraschall.studiolink.onair" version="17.0.3">
         studio-link-onair.pkg
-    </pkg-ref>
-    <pkg-ref id="fm.ultraschall.reaper.sws.plugins" version="2.10.0">
+  </pkg-ref>
+  <pkg-ref id="fm.ultraschall.reaper.sws.plugins" version="2.10.0">
         reaper-sws-extension-plugins.pkg
-    </pkg-ref>
-    <pkg-ref id="fm.ultraschall.reaper.sws.scripts" version="2.10.0">
+  </pkg-ref>
+  <pkg-ref id="fm.ultraschall.reaper.sws.scripts" version="2.10.0">
         reaper-sws-extension-scripts.pkg
-    </pkg-ref>
-    <pkg-ref id="fm.ultraschall.reaper.js" version="0.995">
+  </pkg-ref>
+  <pkg-ref id="fm.ultraschall.reaper.js" version="0.995">
         reaper-js-extension.pkg
-    </pkg-ref>
-    <pkg-ref id="fm.ultraschall.reaper.reapack" version="1.2.2">
+  </pkg-ref>
+  <pkg-ref id="fm.ultraschall.reaper.reapack" version="1.2.2">
         reaper-reapack-extension.pkg
-    </pkg-ref>
-    <!-- List them again here. They can now be organised as a hierarchy if you want. -->
-    <choices-outline>
-        <line choice="fm.ultraschall.reaper.plugin" />
-        <line choice="fm.ultraschall.reaper.api" />
-        <line choice="fm.ultraschall.soundboard" />
-        <line choice="fm.ultraschall.studiolink" />
-        <line choice="fm.ultraschall.studiolink.onair" />
-        <line choice="fm.ultraschall.reaper.sws" />
-        <line choice="fm.ultraschall.reaper.js" />
-        <line choice="fm.ultraschall.reaper.reapack" />
-    </choices-outline>
-    <!-- Define each choice above -->
-    <choice id="fm.ultraschall.reaper.plugin" visible="true" title="Ultraschall REAPER Extension" description="Ultraschall REAPER Plug-in." start_selected="true">
-        <pkg-ref id="fm.ultraschall.reaper.plugin" />
-    </choice>
-    <choice id="fm.ultraschall.reaper.api" visible="false" title="Ultraschall API" description="A collection of LUA scripts for programming REAPER and Ultraschall." start_selected="true">
-        <pkg-ref id="fm.ultraschall.reaper.api" />
-    </choice>
-    <choice id="fm.ultraschall.soundboard" visible="true" title="Ultraschall Soundboard" description="Ultraschall Soundboard." start_selected="true">
-        <pkg-ref id="fm.ultraschall.soundboard" />
-    </choice>
-    <choice id="fm.ultraschall.studiolink" visible="true" title="StudioLink" description="StudioLink Plug-in." start_selected="true">
-        <pkg-ref id="fm.ultraschall.studiolink" />
-    </choice>
-    <choice id="fm.ultraschall.studiolink.onair" visible="true" title="StudioLink" description="StudioLink OnAir Plug-in." start_selected="true">
-        <pkg-ref id="fm.ultraschall.studiolink.onair" />
-    </choice>
-    <choice id="fm.ultraschall.reaper.sws" visible="true" title="REAPER SWS Extension" description="REAPER SWS Extension (see https://sws-extension.org)" start_selected="true">
-        <pkg-ref id="fm.ultraschall.reaper.sws.plugins" />
-        <pkg-ref id="fm.ultraschall.reaper.sws.scripts" />
-    </choice>
-    <choice id="fm.ultraschall.reaper.js" visible="true" title="REAPER JS Extension" description="REAPER JS Extension (see https://github.com/juliansader/ReaExtensions)" start_selected="true">
-        <pkg-ref id="fm.ultraschall.reaper.js" />
-    </choice>
-    <choice id="fm.ultraschall.reaper.reapack" visible="true" title="REAPER ReaPack Extension" description="REAPER ReaPack Extension (see https://reapack.com)" start_selected="true">
-        <pkg-ref id="fm.ultraschall.reaper.reapack" />
-    </choice>
+  </pkg-ref>
+  <!-- List them again here. They can now be organised as a hierarchy if you want. -->
+  <choices-outline>
+    <line choice="fm.ultraschall.reaper.plugin" />
+    <line choice="fm.ultraschall.reaper.api" />
+    <line choice="fm.ultraschall.reaper.theme" />
+    <line choice="fm.ultraschall.soundboard" />
+    <line choice="fm.ultraschall.studiolink" />
+    <line choice="fm.ultraschall.studiolink.onair" />
+    <line choice="fm.ultraschall.reaper.sws" />
+    <line choice="fm.ultraschall.reaper.js" />
+    <line choice="fm.ultraschall.reaper.reapack" />
+  </choices-outline>
+  <!-- Define each choice above -->
+  <choice id="fm.ultraschall.reaper.plugin" visible="true" title="Ultraschall REAPER Extension" description="Ultraschall REAPER Plug-in." start_selected="true">
+    <pkg-ref id="fm.ultraschall.reaper.plugin" />
+  </choice>
+  <choice id="fm.ultraschall.reaper.api" visible="false" title="Ultraschall API" description="A collection of LUA scripts for programming REAPER and Ultraschall." start_selected="true">
+    <pkg-ref id="fm.ultraschall.reaper.api" />
+  </choice>
+  <choice id="fm.ultraschall.reaper.theme" visible="true" title="Ultraschall Theme" description="Ultraschall Theme." start_selected="true">
+    <pkg-ref id="fm.ultraschall.reaper.theme" />
+  </choice>
+  <choice id="fm.ultraschall.soundboard" visible="true" title="Ultraschall Soundboard" description="Ultraschall Soundboard." start_selected="true">
+    <pkg-ref id="fm.ultraschall.soundboard" />
+  </choice>
+  <choice id="fm.ultraschall.studiolink" visible="true" title="StudioLink" description="StudioLink Plug-in." start_selected="true">
+    <pkg-ref id="fm.ultraschall.studiolink" />
+  </choice>
+  <choice id="fm.ultraschall.studiolink.onair" visible="true" title="StudioLink" description="StudioLink OnAir Plug-in." start_selected="true">
+    <pkg-ref id="fm.ultraschall.studiolink.onair" />
+  </choice>
+  <choice id="fm.ultraschall.reaper.sws" visible="true" title="REAPER SWS Extension" description="REAPER SWS Extension (see https://sws-extension.org)" start_selected="true">
+    <pkg-ref id="fm.ultraschall.reaper.sws.plugins" />
+    <pkg-ref id="fm.ultraschall.reaper.sws.scripts" />
+  </choice>
+  <choice id="fm.ultraschall.reaper.js" visible="true" title="REAPER JS Extension" description="REAPER JS Extension (see https://github.com/juliansader/ReaExtensions)" start_selected="true">
+    <pkg-ref id="fm.ultraschall.reaper.js" />
+  </choice>
+  <choice id="fm.ultraschall.reaper.reapack" visible="true" title="REAPER ReaPack Extension" description="REAPER ReaPack Extension (see https://reapack.com)" start_selected="true">
+    <pkg-ref id="fm.ultraschall.reaper.reapack" />
+  </choice>
 </installer-gui-script>

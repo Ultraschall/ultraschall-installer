@@ -48,7 +48,7 @@ fi
 
 if [ ! -d ultraschall-plugin ]; then
   echo "Downloading Ultraschall REAPER Plug-in..."
-  git clone --branch master --depth 1 https://github.com/Ultraschall/ultraschall-plugin.git ultraschall-plugin
+  git clone --branch develop --depth 1 https://github.com/Ultraschall/ultraschall-plugin.git ultraschall-plugin
   if [ ! -d ultraschall-plugin ]; then
     echo "Failed to download Ultraschall REAPER Plug-in."
     exit -1
@@ -125,10 +125,6 @@ cp ultraschall-assets/source/us-banner_2000.png "installer-root/Extras/Ultrascha
 cp ultraschall-assets/images/Ultraschall-4-Logo.png "installer-root/Extras/Ultraschall-4-Logo.png"
 echo "Done."
 
-echo "Copying Ultraschall REAPER Theme..."
-cp ../ultraschall-theme/Ultraschall_4.0.ReaperConfigZip installer-root/Ultraschall_4.0.ReaperConfigZip
-echo "Done."
-
 echo "Copying Ultraschall Utilities..."
 if [ ! -d installer-root/Utilities ]; then
   mkdir installer-root/Utilities
@@ -192,6 +188,10 @@ echo "Creating Ultraschall REAPER API installer package..."
 pkgbuild --root ultraschall-api --scripts ../ultraschall-api/scripts --identifier fm.ultraschall.reaper.api --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/ultraschall-reaper-api.pkg
 echo "Done."
 
+echo "Creating Ultraschall REAPER Theme installer package..."
+pkgbuild --root ../ultraschall-theme/payload/4.1 --scripts ../ultraschall-theme/scripts --identifier fm.ultraschall.reaper.theme --install-location "/Library/Application Support/Ultraschall/Theme" installer-packages/ultraschall-reaper-theme.pkg
+echo "Done."
+
 echo "Creating Ultraschall Soundboard installer package..."
 pkgbuild --root ../ultraschall-soundboard/payload --scripts ../ultraschall-soundboard/scripts --identifier fm.ultraschall.soundboard --install-location "/Library/Audio/Plug-Ins/Components" installer-packages/ultraschall-soundboard.pkg
 echo "Done."
@@ -233,11 +233,11 @@ echo "Done."
 
 echo "Creating final installer package..."
 if [ $BUILD_RELEASE -eq 1 ]; then
-  ULTRASCHALL_BUILD_ID="4.0"
+  ULTRASCHALL_BUILD_ID="Ultraschall-4.1"
 else
-  ULTRASCHALL_BUILD_ID=$(<version.txt)
+  ULTRASCHALL_BUILD_ID="ULTRASCHALL_$(<version.txt)"
 fi
-ULTRASCHALL_BUILD_NAME="Ultraschall-$ULTRASCHALL_BUILD_ID"
+ULTRASCHALL_BUILD_NAME=$ULTRASCHALL_BUILD_ID
 productsign --sign "Developer ID Installer: Heiko Panjas (8J2G689FCZ)" ultraschall-product/ultraschall-intermediate.pkg "installer-root/$ULTRASCHALL_BUILD_NAME.pkg"
 if [ $? -ne 0 ]; then
   echo "Failed to build final installer package."
@@ -297,7 +297,6 @@ echo "        set viewOptions to the icon view options of container window" >> c
 echo "        set arrangement of viewOptions to not arranged" >> create-window-layout.script
 echo "        set background picture of viewOptions to file \".background:background.png\"" >> create-window-layout.script
 echo "        set position of item \"$ULTRASCHALL_BUILD_NAME.pkg\" of container window to {50, 30}" >> create-window-layout.script
-echo "        set position of item \"Ultraschall_4.0.ReaperConfigZip\" of container window to {200, 30}" >> create-window-layout.script
 echo "        set position of item \"README.html\" of container window to {50, 140}" >> create-window-layout.script
 echo "        set position of item \"INSTALL.html\" of container window to {200, 140}" >> create-window-layout.script
 echo "        set position of item \"CHANGELOG.html\" of container window to {350, 140}" >> create-window-layout.script
