@@ -290,6 +290,11 @@ if ($BuildFailed -eq $False) {
 }
 
 if ($BuildFailed -eq $False) {
+  Write-Host "Building custom installer action..."
+  Write-Host "Done."
+}
+
+if ($BuildFailed -eq $False) {
   Write-Host "Building installer package..."
   & $CandleProgramPath -nologo -arch x64 -out ./build/distribution.wixobj ./installer-scripts/distribution.wxs
   if ($LASTEXITCODE -eq 0) {
