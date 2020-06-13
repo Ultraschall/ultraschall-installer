@@ -27,7 +27,7 @@ echo "Building installer from $SOURCE_BRANCH branch..."
 ULTRASCHALL_BUILD_ID='R4.1.0_GENERIC'
 
 # Specify build directory
-ULTRASCHALL_BUILD_DIRECTORY='./_build'
+ULTRASCHALL_BUILD_DIRECTORY='./build'
 
 # Create folder for intermediate data
 if [ ! -d $ULTRASCHALL_BUILD_DIRECTORY ]; then

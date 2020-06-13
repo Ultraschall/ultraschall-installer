@@ -1,8 +1,8 @@
 .vscode/
 .DS_Store
 _build/
+build/
 *.msi
 *.pkg
 *.dmg
 *.tar.gz
-
