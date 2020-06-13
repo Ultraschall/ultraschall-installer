@@ -16,7 +16,7 @@ echo "*                                                                    *"
 echo "**********************************************************************"
 
 # Specify build directory
-ULTRASCHALL_BUILD_DIRECTORY='./_build'
+ULTRASCHALL_BUILD_DIRECTORY='./build'
 
 # Create folder for intermediate data
 if [ ! -d $ULTRASCHALL_BUILD_DIRECTORY ]; then
