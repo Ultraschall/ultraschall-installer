@@ -22,7 +22,7 @@ if ($BuildRelease -eq $True) {
   $SourceBranch = "master"
 }
 
-$BuildDirectory = "./_build"
+$BuildDirectory = "./build"
 $BuildId = "R4.1.0_GENERIC"
 $BuildFailed = $False
 
@@ -273,12 +273,12 @@ Pop-Location
 Write-Host "Done."
 
 $env:ULTRASCHALL_BUILD_ID = $BuildId
-$env:ULTRASCHALL_API_SOURCE = ".\_build\ultraschall_api"
+$env:ULTRASCHALL_API_SOURCE = ".\build\ultraschall_api"
 if ($BuildFailed -eq $False) {
   Write-Host "Compiling API Files..."
-  & $HeatProgramPath dir $env:ULTRASCHALL_API_SOURCE -nologo -cg UltraschallApiFiles -ag -scom -sreg -sfrag -srd -dr ReaperPluginsFolder -var env.ULTRASCHALL_API_SOURCE -out ./_build/ultraschall_api.wxs
+  & $HeatProgramPath dir $env:ULTRASCHALL_API_SOURCE -nologo -cg UltraschallApiFiles -ag -scom -sreg -sfrag -srd -dr ReaperPluginsFolder -var env.ULTRASCHALL_API_SOURCE -out ./build/ultraschall_api.wxs
   if ($LASTEXITCODE -eq 0) {
-    & $CandleProgramPath -nologo -arch x64 -out ./_build/ultraschall_api.wixobj ./_build/ultraschall_api.wxs
+    & $CandleProgramPath -nologo -arch x64 -out ./build/ultraschall_api.wixobj ./build/ultraschall_api.wxs
     if ($LASTEXITCODE -ne 0) {
       $BuildFailed = $True
     }
@@ -290,10 +290,15 @@ if ($BuildFailed -eq $False) {
 }
 
 if ($BuildFailed -eq $False) {
+  Write-Host "Building custom installer action..."
+  Write-Host "Done."
+}
+
+if ($BuildFailed -eq $False) {
   Write-Host "Building installer package..."
-  & $CandleProgramPath -nologo -arch x64 -out ./_build/distribution.wixobj ./installer-scripts/distribution.wxs
+  & $CandleProgramPath -nologo -arch x64 -out ./build/distribution.wixobj ./installer-scripts/distribution.wxs
   if ($LASTEXITCODE -eq 0) {
-    & $LightProgramPath -nologo -sice:ICE64 -sice:ICE38 -sice:ICE57 -sw1076 -ext WixUIExtension -cultures:en-us -spdb -out "$BuildId.msi" ./_build/distribution.wixobj ./_build/ultraschall_api.wixobj
+    & $LightProgramPath -nologo -sice:ICE64 -sice:ICE38 -sice:ICE57 -sw1076 -ext WixUIExtension -cultures:en-us -spdb -out "$BuildId.msi" ./build/distribution.wixobj ./build/ultraschall_api.wixobj
     if ($LASTEXITCODE -ne 0) {
       $BuildFailed = $True
     }

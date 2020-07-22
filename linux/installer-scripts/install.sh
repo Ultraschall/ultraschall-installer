@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ -d "$HOME/.config/REAPER" ]; then
-  BACKUP_TIMESTAMP=$(date --iso-8601=seconds)
+  BACKUP_TIMESTAMP=$(date -u "+%Y%m%dT%H%M%S")
   BACKUP_FOLDER="$HOME/.config/ultraschall/backups/$BACKUP_TIMESTAMP"
   mkdir -p "$BACKUP_FOLDER"
   cp -r "$HOME/.config/REAPER" "$BACKUP_FOLDER"

@@ -6,3 +6,6 @@ build/
 *.pkg
 *.dmg
 *.tar.gz
+.vs/
+bin/
+obj/

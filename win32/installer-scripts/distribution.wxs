@@ -20,6 +20,19 @@
       <![CDATA[Installed OR (VersionNT >= 601)]]>
     </Condition>
     <Media Id="1" Cabinet="Ultraschall.cab" EmbedCab="yes" DiskPrompt="CD-ROM #1" />
+
+    <Binary Id="ULTRASCHALL_CustomActions" SourceFile=".\installer-action\release\custom-action.CA.dll" />
+    <CustomAction Id="ULTRASCHALL_PreInstallActionId" BinaryKey="ULTRASCHALL_CustomActions" DllEntry="PreInstallAction" Execute="deferred" HideTarget="yes" />
+    <CustomAction Id="ULTRASCHALL_PostInstallActionId" BinaryKey="ULTRASCHALL_CustomActions" DllEntry="PostInstallAction" Execute="deferred" HideTarget="yes" />
+    <InstallExecuteSequence>
+      <Custom Action="ULTRASCHALL_PreInstallActionId" After="InstallInitialize">
+        (NOT Installed) AND (NOT REINSTALL) AND (NOT UPGRADINGPRODUCTCODE) AND (NOT REMOVE)
+      </Custom>
+      <Custom Action="ULTRASCHALL_PostInstallActionId" Before="InstallFinalize">
+        NOT REMOVE
+      </Custom>
+    </InstallExecuteSequence>
+
     <Property Id="DiskPrompt" Value="Ultraschall 4.1.0 Installation [1]" />
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="AppDataFolder">
@@ -31,7 +44,7 @@
           <Directory Id="ReaperPluginsFolder" Name="UserPlugins">
             <Component Id="ReaperPluginsComponent" Guid="C03BAC23-1BA8-4E6D-9B5A-88E09ED2E9E2" Win64="yes">
               <RegistryValue Root="HKCU" Key="Software\Ultraschall" Name="Uninstall" Type="string" Value="1.0.0.0" KeyPath="yes" />
-              <File Id="ReaperUltraschallDll" Name="reaper_ultraschall.dll" DiskId="1" Source=".\_build\ultraschall-plugin\_build\src\Release\reaper_ultraschall.dll" />
+              <File Id="ReaperUltraschallDll" Name="reaper_ultraschall.dll" DiskId="1" Source=".\build\ultraschall-plugin\build\src\Release\reaper_ultraschall.dll" />
               <File Name="reaper_sws64.dll" DiskId="1" Source="..\sws-extension\reaper_sws64.dll" />
               <File Name="reaper_js_ReaScriptAPI64.dll" DiskId="1" Source="..\js-extension\reaper_js_ReaScriptAPI64.dll" />
               <File Name="reaper_reapack64.dll" DiskId="1" Source="..\reapack-extension\reaper_reapack64.dll" />
@@ -60,36 +73,27 @@
             <RegistryKey Root="HKCU" Key="Software\Ultraschall\Uninstall">
               <RegistryValue Value="Uninstall Ultraschall" Type="string" KeyPath="yes" />
             </RegistryKey>
-            <Shortcut Id="UninstallProduct" Name="Uninstall Ultraschall" Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]" Directory="UltraschallFolder" Description="Uninstall Ultraschall" />
+            <Shortcut Id="UninstallProduct" Name="Uninstall Ultraschall" Target="[System64Folder]msiexec.exe" Arguments=" /x [ProductCode]" Directory="UltraschallFolder" Description="Uninstall Ultraschall" />
           </Component>
           <Component Id="UltraschallComponent" Guid="9F68E7D5-9D8E-45B9-9AED-3E1137F2466C" Win64="yes">
             <RemoveFolder Id="RemoveUltraschallComponent" Directory="UltraschallFolder" On="uninstall" />
             <RegistryValue Root="HKCU" Key="Software\Ultraschall" Name="Uninstall" Type="string" Value="1.0.0.0" KeyPath="yes" />
-            <File Name="Ultraschall Keyboard Layout.pdf" DiskId="1" Source="_build\ultraschall-assets\keyboard-layout\Keymap.pdf">
+            <File Name="Ultraschall_4.1.ReaperConfigZip" DiskId="1" Source=".\ultraschall-theme\4.1\Ultraschall_4.1.ReaperConfigZip" />
+            <File Name="Ultraschall Keyboard Layout.pdf" DiskId="1" Source="build\ultraschall-assets\keyboard-layout\Keymap.pdf">
               <Shortcut Id="KeyboardLayoutPdfShortcut" Directory="ShortcutsFolder" Name="Ultraschall Keyboard Layout.pdf" />
             </File>
-            <File Name="README.html" DiskId="1" Source=".\_build\ultraschall-resources\README.html">
+            <File Name="README.html" DiskId="1" Source=".\build\ultraschall-resources\README.html">
               <Shortcut Id="ReadmeShortcut" Directory="ShortcutsFolder" Name="README.html" />
             </File>
-            <File Name="CHANGELOG.html" DiskId="1" Source=".\_build\ultraschall-resources\CHANGELOG.html">
+            <File Name="CHANGELOG.html" DiskId="1" Source=".\build\ultraschall-resources\CHANGELOG.html">
               <Shortcut Id="ChangelogShortcut" Directory="ShortcutsFolder" Name="CHANGELOG.html" />
             </File>
-            <File Name="INSTALL.html" DiskId="1" Source=".\_build\ultraschall-resources\INSTALL.html">
+            <File Name="INSTALL.html" DiskId="1" Source=".\build\ultraschall-resources\INSTALL.html">
               <Shortcut Id="InstallShortcut" Directory="ShortcutsFolder" Name="INSTALL.html" />
             </File>
             <File Id="UltraschallThemeIcon" Name="ultraschall.ico" Source=".\installer-resources\ultraschall.ico" />
           </Component>
         </Directory>
-      </Directory>
-      <Directory Id="DesktopFolder">
-        <Component Id="DesktopComponent" Guid="7E967F6B-0F5A-47F6-BCBC-533604D670A6" Win64="yes">
-          <File Id="UltraschallThemeFile" Name="Ultraschall_4.0.ReaperConfigZip" DiskId="1" Source=".\ultraschall-theme\Ultraschall_4.0.ReaperConfigZip" />
-          <ProgId Id="REAPER.ReaperConfigZip" Description="REAPER Theme File" Advertise="no" Icon="UltraschallThemeIcon">
-            <Extension Id="ReaperConfigZip" ContentType="application/text">
-              <!-- <Verb Id="open" Sequence="10" Command="Open" Argument="%1" /> -->
-            </Extension>
-          </ProgId>
-        </Component>
       </Directory>
       <Directory Id="ProgramMenuFolder">
         <Directory Id="ShortcutsFolder" Name="Ultraschall">
@@ -101,7 +105,7 @@
       </Directory>
     </Directory>
     <DirectoryRef Id="TARGETDIR">
-      <Merge Id="VCRedist" SourceFile=".\_build\microsoft-redist\Microsoft_VC142_CRT_x64.msm" DiskId="1" Language="0" />
+      <Merge Id="VCRedist" SourceFile=".\build\microsoft-redist\Microsoft_VC142_CRT_x64.msm" DiskId="1" Language="0" />
     </DirectoryRef>
     <Feature Id="VCRedist" Title="Visual C++ Runtime" AllowAdvertise="no" Display="hidden" Level="1">
       <MergeRef Id="VCRedist" />
@@ -114,7 +118,6 @@
       <ComponentRef Id="UltraschallComponent" />
       <ComponentRef Id="UninstallComponent" />
       <ComponentRef Id="ShortcutsComponent" />
-      <ComponentRef Id="DesktopComponent" />
       <ComponentGroupRef Id="UltraschallApiFiles" />
     </Feature>
     <UIRef Id="WixUI_Minimal" />
