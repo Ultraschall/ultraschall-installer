@@ -140,22 +140,24 @@ if [ ! -d build ]; then
  mkdir build
 fi
 pushd build > /dev/null
-cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release ../
+cmake -G "Unix Makefiles" -Wno-dev -DCMAKE_BUILD_TYPE=Release ../
 if [ $? -ne 0 ]; then
   echo "Failed to configure Ultraschall REAPER Plug-in."
   exit -1
 fi
-cmake --build . --target reaper_ultraschall --config Release
+cmake --build . --target reaper_ultraschall --config Release -j 6
 if [ $? -ne 0 ]; then
   echo "Failed to build Ultraschall REAPER Plug-in."
   exit -1
 fi
+mkdir -p Release
+mv ./src/reaper_ultraschall.dylib release/
 popd > /dev/null
 popd > /dev/null
 echo "Done."
 
 echo "Signing ULTRASCHALL REAPER Plug-in..."
-codesign --force --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" ultraschall-plugin/build/src/Release/reaper_ultraschall.dylib
+codesign --force --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" ultraschall-plugin/build/release/reaper_ultraschall.dylib
 if [ $? -ne 0 ]; then
   echo "Failed to sign ULTRASCHALL REAPER Plug-in."
   exit -1
@@ -181,7 +183,7 @@ fi
 echo "Done."
 
 echo "Creating Ultraschall REAPER Plug-in installer package..."
-pkgbuild --root ultraschall-plugin/build/src/Release --scripts ../ultraschall-plugin/scripts --identifier fm.ultraschall.reaper.plugin --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/ultraschall-reaper-plugin.pkg
+pkgbuild --root ultraschall-plugin/build/release --scripts ../ultraschall-plugin/scripts --identifier fm.ultraschall.reaper.plugin --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/ultraschall-reaper-plugin.pkg
 echo "Done."
 
 echo "Creating Ultraschall REAPER API installer package..."
