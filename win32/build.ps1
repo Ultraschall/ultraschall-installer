@@ -194,7 +194,7 @@ if ($BuildFailed -eq $False) {
   if ((Test-Path -PathType Container $RedistDirectory) -eq $False) {
     Write-Host "Copying Microsoft Visual C++ 2019 CRT..."
     New-Item -ItemType Directory -Path $RedistDirectory | Out-Null
-    Copy-Item -Force "${env:ProgramFiles(x86)}/Microsoft Visual Studio/2019/Professional/VC/Redist/MSVC/14.26.28720/MergeModules/Microsoft_VC142_CRT_x64.msm" -Destination $RedistDirectory
+    Copy-Item -Force "${env:ProgramFiles(x86)}/Microsoft Visual Studio/2019/Professional/VC/Redist/MSVC/14.27.29016/MergeModules/Microsoft_VC142_CRT_x64.msm" -Destination $RedistDirectory
     if ((Test-Path -PathType Leaf "$RedistDirectory/Microsoft_VC142_CRT_x64.msm") -eq $False) {
       Write-Host -Foreground Red "Failed to copy Microsoft Visual C++ 2019 CRT."
       $BuildFailed = $True
