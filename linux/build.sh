@@ -24,7 +24,7 @@ fi
 echo "Building installer from $SOURCE_BRANCH branch..."
 
 # Specify build id
-ULTRASCHALL_BUILD_ID='R4.1.0_GENERIC'
+ULTRASCHALL_BUILD_ID='R5.0.0_GENERIC'
 
 # Specify build directory
 ULTRASCHALL_BUILD_DIRECTORY='./build'
