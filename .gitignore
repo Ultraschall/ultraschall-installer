@@ -9,4 +9,4 @@ build/
 .vs/
 bin/
 obj/
-.ionide
+.ionide/
