@@ -156,14 +156,6 @@ popd > /dev/null
 popd > /dev/null
 echo "Done."
 
-echo "Signing ULTRASCHALL REAPER Plug-in..."
-codesign --force --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" ultraschall-plugin/build/release/reaper_ultraschall.dylib
-if [ $? -ne 0 ]; then
-  echo "Failed to sign ULTRASCHALL REAPER Plug-in."
-  exit -1
-fi
-echo "Done."
-
 echo "Building ULTRASCHALL REAPER API..."
 if [ ! -d ultraschall-api ]; then
   mkdir ultraschall-api
@@ -235,12 +227,12 @@ echo "Done."
 
 echo "Creating final installer package..."
 if [ $BUILD_RELEASE -eq 1 ]; then
-  ULTRASCHALL_BUILD_ID="Ultraschall-4.1"
+  ULTRASCHALL_BUILD_ID="Ultraschall-5.0.0"
 else
   ULTRASCHALL_BUILD_ID="ULTRASCHALL_$(<version.txt)"
 fi
 ULTRASCHALL_BUILD_NAME=$ULTRASCHALL_BUILD_ID
-productsign --sign "Developer ID Installer: Heiko Panjas (8J2G689FCZ)" ultraschall-product/ultraschall-intermediate.pkg "installer-root/$ULTRASCHALL_BUILD_NAME.pkg"
+cp ultraschall-product/ultraschall-intermediate.pkg "installer-root/$ULTRASCHALL_BUILD_NAME.pkg"
 if [ $? -ne 0 ]; then
   echo "Failed to build final installer package."
   exit -1
@@ -270,22 +262,6 @@ fi
 echo "Done."
 
 sync
-
-echo "Signing uninstall script..."
-codesign --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" ultraschall-intermediate/Uninstall.command
-if [ $? -ne 0 ]; then
-  echo "Failed to sign uninstall script."
-  exit -1
-fi
-echo "Done."
-
-echo "Signing device removal script..."
-codesign --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" "ultraschall-intermediate/Utilities/Remove legacy audio devices.command"
-if [ $? -ne 0 ]; then
-  echo "Failed to sign device removal script."
-  exit -1
-fi
-echo "Done."
 
 echo "Creating installer disk window layout..."
 echo "tell application \"Finder\"" > create-window-layout.script
