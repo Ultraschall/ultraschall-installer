@@ -23,7 +23,7 @@ if ($BuildRelease -eq $True) {
 }
 
 $BuildDirectory = "./build"
-$BuildId = "R4.1.0_GENERIC"
+$BuildId = "R5.0.0_GENERIC"
 $BuildFailed = $False
 
 if ((Test-Path -PathType Container $BuildDirectory) -eq $False) {
@@ -131,7 +131,7 @@ if ($BuildFailed -eq $False) {
 if ($BuildFailed -eq $False) {
   Push-Location $PluginDirectory
   if ($BuildRelease -eq $True) {
-    $BuildId = "4.1.0"
+    $BuildId = "5.0.0"
   }
   Else {
     $BuildId = (git describe --tags | Out-String).Trim()
