@@ -2,7 +2,7 @@
 
 
 echo "Installing the Ultraschall REAPER Theme..."
-unzip -o "$HOME/Library/Application Support/Ultraschall/Theme/Ultraschall_4.1.ReaperConfigZip" -d "$HOME/Library/Application Support/REAPER"
+unzip -o "$HOME/Library/Application Support/Ultraschall/Theme/Ultraschall_5.0.ReaperConfigZip" -d "$HOME/Library/Application Support/REAPER"
 
 if [ $? -ne 0 ]; then
   echo "Failed to install Ultraschall."
