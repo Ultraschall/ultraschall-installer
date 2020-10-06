@@ -25,7 +25,7 @@
 			<key>type</key>
 			<string>aufx</string>
 			<key>version</key>
-			<integer>1311491</integer>
+			<integer>1312000</integer>
 		</dict>
 	</array>
 	<key>BuildMachineOSBuild</key>
@@ -41,7 +41,7 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>20.03.3</string>
+	<string>20.05.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleSupportedPlatforms</key>
@@ -49,21 +49,21 @@
 		<string>MacOSX</string>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>20.03.3</string>
+	<string>20.05.0</string>
 	<key>DTCompiler</key>
 	<string>com.apple.compilers.llvm.clang.1_0</string>
 	<key>DTPlatformBuild</key>
-	<string>10B61</string>
+	<string>9F2000</string>
 	<key>DTPlatformVersion</key>
 	<string>GM</string>
 	<key>DTSDKBuild</key>
-	<string>18B71</string>
+	<string>17E189</string>
 	<key>DTSDKName</key>
-	<string>macosx10.14</string>
+	<string>macosx10.13</string>
 	<key>DTXcode</key>
-	<string>1010</string>
+	<string>0941</string>
 	<key>DTXcodeBuild</key>
-	<string>10B61</string>
+	<string>9F2000</string>
 	<key>NSHighResolutionCapable</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
