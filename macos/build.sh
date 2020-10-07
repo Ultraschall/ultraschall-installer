@@ -1,7 +1,11 @@
 #!/bin/sh
 
+ULTRASCHALL_BUILD_DATE=$(date -ju "+%Y%m%dT%H%M%S")
+ULTRASCHALL_BUILD_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')
+
 ULTRASCHALL_BUILD_BOOTSTRAP=0
 ULTRASCHALL_BUILD_CLEAN=0
+ULTRASCHALL_BUILD_ALL=0
 ULTRASCHALL_BUILD_RELEASE=0
 ULTRASCHALL_BUILD_CODESIGN=0
 ULTRASCHALL_BUILD_UPDATE=0
@@ -13,6 +17,13 @@ ULTRASCHALL_BUILD_DIRECTORY="$ULTRASCHALL_ROOT_DIRECTORY/build"
 ULTRASCHALL_TOOLS_DIRECTORY="$ULTRASCHALL_BUILD_DIRECTORY/tools"
 ULTRASCHALL_PAYLOAD_DIRECTORY="$ULTRASCHALL_BUILD_DIRECTORY/payload"
 
+ULTRASCHALL_PLUGIN_URL="https://github.com/Ultraschall/ultraschall-plugin.git"
+ULTRASCHALL_PLUGIN_BRANCH="<Unknown>"
+ULTRASCHALL_PLUGIN_COMMIT="<Unknown>"
+ULTRASCHALL_PORTABLE_URL="https://github.com/Ultraschall/ultraschall-portable.git"
+ULTRASCHALL_PORTABLE_BRANCH="<Unknown>"
+ULTRASCHALL_PORTABLE_COMMIT="<Unknown>"
+
 for arg in "$@"
 do
 case $arg in
@@ -20,6 +31,10 @@ case $arg in
     # docker_file="${arg#*=}"
     # shift # past argument
     # ;;
+    "-a"|"--all")
+    ULTRASCHALL_BUILD_ALL=1
+    shift # past argument
+    ;;
     "-b"|"--bootstrap")
     ULTRASCHALL_BUILD_BOOTSTRAP=1
     shift # past argument
@@ -32,12 +47,13 @@ case $arg in
     echo "Usage: build.sh [Options]"
     echo ""
     echo "Options:"
-    echo "  -b|--bootstrap  Reinit build tools and build targets"
+    echo "  -a|--all        Use with --clean to remove the build tools as well"
+    echo "  -b|--bootstrap  Reinitialize build tools and build targets"
     echo "  -c|--clean      Delete intermediate build targets"
     echo "  -h|--help       Print this help screen"
     echo "  -r|--release    Build release version"
     echo "  -s|--sign       Code-sign executables and installer"
-    echo "  -u|--update     Reinit build targets"
+    echo "  -u|--update     Reinitialize build targets"
     echo ""
     exit 0
     shift # past argument
@@ -66,6 +82,12 @@ done
 if [ $ULTRASCHALL_BUILD_CLEAN -eq 1 ]; then
   if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
     rm -rf $ULTRASCHALL_PAYLOAD_DIRECTORY
+  fi
+  if [ $ULTRASCHALL_BUILD_ALL -eq 1 ]; then
+    if [ -d $ULTRASCHALL_TOOLS_DIRECTORY ]; then
+      rm -rf $ULTRASCHALL_TOOLS_DIRECTORY
+    fi
+    rm -rf $ULTRASCHALL_BUILD_DIRECTORY
   fi
   exit 0
 fi
@@ -169,10 +191,15 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
     git pull
     popd > /dev/null
   fi
+  pushd ultraschall-plugin > /dev/null
+  ULTRASCHALL_PLUGIN_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  ULTRASCHALL_PLUGIN_COMMIT=$(git rev-parse HEAD)
+  ULTRASCHALL_BUILD_TAG="ULTRASCHALL_$(git describe --tags)"
+  popd > /dev/null
   echo "Done."
 
   if [ ! -d ultraschall-portable ]; then
-    echo "Downloading Ultraschall REAPER API..."
+    echo "Downloading Ultraschall REAPER Theme & API..."
     git clone --branch master --depth 1 https://github.com/Ultraschall/ultraschall-portable.git ultraschall-portable
     if [ ! -d ultraschall-portable ]; then
       echo "Failed to download Ultraschall REAPER API."
@@ -184,6 +211,11 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
     git pull
     popd > /dev/null
   fi
+  pushd ultraschall-portable > /dev/null
+  chmod -R u+rw .
+  ULTRASCHALL_PORTABLE_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  ULTRASCHALL_PORTABLE_COMMIT=$(git rev-parse HEAD)
+  popd > /dev/null
   echo "Done."
 
   if [ ! -d ultraschall-assets ]; then
@@ -202,9 +234,10 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   echo "Done."
 
   echo "Creating installer root directory..."
-  if [ ! -d installer-root ]; then
-    mkdir installer-root
+  if [ -d installer-root ]; then
+    rm -rf installer-root
   fi
+  mkdir -p installer-root
   echo "Done."
 
   echo "Copying installer background image..."
@@ -245,11 +278,10 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   echo "Building Ultraschall REAPER Plug-in"
   pushd ultraschall-plugin > /dev/null
-  git describe --tags > ../version.txt
-  if [ ! -d build ]; then
-  mkdir build
-  fi
 
+  if [ ! -d build ]; then
+    mkdir build
+  fi
   pushd build > /dev/null
   $ULTRASCHALL_CMAKE_TOOL -G"Unix Makefiles" -Wno-dev -DCMAKE_BUILD_TYPE=Release ../
   if [ $? -ne 0 ]; then
@@ -261,8 +293,8 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
     echo "Failed to build Ultraschall REAPER Plug-in."
     exit -1
   fi
-  mkdir -p Release
-  mv ./src/reaper_ultraschall.dylib release/
+  mkdir -p release
+  cp ./src/reaper_ultraschall.dylib release/
   popd > /dev/null
   popd > /dev/null
   echo "Done."
@@ -289,9 +321,53 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   cp ultraschall-portable/UserPlugins/ultraschall_api_readme.txt ultraschall-api/
   echo "Done."
 
+  echo "Building ULTRASCHALL REAPER Theme..."
+  if [ ! -d ultraschall-theme ]; then
+    mkdir ultraschall-theme
+  fi
+  cp -r ultraschall-portable/ ultraschall-theme
+  rm -rf ultraschall-theme/Plugins
+  rm -rf ultraschall-theme/UserPlugins
+  rm -f ultraschall-theme/Default_6.0.ReaperThemeZip
+  rm -f ultraschall-theme/reamote.exe
+  rm -f ultraschall-theme/ColorThemes/Default_6.0.ReaperThemeZip
+  rm -f ultraschall-theme/ColorThemes/Default_5.0.ReaperThemeZip
+  rm -f ultraschall-theme/ColorThemes/Ultraschall_3.1.ReaperThemeZip
+
+  # ----------------------------------------------------------------------
+  # FIXME Still required by Ultraschall 5
+  # rm -f ultraschall-theme/ColorThemes/Ultraschall_3.1.ReaperTheme
+  # ----------------------------------------------------------------------
+
+  echo "Done."
+
+  echo "Creating Bill of Materials..."
+  ULTRASCHALL_BOM_NAME="ultraschall-theme/$ULTRASCHALL_BUILD_TAG.yml"
+  echo "products:" > $ULTRASCHALL_BOM_NAME
+  echo "  name: ultraschall" >> $ULTRASCHALL_BOM_NAME
+  echo "  version: 5.0.0" >> $ULTRASCHALL_BOM_NAME
+  if [ $ULTRASCHALL_BUILD_RELEASE -eq 1 ]; then
+    echo "  stage: release" >> $ULTRASCHALL_BOM_NAME
+  else
+    echo "  stage: pre-release" >> $ULTRASCHALL_BOM_NAME
+  fi
+  echo "  timestamp: $ULTRASCHALL_BUILD_DATE" >> $ULTRASCHALL_BOM_NAME
+  echo "  id: $ULTRASCHALL_BUILD_ID" >> $ULTRASCHALL_BOM_NAME
+  echo "  assets:" >> $ULTRASCHALL_BOM_NAME
+  echo "    - name: ultraschall-portable" >> $ULTRASCHALL_BOM_NAME
+  echo "      url:    $ULTRASCHALL_PORTABLE_URL" >> $ULTRASCHALL_BOM_NAME
+  echo "      branch: $ULTRASCHALL_PORTABLE_BRANCH" >> $ULTRASCHALL_BOM_NAME
+  echo "      commit: $ULTRASCHALL_PORTABLE_COMMIT" >> $ULTRASCHALL_BOM_NAME
+  echo "    - name: ultraschall-plugin" >> $ULTRASCHALL_BOM_NAME
+  echo "      url:    $ULTRASCHALL_PLUGIN_URL" >> $ULTRASCHALL_BOM_NAME
+  echo "      branch: $ULTRASCHALL_PLUGIN_BRANCH" >> $ULTRASCHALL_BOM_NAME
+  echo "      commit: $ULTRASCHALL_PLUGIN_COMMIT" >> $ULTRASCHALL_BOM_NAME
+  echo "" >> $ULTRASCHALL_BOM_NAME
+  echo "Done."
+
   echo "Creating installer packages directory..."
   if [ ! -d installer-packages ]; then
-  mkdir installer-packages
+    mkdir installer-packages
   fi
   echo "Done."
 
@@ -299,12 +375,12 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   pkgbuild --root ultraschall-plugin/build/release --scripts $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-plugin/scripts --identifier fm.ultraschall.reaper.plugin --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/ultraschall-reaper-plugin.pkg
   echo "Done."
 
-  echo "Creating Ultraschall REAPER API installer package..."
-  pkgbuild --root ultraschall-api --scripts $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-api/scripts --identifier fm.ultraschall.reaper.api --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/ultraschall-reaper-api.pkg
+  echo "Creating Ultraschall REAPER Theme installer package..."
+  pkgbuild --root ultraschall-theme --scripts $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-theme/scripts --identifier fm.ultraschall.reaper.theme --install-location "/Library/Application Support/REAPER" installer-packages/ultraschall-reaper-theme.pkg
   echo "Done."
 
-  echo "Creating Ultraschall REAPER Theme installer package..."
-  pkgbuild --root $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-theme/payload/5.0 --scripts $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-theme/scripts --identifier fm.ultraschall.reaper.theme --install-location "/Library/Application Support/Ultraschall/Theme" installer-packages/ultraschall-reaper-theme.pkg
+  echo "Creating Ultraschall REAPER API installer package..."
+  pkgbuild --root ultraschall-api --scripts $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-api/scripts --identifier fm.ultraschall.reaper.api --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/ultraschall-reaper-api.pkg
   echo "Done."
 
   echo "Creating Ultraschall Soundboard installer package..."
@@ -347,13 +423,13 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   echo "Done."
 
   echo "Creating final installer package..."
+  ULTRASCHALL_BUILD_NAME="<Unknown>"
   if [ $ULTRASCHALL_BUILD_RELEASE -eq 1 ]; then
-    ULTRASCHALL_BUILD_ID="Ultraschall-5.0.0"
+    ULTRASCHALL_BUILD_NAME="Ultraschall-5.0.0"
   else
-    ULTRASCHALL_BUILD_ID="ULTRASCHALL_$(<version.txt)"
+    ULTRASCHALL_BUILD_NAME=$ULTRASCHALL_BUILD_TAG
   fi
 
-  ULTRASCHALL_BUILD_NAME=$ULTRASCHALL_BUILD_ID
   if [ $ULTRASCHALL_BUILD_CODESIGN -eq 1 ]; then
     productsign --sign "Developer ID Installer: Heiko Panjas (8J2G689FCZ)" ultraschall-product/ultraschall-intermediate.pkg "installer-root/$ULTRASCHALL_BUILD_NAME.pkg"
     if [ $? -ne 0 ]; then
@@ -423,6 +499,10 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   echo "        set arrangement of viewOptions to not arranged" >> create-window-layout.script
   echo "        set background picture of viewOptions to file \".background:background.png\"" >> create-window-layout.script
   echo "        set position of item \"$ULTRASCHALL_BUILD_NAME.pkg\" of container window to {50, 30}" >> create-window-layout.script
+  if [ $ULTRASCHALL_BUILD_RELEASE -eq 0 ]; then
+    cp $ULTRASCHALL_BOM_NAME ultraschall-intermediate/
+    echo "        set position of item \"$ULTRASCHALL_BUILD_NAME.yml\" of container window to {250, 30}" >> create-window-layout.script
+  fi
   echo "        set position of item \"README.html\" of container window to {50, 140}" >> create-window-layout.script
   echo "        set position of item \"INSTALL.html\" of container window to {200, 140}" >> create-window-layout.script
   echo "        set position of item \"CHANGELOG.html\" of container window to {350, 140}" >> create-window-layout.script

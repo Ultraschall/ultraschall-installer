@@ -9,14 +9,14 @@
   <!-- Define documents displayed at various steps -->
   <license file="license.html" mime-type="text/html" />
   <!-- List all component packages -->
-  <pkg-ref id="fm.ultraschall.reaper.plugin" version="3.2.0">
+  <pkg-ref id="fm.ultraschall.reaper.plugin" version="5.0.0">
         ultraschall-reaper-plugin.pkg
   </pkg-ref>
-  <pkg-ref id="fm.ultraschall.reaper.api" version="3.2.0">
-        ultraschall-reaper-api.pkg
+  <pkg-ref id="fm.ultraschall.reaper.theme" version="5.0.0">
+          ultraschall-reaper-theme.pkg
   </pkg-ref>
-  <pkg-ref id="fm.ultraschall.reaper.theme" version="3.1.1">
-        ultraschall-reaper-theme.pkg
+  <pkg-ref id="fm.ultraschall.reaper.api" version="5.0.0">
+        ultraschall-reaper-api.pkg
   </pkg-ref>
   <pkg-ref id="fm.ultraschall.soundboard" version="3.1.1">
         ultraschall-soundboard.pkg
@@ -42,8 +42,8 @@
   <!-- List them again here. They can now be organised as a hierarchy if you want. -->
   <choices-outline>
     <line choice="fm.ultraschall.reaper.plugin" />
-    <line choice="fm.ultraschall.reaper.api" />
     <line choice="fm.ultraschall.reaper.theme" />
+    <line choice="fm.ultraschall.reaper.api" />
     <line choice="fm.ultraschall.soundboard" />
     <line choice="fm.ultraschall.studiolink" />
     <line choice="fm.ultraschall.studiolink.onair" />
@@ -55,11 +55,11 @@
   <choice id="fm.ultraschall.reaper.plugin" visible="true" title="Ultraschall REAPER Extension" description="Ultraschall REAPER Plug-in." start_selected="true">
     <pkg-ref id="fm.ultraschall.reaper.plugin" />
   </choice>
-  <choice id="fm.ultraschall.reaper.api" visible="false" title="Ultraschall API" description="A collection of LUA scripts for programming REAPER and Ultraschall." start_selected="true">
-    <pkg-ref id="fm.ultraschall.reaper.api" />
-  </choice>
   <choice id="fm.ultraschall.reaper.theme" visible="true" title="Ultraschall Theme" description="Ultraschall Theme." start_selected="true">
     <pkg-ref id="fm.ultraschall.reaper.theme" />
+  </choice>
+  <choice id="fm.ultraschall.reaper.api" visible="false" title="Ultraschall API" description="A collection of LUA scripts for programming REAPER and Ultraschall." start_selected="true">
+    <pkg-ref id="fm.ultraschall.reaper.api" />
   </choice>
   <choice id="fm.ultraschall.soundboard" visible="true" title="Ultraschall Soundboard" description="Ultraschall Soundboard." start_selected="true">
     <pkg-ref id="fm.ultraschall.soundboard" />
