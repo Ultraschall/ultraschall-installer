@@ -230,7 +230,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   if [ ! -d ultraschall-assets ]; then
     echo "Downloading Ultraschall REAPER Resources..."
-    git clone --branch master --depth 1 ULTRASCHALL_ASSETS_URL ultraschall-assets
+    git clone --branch master --depth 1 $ULTRASCHALL_ASSETS_URL ultraschall-assets
     if [ ! -d ultraschall-assets ]; then
       echo "Failed to download Ultraschall REAPER Resources."
       exit -1
@@ -257,7 +257,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
     fi
   else
     echo "Updating Ultraschall REAPER Stream Deck Plug-in..."
-    pushd ultraschall-stream-deck-plugin > /dev/null
+    pushd ultraschall-streamdeck > /dev/null
     git pull
     popd > /dev/null
   fi
