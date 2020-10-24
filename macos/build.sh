@@ -1,6 +1,10 @@
 #!/bin/sh
 
-ULTRASCHALL_BUILD_DATE=$(date -ju "+%Y%m%dT%H%M%S")
+ULTRASCHALL_BUILD_PRODUCT="ultraschall"
+ULTRASCHALL_BUILD_VERSION="5.0.0"
+ULTRASCHALL_BUILD_STAGE="pre-release"
+ULTRASCHALL_BUILD_PLATFORM="macos"
+ULTRASCHALL_BUILD_DATE=$(date -ju "+%Y%m%dT%H%M%S")Z
 ULTRASCHALL_BUILD_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')
 
 ULTRASCHALL_BUILD_BOOTSTRAP=0
@@ -23,6 +27,12 @@ ULTRASCHALL_PLUGIN_COMMIT="<Unknown>"
 ULTRASCHALL_PORTABLE_URL="https://github.com/Ultraschall/ultraschall-portable.git"
 ULTRASCHALL_PORTABLE_BRANCH="<Unknown>"
 ULTRASCHALL_PORTABLE_COMMIT="<Unknown>"
+ULTRASCHALL_STREAMDECK_URL="https://github.com/Ultraschall/ultraschall-stream-deck-plugin.git"
+ULTRASCHALL_STREAMDECK_BRANCH="<Unknown>"
+ULTRASCHALL_STREAMDECK_COMMIT="<Unknown>"
+ULTRASCHALL_ASSETS_URL="https://github.com/Ultraschall/ultraschall-assets.git"
+ULTRASCHALL_ASSETS_BRANCH="<Unknown>"
+ULTRASCHALL_ASSETS_COMMIT="<Unknown>"
 
 for arg in "$@"
 do
@@ -180,7 +190,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   if [ ! -d ultraschall-plugin ]; then
     echo "Downloading Ultraschall REAPER Plug-in..."
-    git clone --branch develop --depth 1 https://github.com/Ultraschall/ultraschall-plugin.git ultraschall-plugin
+    git clone --branch develop --depth 1 $ULTRASCHALL_PLUGIN_URL ultraschall-plugin
     if [ ! -d ultraschall-plugin ]; then
       echo "Failed to download Ultraschall REAPER Plug-in."
       exit -1
@@ -200,7 +210,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   if [ ! -d ultraschall-portable ]; then
     echo "Downloading Ultraschall REAPER Theme & API..."
-    git clone --branch master --depth 1 https://github.com/Ultraschall/ultraschall-portable.git ultraschall-portable
+    git clone --branch master --depth 1 $ULTRASCHALL_PORTABLE_URL ultraschall-portable
     if [ ! -d ultraschall-portable ]; then
       echo "Failed to download Ultraschall REAPER API."
       exit -1
@@ -220,7 +230,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   if [ ! -d ultraschall-assets ]; then
     echo "Downloading Ultraschall REAPER Resources..."
-    git clone --branch master --depth 1 https://github.com/Ultraschall/ultraschall-assets.git ultraschall-assets
+    git clone --branch master --depth 1 ULTRASCHALL_ASSETS_URL ultraschall-assets
     if [ ! -d ultraschall-assets ]; then
       echo "Failed to download Ultraschall REAPER Resources."
       exit -1
@@ -232,6 +242,39 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
     popd > /dev/null
   fi
   echo "Done."
+
+  pushd ultraschall-assets > /dev/null
+  ULTRASCHALL_ASSETS_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  ULTRASCHALL_ASSETS_COMMIT=$(git rev-parse HEAD)
+  popd > /dev/null
+
+  if [ ! -d ultraschall-streamdeck ]; then
+    echo "Downloading Ultraschall REAPER Stream Deck Plug-in..."
+    git clone --branch master --depth 1 $ULTRASCHALL_STREAMDECK_URL ultraschall-streamdeck
+    if [ ! -d ultraschall-streamdeck ]; then
+      echo "Failed to download Ultraschall REAPER Stream Deck Plug-in."
+      exit -1
+    fi
+  else
+    echo "Updating Ultraschall REAPER Stream Deck Plug-in..."
+    pushd ultraschall-stream-deck-plugin > /dev/null
+    git pull
+    popd > /dev/null
+  fi
+  echo "Done."
+
+  pushd ultraschall-streamdeck > /dev/null
+  ULTRASCHALL_STREAMDECK_TAG="$(git describe --tags)"
+  ULTRASCHALL_STREAMDECK_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  ULTRASCHALL_STREAMDECK_COMMIT=$(git rev-parse HEAD)
+  echo "Downloading release $ULTRASCHALL_STREAMDECK_TAG..."
+  curl -LO "https://github.com/Ultraschall/ultraschall-stream-deck-plugin/releases/download/$ULTRASCHALL_STREAMDECK_TAG/fm.ultraschall.ultradeck.streamDeckPlugin"
+  if [ $? -ne 0 ]; then
+    echo "Failed to download release $ULTRASCHALL_STREAMDECK_TAG."
+    exit -1
+  fi
+  echo "Done."
+  popd > /dev/null
 
   echo "Creating installer root directory..."
   if [ -d installer-root ]; then
@@ -272,6 +315,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   if [ ! -d installer-root/Utilities ]; then
     mkdir installer-root/Utilities
   fi
+  cp $ULTRASCHALL_PAYLOAD_DIRECTORY/ultraschall-streamdeck/fm.ultraschall.ultradeck.streamDeckPlugin "installer-root/Utilities/fm.ultraschall.ultradeck.streamDeckPlugin"
   cp $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-hub/UltraschallHub-2015-11-12.pkg "installer-root/Utilities/Ultraschall Hub.pkg"
   cp "$ULTRASCHALL_ROOT_DIRECTORY/ultraschall-scripts/Remove legacy audio devices.command" "installer-root/Utilities/Remove legacy audio devices.command"
   echo "Done."
@@ -343,14 +387,16 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   echo "Creating Bill of Materials..."
   ULTRASCHALL_BOM_NAME="ultraschall-theme/$ULTRASCHALL_BUILD_TAG.yml"
-  echo "products:" > $ULTRASCHALL_BOM_NAME
-  echo "  name: ultraschall" >> $ULTRASCHALL_BOM_NAME
-  echo "  version: 5.0.0" >> $ULTRASCHALL_BOM_NAME
+
   if [ $ULTRASCHALL_BUILD_RELEASE -eq 1 ]; then
-    echo "  stage: release" >> $ULTRASCHALL_BOM_NAME
-  else
-    echo "  stage: pre-release" >> $ULTRASCHALL_BOM_NAME
+    ULTRASCHALL_BUILD_STAGE="release"
   fi
+
+  echo "products:" > $ULTRASCHALL_BOM_NAME
+  echo "  name: $ULTRASCHALL_BUILD_PRODUCT" >> $ULTRASCHALL_BOM_NAME
+  echo "  version: $ULTRASCHALL_BUILD_VERSION" >> $ULTRASCHALL_BOM_NAME
+  echo "  platform: $ULTRASCHALL_BUILD_PLATFORM" >> $ULTRASCHALL_BOM_NAME
+  echo "  stage: $ULTRASCHALL_BUILD_STAGE" >> $ULTRASCHALL_BOM_NAME
   echo "  timestamp: $ULTRASCHALL_BUILD_DATE" >> $ULTRASCHALL_BOM_NAME
   echo "  id: $ULTRASCHALL_BUILD_ID" >> $ULTRASCHALL_BOM_NAME
   echo "  assets:" >> $ULTRASCHALL_BOM_NAME
@@ -362,6 +408,14 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   echo "      url:    $ULTRASCHALL_PLUGIN_URL" >> $ULTRASCHALL_BOM_NAME
   echo "      branch: $ULTRASCHALL_PLUGIN_BRANCH" >> $ULTRASCHALL_BOM_NAME
   echo "      commit: $ULTRASCHALL_PLUGIN_COMMIT" >> $ULTRASCHALL_BOM_NAME
+  echo "    - name: ultraschall-stream-deck-plugin" >> $ULTRASCHALL_BOM_NAME
+  echo "      url:    $ULTRASCHALL_STREAMDECK_URL" >> $ULTRASCHALL_BOM_NAME
+  echo "      branch: $ULTRASCHALL_STREAMDECK_BRANCH" >> $ULTRASCHALL_BOM_NAME
+  echo "      commit: $ULTRASCHALL_STREAMDECK_COMMIT" >> $ULTRASCHALL_BOM_NAME
+  echo "    - name: ultraschall-assets" >> $ULTRASCHALL_BOM_NAME
+  echo "      url:    $ULTRASCHALL_ASSETS_URL" >> $ULTRASCHALL_BOM_NAME
+  echo "      branch: $ULTRASCHALL_ASSETS_BRANCH" >> $ULTRASCHALL_BOM_NAME
+  echo "      commit: $ULTRASCHALL_ASSETS_COMMIT" >> $ULTRASCHALL_BOM_NAME
   echo "" >> $ULTRASCHALL_BOM_NAME
   echo "Done."
 
