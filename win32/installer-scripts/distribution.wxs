@@ -23,14 +23,14 @@
 
     <Binary Id="ULTRASCHALL_CustomActions" SourceFile=".\installer-action\release\custom-action.CA.dll" />
     <CustomAction Id="ULTRASCHALL_PreInstallActionId" BinaryKey="ULTRASCHALL_CustomActions" DllEntry="PreInstallAction" Execute="deferred" HideTarget="yes" />
-    <CustomAction Id="ULTRASCHALL_PostInstallActionId" BinaryKey="ULTRASCHALL_CustomActions" DllEntry="PostInstallAction" Execute="deferred" HideTarget="yes" />
+    <!-- <CustomAction Id="ULTRASCHALL_PostInstallActionId" BinaryKey="ULTRASCHALL_CustomActions" DllEntry="PostInstallAction" Execute="deferred" HideTarget="yes" /> -->
     <InstallExecuteSequence>
       <Custom Action="ULTRASCHALL_PreInstallActionId" After="InstallInitialize">
         (NOT Installed) AND (NOT REINSTALL) AND (NOT UPGRADINGPRODUCTCODE) AND (NOT REMOVE)
       </Custom>
-      <Custom Action="ULTRASCHALL_PostInstallActionId" Before="InstallFinalize">
+      <!-- <Custom Action="ULTRASCHALL_PostInstallActionId" Before="InstallFinalize">
         NOT REMOVE
-      </Custom>
+      </Custom> -->
     </InstallExecuteSequence>
 
     <Property Id="DiskPrompt" Value="Ultraschall 5.0.0 Installation [1]" />
@@ -78,7 +78,7 @@
           <Component Id="UltraschallComponent" Guid="9F68E7D5-9D8E-45B9-9AED-3E1137F2466C" Win64="yes">
             <RemoveFolder Id="RemoveUltraschallComponent" Directory="UltraschallFolder" On="uninstall" />
             <RegistryValue Root="HKCU" Key="Software\Ultraschall" Name="Uninstall" Type="string" Value="1.0.0.0" KeyPath="yes" />
-            <File Name="Ultraschall_4.1.ReaperConfigZip" DiskId="1" Source=".\ultraschall-theme\4.1\Ultraschall_4.1.ReaperConfigZip" />
+            <!-- <File Name="Ultraschall_4.1.ReaperConfigZip" DiskId="1" Source=".\ultraschall-theme\4.1\Ultraschall_4.1.ReaperConfigZip" /> -->
             <File Name="Ultraschall Keyboard Layout.pdf" DiskId="1" Source="build\ultraschall-assets\keyboard-layout\Keymap.pdf">
               <Shortcut Id="KeyboardLayoutPdfShortcut" Directory="ShortcutsFolder" Name="Ultraschall Keyboard Layout.pdf" />
             </File>
@@ -91,7 +91,7 @@
             <File Name="INSTALL.html" DiskId="1" Source=".\build\ultraschall-resources\INSTALL.html">
               <Shortcut Id="InstallShortcut" Directory="ShortcutsFolder" Name="INSTALL.html" />
             </File>
-            <File Id="UltraschallThemeIcon" Name="ultraschall.ico" Source=".\installer-resources\ultraschall.ico" />
+            <!-- <File Id="UltraschallThemeIcon" Name="ultraschall.ico" Source=".\installer-resources\ultraschall.ico" /> -->
           </Component>
         </Directory>
       </Directory>
@@ -119,6 +119,7 @@
       <ComponentRef Id="UninstallComponent" />
       <ComponentRef Id="ShortcutsComponent" />
       <ComponentGroupRef Id="UltraschallApiFiles" />
+      <ComponentGroupRef Id="UltraschallThemeFiles" />
     </Feature>
     <UIRef Id="WixUI_Minimal" />
   </Product>

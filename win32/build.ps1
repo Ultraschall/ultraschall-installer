@@ -251,20 +251,44 @@ if ($BuildFailed -eq $False) {
 }
 
 if ($BuildFailed -eq $False) {
-  $APIDirectory = "./ultraschall_api"
+  $ThemeDirectory = "./ultraschall-theme"
+  Write-Host "Copying Ultraschall Theme files..."
+  if ((Test-Path -PathType Container $ThemeDirectory) -eq $False) {
+    New-Item -ItemType Directory -Path $ThemeDirectory | Out-Null
+  }
+  Copy-Item -Force -Recurse "./ultraschall-portable/*" -Destination $ThemeDirectory
+  if ((Test-Path -PathType Leaf $ThemeDirectory/reaper.ini) -eq $True) {
+    Remove-Item -Force $ThemeDirectory/.gitignore
+    Remove-Item -Force $ThemeDirectory/reamote.exe
+    Remove-Item -Force $ThemeDirectory/Scripts/sws_python.py
+    Remove-Item -Force $ThemeDirectory/Scripts/sws_python32.py
+    Remove-Item -Force $ThemeDirectory/Scripts/sws_python64.py
+    Remove-Item -Recurse -Force $ThemeDirectory/.git
+    Remove-Item -Recurse -Force $ThemeDirectory/UserPlugins
+    Remove-Item -Recurse -Force $ThemeDirectory/Plugins
+    Remove-Item -Recurse -Force $ThemeDirectory/ColorThemes/Default_6.0.ReaperThemeZip
+    Remove-Item -Recurse -Force $ThemeDirectory/ColorThemes/Ultraschall_3.1.ReaperThemeZip
+  }
+  else {
+    Write-Host -Foreground Red "Failed to copy Ultraschall Theme files."
+    $BuildFailed = $True
+  }
+  Write-Host "Done."
+}
+
+if ($BuildFailed -eq $False) {
+  $APIDirectory = "./ultraschall-api"
   Write-Host "Copying Ultraschall API files..."
   if ((Test-Path -PathType Container $APIDirectory) -eq $False) {
     New-Item -ItemType Directory -Path $APIDirectory | Out-Null
   }
   Copy-Item -Force "./ultraschall-portable/UserPlugins/ultraschall_api.lua" -Destination $APIDirectory
   Copy-Item -Force "./ultraschall-portable/UserPlugins/ultraschall_api_readme.txt" -Destination $APIDirectory
-  # Push-Location $APIDirectory
   Copy-Item -Force -Recurse "./ultraschall-portable/UserPlugins/ultraschall_api" -Destination $APIDirectory
   if ((Test-Path -PathType Container $APIDirectory/ultraschall_api/Scripts) -eq $False) {
     Write-Host -Foreground Red "Failed to copy Ultraschall API files."
     $BuildFailed = $True
   }
-  # Pop-Location
   Write-Host "Done."
 }
 
@@ -273,12 +297,29 @@ Pop-Location
 Write-Host "Done."
 
 $env:ULTRASCHALL_BUILD_ID = $BuildId
-$env:ULTRASCHALL_API_SOURCE = ".\build\ultraschall_api"
+
+$env:ULTRASCHALL_THEME_SOURCE = ".\build\ultraschall-theme"
+if ($BuildFailed -eq $False) {
+  Write-Host "Compiling Theme Files..."
+  & $HeatProgramPath dir $env:ULTRASCHALL_THEME_SOURCE -nologo -cg UltraschallThemeFiles -ag -scom -sreg -sfrag -srd -dr ReaperFolder -var env.ULTRASCHALL_THEME_SOURCE -out ./build/ultraschall-theme.wxs
+  if ($LASTEXITCODE -eq 0) {
+    & $CandleProgramPath -nologo -arch x64 -out ./build/ultraschall-theme.wixobj ./build/ultraschall-theme.wxs
+    if ($LASTEXITCODE -ne 0) {
+      $BuildFailed = $True
+    }
+  }
+  else {
+    $BuildFailed = $True
+  }
+  Write-Host "Done."
+}
+
+$env:ULTRASCHALL_API_SOURCE = ".\build\ultraschall-api"
 if ($BuildFailed -eq $False) {
   Write-Host "Compiling API Files..."
-  & $HeatProgramPath dir $env:ULTRASCHALL_API_SOURCE -nologo -cg UltraschallApiFiles -ag -scom -sreg -sfrag -srd -dr ReaperPluginsFolder -var env.ULTRASCHALL_API_SOURCE -out ./build/ultraschall_api.wxs
+  & $HeatProgramPath dir $env:ULTRASCHALL_API_SOURCE -nologo -cg UltraschallApiFiles -ag -scom -sreg -sfrag -srd -dr ReaperPluginsFolder -var env.ULTRASCHALL_API_SOURCE -out ./build/ultraschall-api.wxs
   if ($LASTEXITCODE -eq 0) {
-    & $CandleProgramPath -nologo -arch x64 -out ./build/ultraschall_api.wixobj ./build/ultraschall_api.wxs
+    & $CandleProgramPath -nologo -arch x64 -out ./build/ultraschall-api.wixobj ./build/ultraschall-api.wxs
     if ($LASTEXITCODE -ne 0) {
       $BuildFailed = $True
     }
@@ -290,15 +331,10 @@ if ($BuildFailed -eq $False) {
 }
 
 if ($BuildFailed -eq $False) {
-  Write-Host "Building custom installer action..."
-  Write-Host "Done."
-}
-
-if ($BuildFailed -eq $False) {
   Write-Host "Building installer package..."
   & $CandleProgramPath -nologo -arch x64 -out ./build/distribution.wixobj ./installer-scripts/distribution.wxs
   if ($LASTEXITCODE -eq 0) {
-    & $LightProgramPath -nologo -sice:ICE64 -sice:ICE38 -sice:ICE57 -sw1076 -ext WixUIExtension -cultures:en-us -spdb -out "$BuildId.msi" ./build/distribution.wixobj ./build/ultraschall_api.wixobj
+    & $LightProgramPath -nologo -sice:ICE64 -sice:ICE38 -sice:ICE57 -sw1076 -ext WixUIExtension -cultures:en-us -spdb -out "$BuildId.msi" ./build/distribution.wixobj ./build/ultraschall-api.wixobj ./build/ultraschall-theme.wixobj
     if ($LASTEXITCODE -ne 0) {
       $BuildFailed = $True
     }
