@@ -205,7 +205,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   pushd ultraschall-plugin > /dev/null
   ULTRASCHALL_PLUGIN_BRANCH=$(git rev-parse --abbrev-ref HEAD)
   ULTRASCHALL_PLUGIN_COMMIT=$(git rev-parse HEAD)
-  ULTRASCHALL_BUILD_TAG="ULTRASCHALL_$(git describe --tags)"
+  ULTRASCHALL_BUILD_TAG="ULTRASCHALL_$(git describe --tags)_$ULTRASCHALL_BUILD_ARCHITECTURE"
   popd > /dev/null
   echo "Done."
 
