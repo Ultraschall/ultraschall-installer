@@ -37,10 +37,6 @@ ULTRASCHALL_ASSETS_COMMIT="<Unknown>"
 for arg in "$@"
 do
 case $arg in
-    # -f=*|--file=*)
-    # docker_file="${arg#*=}"
-    # shift # past argument
-    # ;;
     "-a"|"--all")
     ULTRASCHALL_BUILD_ALL=1
     shift # past argument
@@ -137,43 +133,43 @@ if [ ! -d $ULTRASCHALL_TOOLS_DIRECTORY ]; then
   mkdir -p $ULTRASCHALL_TOOLS_DIRECTORY
 fi
 
-ULTRASCHALL_PANDOC_TOOL="$ULTRASCHALL_TOOLS_DIRECTORY/pandoc-2.10.1/bin/pandoc"
-ULTRASCHALL_CMAKE_TOOL="$ULTRASCHALL_TOOLS_DIRECTORY/cmake-3.18.3-Darwin-x86_64/CMake.app/Contents/bin/cmake"
+ULTRASCHALL_PANDOC_TOOL="$ULTRASCHALL_TOOLS_DIRECTORY/pandoc-2.11.1.1/bin/pandoc"
+ULTRASCHALL_CMAKE_TOOL="$ULTRASCHALL_TOOLS_DIRECTORY/cmake-3.18.4-Darwin-x86_64/CMake.app/Contents/bin/cmake"
 
 if [ -d $ULTRASCHALL_TOOLS_DIRECTORY ]; then
   pushd $ULTRASCHALL_TOOLS_DIRECTORY > /dev/null
 
-  if [ ! -d "$ULTRASCHALL_TOOLS_DIRECTORY/cmake-3.18.3-Darwin-x86_64" ]; then
+  if [ ! -d "$ULTRASCHALL_TOOLS_DIRECTORY/cmake-3.18.4-Darwin-x86_64" ]; then
     echo "Downloading cmake..."
-    curl -LO "https://github.com/Kitware/CMake/releases/download/v3.18.3/cmake-3.18.3-Darwin-x86_64.tar.gz"
+    curl -LO "https://github.com/Kitware/CMake/releases/download/v3.18.4/cmake-3.18.4-Darwin-x86_64.tar.gz"
     if [ $? -ne 0 ]; then
       echo "Failed to download cmake."
       exit -1
     fi
-    tar xvzf "cmake-3.18.3-Darwin-x86_64.tar.gz";
+    tar xvzf "cmake-3.18.4-Darwin-x86_64.tar.gz";
     if [ $? -ne 0 ]; then
       echo "Failed to install cmake."
       exit -1
     fi
-    if [ -f "cmake-3.18.3-Darwin-x86_64.tar.gz" ]; then
-      rm -f "cmake-3.18.3-Darwin-x86_64.tar.gz"
+    if [ -f "cmake-3.18.4-Darwin-x86_64.tar.gz" ]; then
+      rm -f "cmake-3.18.4-Darwin-x86_64.tar.gz"
     fi
   fi
 
-  if [ ! -d "$ULTRASCHALL_TOOLS_DIRECTORY/pandoc-2.10.1" ]; then
+  if [ ! -d "$ULTRASCHALL_TOOLS_DIRECTORY/pandoc-2.11.1.1" ]; then
     echo "Downloading pandoc..."
-    curl -LO "https://github.com/jgm/pandoc/releases/download/2.10.1/pandoc-2.10.1-macOS.zip"
+    curl -LO "https://github.com/jgm/pandoc/releases/download/2.11.1.1/pandoc-2.11.1.1-macOS.zip"
     if [ $? -ne 0 ]; then
       echo "Failed to download pandoc."
       exit -1
     fi
-    unzip "pandoc-2.10.1-macOS.zip";
+    unzip "pandoc-2.11.1.1-macOS.zip";
     if [ $? -ne 0 ]; then
       echo "Failed to install pandoc."
       exit -1
     fi
-    if [ -f "pandoc-2.10.1-macOS.zip" ]; then
-      rm -f "pandoc-2.10.1-macOS.zip"
+    if [ -f "pandoc-2.11.1.1-macOS.zip" ]; then
+      rm -f "pandoc-2.11.1.1-macOS.zip"
     fi
   fi
   popd > /dev/null
