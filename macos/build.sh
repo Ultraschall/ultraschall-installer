@@ -246,7 +246,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   if [ ! -d ultraschall-streamdeck ]; then
     echo "Downloading Ultraschall REAPER Stream Deck Plug-in..."
-    git clone --branch master --depth 1 $ULTRASCHALL_STREAMDECK_URL ultraschall-streamdeck
+    git clone --branch master $ULTRASCHALL_STREAMDECK_URL ultraschall-streamdeck
     if [ ! -d ultraschall-streamdeck ]; then
       echo "Failed to download Ultraschall REAPER Stream Deck Plug-in."
       exit -1
