@@ -40,13 +40,13 @@ $ ./build.sh
 $ cd build/installer-package
 ```
 
-5. install (you must have reaper installed) 
+5. install (you must have Reaper installed) 
 ```bash
 $ ./install.sh
 ```
 
 
 ## Notice for Linux: 
-Some features like StudioLink, StuidoLink-onair and soundboard are still missing. 
+Some features like StudioLink, StudioLink-onair and soundboard are still missing. 
 A StudioLink VST is available for testing: https://download.studio.link/releases/v20.12.1-stable/linux/vst/studio-link-plugin.zip 
-Download the file and extract it to /home/[username]/.vst3 
+Download the file and extract it to `$HOME/.vst3` 
