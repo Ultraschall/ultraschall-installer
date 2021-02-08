@@ -212,7 +212,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   if [ ! -d ultraschall-plugin ]; then
     echo "Downloading Ultraschall REAPER Plug-in..."
-    git clone --branch develop --depth 1 $ULTRASCHALL_PLUGIN_URL ultraschall-plugin
+    git clone --branch main --depth 1 $ULTRASCHALL_PLUGIN_URL ultraschall-plugin
     if [ ! -d ultraschall-plugin ]; then
       echo "Failed to download Ultraschall REAPER Plug-in."
       exit -1
