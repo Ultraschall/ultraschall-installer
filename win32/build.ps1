@@ -190,6 +190,27 @@ if ($BuildFailed -eq $False) {
 }
 
 if ($BuildFailed -eq $False) {
+  $StreamDeckDirectory = "./ultraschall-stream-deck-plugin"
+  if ((Test-Path -PathType Container $StreamDeckDirectory) -eq $False) {
+    Write-Host "Downloading Ultraschall Stream Deck Plugin......"
+    
+    git clone --branch master --depth 1 https://github.com/Ultraschall/ultraschall-assets.git $StreamDeckDirectory
+    if ((Test-Path -PathType Container $StreamDeckDirectory) -eq $False) {
+      Write-Host -Foreground Red "Failed to download Ultraschall stream deck plugin."
+      $BuildFailed = $True
+    }
+    Write-Host "Done."
+  }
+  else {
+    Write-Host "Updating Ultraschall REAPER Stream Deck Plugin..."
+    Push-Location $AssetsDirectory
+    git pull
+    Pop-Location
+    Write-Host "Done."
+  }
+}
+
+if ($BuildFailed -eq $False) {
   $RedistDirectory = "./microsoft-redist"
   if ((Test-Path -PathType Container $RedistDirectory) -eq $False) {
     Write-Host "Copying Microsoft Visual C++ 2019 CRT..."
@@ -267,7 +288,6 @@ if ($BuildFailed -eq $False) {
     Remove-Item -Recurse -Force $ThemeDirectory/UserPlugins
     Remove-Item -Recurse -Force $ThemeDirectory/Plugins
     Remove-Item -Recurse -Force $ThemeDirectory/ColorThemes/Default_6.0.ReaperThemeZip
-    Remove-Item -Recurse -Force $ThemeDirectory/ColorThemes/Ultraschall_3.1.ReaperThemeZip
   }
   else {
     Write-Host -Foreground Red "Failed to copy Ultraschall Theme files."
