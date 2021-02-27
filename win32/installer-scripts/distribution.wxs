@@ -90,6 +90,9 @@
             <File Name="INSTALL.html" DiskId="1" Source=".\build\ultraschall-resources\INSTALL.html">
               <Shortcut Id="InstallShortcut" Directory="ShortcutsFolder" Name="INSTALL.html" />
             </File>
+            <File Name="fm.ultraschall.ultradeck.streamDeckPlugin" DiskId="1" Source=".\build\ultraschall-stream-deck-plugin\fm.ultraschall.ultradeck.streamDeckPlugin">
+                <Shortcut Id="StreamDeckShortcut" Directory="ShortcutsFolder" Name="fm.ultraschall.ultradeck.streamDeckPlugin" />
+            </File>
             <!-- <File Id="UltraschallThemeIcon" Name="ultraschall.ico" Source=".\installer-resources\ultraschall.ico" /> -->
           </Component>
         </Directory>

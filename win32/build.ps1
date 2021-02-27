@@ -39,16 +39,18 @@ if ($BuildFailed -eq $False) {
     Write-Host "Downloading CMake Build Tool..."
     New-Item -ItemType Directory -Path $CMakeDirectory | Out-Null
     Push-Location $CMakeDirectory
-    Invoke-WebRequest -Uri "https://github.com/Kitware/CMake/releases/download/v3.15.0/cmake-3.15.0-win64-x64.zip" -OutFile "./cmake-3.15.0-win64-x64.zip"
-    Expand-Archive -Force -Path "./cmake-3.15.0-win64-x64.zip" -DestinationPath "./"
+    # Invoke-WebRequest -Uri "https://github.com/Kitware/CMake/releases/download/v3.15.0/cmake-3.15.0-win64-x64.zip" -OutFile "./cmake-3.15.0-win64-x64.zip"
+    # Expand-Archive -Force -Path "./cmake-3.15.0-win64-x64.zip" -DestinationPath "./"
+    Invoke-WebRequest -Uri "https://github.com/Kitware/CMake/releases/download/v3.19.6/cmake-3.19.6-win64-x64.zip" -OutFile "./cmake-3.19.6-win64-x64.zip"
+    Expand-Archive -Force -Path "./cmake-3.19.6-win64-x64.zip" -DestinationPath "./"
     Write-Host "Done."
     Pop-Location
   }
 }
 
 if ($BuildFailed -eq $False) {
-  if ((Test-Path -PathType Leaf "./cmake-tool/cmake-3.15.0-win64-x64/bin/cmake.exe") -ne $False) {
-    $CMakeProgramPath = Get-ChildItem "./cmake-tool/cmake-3.15.0-win64-x64/bin/cmake.exe" | Select-Object $_.FullName
+  if ((Test-Path -PathType Leaf "./cmake-tool/cmake-3.19.6-win64-x64/bin/cmake.exe") -ne $False) {
+    $CMakeProgramPath = Get-ChildItem "./cmake-tool/cmake-3.19.6-win64-x64/bin/cmake.exe" | Select-Object $_.FullName
   }
   else {
     Write-Host -Foreground Red "Failed to download CMake Build Tool."
@@ -193,8 +195,7 @@ if ($BuildFailed -eq $False) {
   $StreamDeckDirectory = "./ultraschall-stream-deck-plugin"
   if ((Test-Path -PathType Container $StreamDeckDirectory) -eq $False) {
     Write-Host "Downloading Ultraschall Stream Deck Plugin......"
-    
-    git clone --branch master --depth 1 https://github.com/Ultraschall/ultraschall-assets.git $StreamDeckDirectory
+    git clone --branch master https://github.com/Ultraschall/ultraschall-stream-deck-plugin.git $StreamDeckDirectory
     if ((Test-Path -PathType Container $StreamDeckDirectory) -eq $False) {
       Write-Host -Foreground Red "Failed to download Ultraschall stream deck plugin."
       $BuildFailed = $True
@@ -203,12 +204,18 @@ if ($BuildFailed -eq $False) {
   }
   else {
     Write-Host "Updating Ultraschall REAPER Stream Deck Plugin..."
-    Push-Location $AssetsDirectory
+    Push-Location $StreamDeckDirectory
     git pull
     Pop-Location
     Write-Host "Done."
   }
 }
+
+Push-Location $StreamDeckDirectory
+    $StreamDeckTag = (git describe --tags | Out-String).Trim()
+    $StreamDeckUrl = "https://github.com/Ultraschall/ultraschall-stream-deck-plugin/releases/download/" + $StreamDeckTag + "/fm.ultraschall.ultradeck.streamDeckPlugin"
+    Invoke-WebRequest -Uri $StreamDeckUrl -OutFile "./fm.ultraschall.ultradeck.streamDeckPlugin"
+Pop-Location
 
 if ($BuildFailed -eq $False) {
   $RedistDirectory = "./microsoft-redist"
