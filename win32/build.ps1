@@ -19,7 +19,7 @@ If ($args.Count -gt 0) {
 
 $SourceBranch = "develop"
 if ($BuildRelease -eq $True) {
-  $SourceBranch = "master"
+  $SourceBranch = "main"
 }
 
 $BuildDirectory = "./build"
