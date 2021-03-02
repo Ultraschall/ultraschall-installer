@@ -310,6 +310,7 @@ if ($BuildFailed -eq $False) {
     New-Item -ItemType Directory -Path $APIDirectory | Out-Null
   }
   Copy-Item -Force "./ultraschall-portable/UserPlugins/ultraschall_api.lua" -Destination $APIDirectory
+  Copy-Item -Force "./ultraschall-portable/UserPlugins/ultraschall_api_readme.txt" -Destination $APIDirectory
   Copy-Item -Force -Recurse "./ultraschall-portable/UserPlugins/ultraschall_api" -Destination $APIDirectory
   if ((Test-Path -PathType Container $APIDirectory/ultraschall_api/Scripts) -eq $False) {
     Write-Host -Foreground Red "Failed to copy Ultraschall API files."
