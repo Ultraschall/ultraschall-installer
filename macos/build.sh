@@ -384,6 +384,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   fi
   cp -r ultraschall-portable/UserPlugins/ultraschall_api ultraschall-api
   cp ultraschall-portable/UserPlugins/ultraschall_api.lua ultraschall-api/
+  cp ultraschall-portable/UserPlugins/ultraschall_api_readme.txt ultraschall-api/
   echo "Done."
 
   echo "Building ULTRASCHALL REAPER Theme..."
