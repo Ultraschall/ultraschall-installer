@@ -1,4 +1,4 @@
-name: ultraschall-linux
+name: linux
 
 on:
   push:

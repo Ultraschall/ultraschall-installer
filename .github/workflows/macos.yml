@@ -1,4 +1,4 @@
-name: ultraschall-macos
+name: macos
 
 on:
   push:
