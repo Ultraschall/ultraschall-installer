@@ -1,0 +1,16 @@
+name: linux-installer
+
+on:
+  push:
+
+jobs:
+  test-linux:
+    name: Test Linux installer
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run installer script
+      run: cd linux && ./build.sh
