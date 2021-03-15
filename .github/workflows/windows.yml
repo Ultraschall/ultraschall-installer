@@ -12,6 +12,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Patch files onto enviroment
+      shell: pwsh
+      run: |
+        md "${env:ProgramFiles(x86)}/Microsoft Visual Studio/2019/Professional/VC/Redist/MSVC/v142/MergeModules/" -ea 0
+        Invoke-WebRequest -Uri "https://github.com/cloudbase/ceph-windows-installer/blob/master/Microsoft_VC142_CRT_x64.msm?raw=true" -OutFile "${env:ProgramFiles(x86)}/Microsoft Visual Studio/2019/Professional/VC/Redist/MSVC/v142/MergeModules/Microsoft_VC142_CRT_x64.msm"
+
     - name: Run installer script
       shell: pwsh
       run: |

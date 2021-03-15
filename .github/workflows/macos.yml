@@ -17,3 +17,19 @@ jobs:
       run: |
         cd macos
         ./build.sh
+
+    - name: find files
+      run: |
+        find . -iname \*.dmg 2>/dev/null
+        find / -iname \*.dmg 2>/dev/null
+        find . -iname \*.pkg 2>/dev/null
+
+
+    # - name: Archive production artifacts
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: dist-without-markdown
+    #       path: |
+    #         dist
+    #         !dist/**/*.md
+

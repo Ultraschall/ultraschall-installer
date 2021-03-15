@@ -16,3 +16,8 @@ jobs:
       run: |
         cd linux
         ./build.sh
+
+    - name: find packages
+      run: |
+        find . -iname \*.tar.gz 2>/dev/null
+        find / -iname \*.tar.gz 2>/dev/null
