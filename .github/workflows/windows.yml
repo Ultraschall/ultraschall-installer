@@ -4,8 +4,8 @@ on:
   push:
 
 jobs:
-  test-windows:
-    name: Test Windows installer
+  build-windows:
+    name: Build Windows installer
     runs-on: windows-2019
 
     steps:

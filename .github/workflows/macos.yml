@@ -4,8 +4,8 @@ on:
   push:
 
 jobs:
-  test-macos:
-    name: Test macOS installer
+  build-macos:
+    name: Build macOS installer
     # runs-on: macos-11.0
     runs-on: macos-10.15
 
