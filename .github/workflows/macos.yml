@@ -1,0 +1,19 @@
+name: ultraschall-macos
+
+on:
+  push:
+
+jobs:
+  test-macos:
+    name: Test macOS installer
+    # runs-on: macos-11.0
+    runs-on: macos-10.15
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run installer script
+      run: |
+        cd macos
+        ./build.sh

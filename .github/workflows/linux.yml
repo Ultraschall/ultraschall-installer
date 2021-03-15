@@ -1,16 +1,18 @@
-name: linux-installer
+name: ultraschall-linux
 
 on:
   push:
 
 jobs:
-  test-linux:
-    name: Test Linux installer
-    runs-on: ubuntu-latest
+  build-linux:
+    name: Build Linux installer
+    runs-on: ubuntu-20.04
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
     - name: Run installer script
-      run: cd linux && ./build.sh
+      run: |
+        cd linux
+        ./build.sh

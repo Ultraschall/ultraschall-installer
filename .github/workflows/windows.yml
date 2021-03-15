@@ -1,0 +1,20 @@
+name: ultraschall-windows
+
+on:
+  push:
+
+jobs:
+  test-windows:
+    name: Test Windows installer
+    runs-on: windows-2019
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run installer script
+      shell: pwsh
+      run: |
+        cd win32
+        ./build.ps1
+
