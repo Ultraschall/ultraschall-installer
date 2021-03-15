@@ -17,7 +17,9 @@ jobs:
         cd linux
         ./build.sh
 
-    - name: find packages
-      run: |
-        find . -iname \*.tar.gz 2>/dev/null
-        find / -iname \*.tar.gz 2>/dev/null
+    - uses: actions/upload-artifact@v2
+      with:
+        name: ultraschall-build-linux
+        path: |
+          linux/*.tar.gz
+
