@@ -399,6 +399,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   rm -f ultraschall-theme/ColorThemes/Default_6.0.ReaperThemeZip
   rm -f ultraschall-theme/ColorThemes/Default_5.0.ReaperThemeZip
   rm -f ultraschall-theme/ColorThemes/Ultraschall_3.1.ReaperThemeZip
+  rm -rf ultraschall-theme/osFiles
 
   # ----------------------------------------------------------------------
   # FIXME Still required by Ultraschall 5
