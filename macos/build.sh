@@ -330,7 +330,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   cp ultraschall-assets/source/us-banner_400.png "installer-root/Extras/Ultraschall Badge 400px.png"
   cp ultraschall-assets/source/us-banner_800.png "installer-root/Extras/Ultraschall Badge 800px.png"
   cp ultraschall-assets/source/us-banner_2000.png "installer-root/Extras/Ultraschall Badge 2000px.png"
-  cp ultraschall-assets/images/Ultraschall-4-Logo.png "installer-root/Extras/Ultraschall-4-Logo.png"
+  cp ultraschall-assets/images/Ultraschall-5-Logo.png "installer-root/Extras/Ultraschall-5-Logo.png"
   echo "Done."
 
   echo "Copying Ultraschall Utilities..."
