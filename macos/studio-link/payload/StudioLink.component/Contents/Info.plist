@@ -25,11 +25,11 @@
 			<key>type</key>
 			<string>aufx</string>
 			<key>version</key>
-			<integer>1377024</integer>
+			<integer>1377026</integer>
 		</dict>
 	</array>
 	<key>BuildMachineOSBuild</key>
-	<string>19H512</string>
+	<string>19H524</string>
 	<key>CFBundleDisplayName</key>
 	<string>StudioLink</string>
 	<key>CFBundleExecutable</key>
@@ -41,7 +41,7 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>21.03.0</string>
+	<string>21.03.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleSupportedPlatforms</key>
@@ -49,7 +49,7 @@
 		<string>MacOSX</string>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>21.03.0</string>
+	<string>21.03.2</string>
 	<key>DTCompiler</key>
 	<string>com.apple.compilers.llvm.clang.1_0</string>
 	<key>DTPlatformBuild</key>
