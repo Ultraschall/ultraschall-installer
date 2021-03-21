@@ -17,13 +17,13 @@ If ($args.Count -gt 0) {
   }
 }
 
-$SourceBranch = "develop"
+$SourceBranch = "main"
 if ($BuildRelease -eq $True) {
   $SourceBranch = "main"
 }
 
 $BuildDirectory = "./build"
-$BuildId = "R5.0_GENERIC"
+$BuildId = "R5.0.1_GENERIC"
 $BuildFailed = $False
 
 if ((Test-Path -PathType Container $BuildDirectory) -eq $False) {
@@ -133,7 +133,7 @@ if ($BuildFailed -eq $False) {
 if ($BuildFailed -eq $False) {
   Push-Location $PluginDirectory
   if ($BuildRelease -eq $True) {
-    $BuildId = "5.0"
+    $BuildId = "5.0.1"
   }
   Else {
     $BuildId = (git describe --tags | Out-String).Trim()
@@ -295,6 +295,19 @@ if ($BuildFailed -eq $False) {
     Remove-Item -Recurse -Force $ThemeDirectory/UserPlugins
     Remove-Item -Recurse -Force $ThemeDirectory/Plugins
     Remove-Item -Recurse -Force $ThemeDirectory/ColorThemes/Default_6.0.ReaperThemeZip
+
+    Remove-Item -Force $ThemeDirectory/reaper-kb.ini
+    Copy-Item -Force $ThemeDirectory/osFiles/Win/reaper-kb.ini -Destination $ThemeDirectory
+
+    Remove-Item -Recurse -Force $ThemeDirectory/TrackTemplates
+    New-Item -ItemType Directory -Path $ThemeDirectory/TrackTemplates  | Out-Null
+    Copy-Item -Force -Recurse $ThemeDirectory/osFiles/Win/TrackTemplates/* -Destination $ThemeDirectory/TrackTemplates
+
+    Remove-Item -Recurse -Force $ThemeDirectory/ProjectTemplates
+    New-Item -ItemType Directory -Path $ThemeDirectory/ProjectTemplates | Out-Null
+    Copy-Item -Force -Recurse $ThemeDirectory/osFiles/Win/ProjectTemplates/* -Destination $ThemeDirectory/ProjectTemplates
+
+    Remove-Item -Recurse -Force $ThemeDirectory/osFiles
   }
   else {
     Write-Host -Foreground Red "Failed to copy Ultraschall Theme files."

@@ -33,7 +33,7 @@
       </Custom> -->
     </InstallExecuteSequence>
 
-    <Property Id="DiskPrompt" Value="Ultraschall 5.0 Installation [1]" />
+    <Property Id="DiskPrompt" Value="Ultraschall 5.0.1 Installation [1]" />
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="AppDataFolder">
         <Directory Id="ReaperFolder" Name="REAPER">
