@@ -9,7 +9,7 @@ if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_sws_extension.d
 	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_sws_extension.dylib
 fi
 
-# remove components from v4
+# remove components from v5
 if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_sws-arm64.dylib ]; then
 	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_sws-arm64.dylib
 fi
