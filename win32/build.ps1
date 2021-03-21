@@ -23,7 +23,7 @@ if ($BuildRelease -eq $True) {
 }
 
 $BuildDirectory = "./build"
-$BuildId = "R5.0.1_GENERIC"
+$BuildId = "R5_GENERIC"
 $BuildFailed = $False
 
 if ((Test-Path -PathType Container $BuildDirectory) -eq $False) {
@@ -39,8 +39,6 @@ if ($BuildFailed -eq $False) {
     Write-Host "Downloading CMake Build Tool..."
     New-Item -ItemType Directory -Path $CMakeDirectory | Out-Null
     Push-Location $CMakeDirectory
-    # Invoke-WebRequest -Uri "https://github.com/Kitware/CMake/releases/download/v3.15.0/cmake-3.15.0-win64-x64.zip" -OutFile "./cmake-3.15.0-win64-x64.zip"
-    # Expand-Archive -Force -Path "./cmake-3.15.0-win64-x64.zip" -DestinationPath "./"
     Invoke-WebRequest -Uri "https://github.com/Kitware/CMake/releases/download/v3.19.6/cmake-3.19.6-win64-x64.zip" -OutFile "./cmake-3.19.6-win64-x64.zip"
     Expand-Archive -Force -Path "./cmake-3.19.6-win64-x64.zip" -DestinationPath "./"
     Write-Host "Done."
@@ -133,7 +131,7 @@ if ($BuildFailed -eq $False) {
 if ($BuildFailed -eq $False) {
   Push-Location $PluginDirectory
   if ($BuildRelease -eq $True) {
-    $BuildId = "5.0.1"
+    $BuildId = "5.0.2"
   }
   Else {
     $BuildId = (git describe --tags | Out-String).Trim()

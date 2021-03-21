@@ -27,7 +27,7 @@
 ################################################################################
 
 ULTRASCHALL_BUILD_PRODUCT="ultraschall"
-ULTRASCHALL_BUILD_VERSION="5.0"
+ULTRASCHALL_BUILD_VERSION="5.0.2"
 ULTRASCHALL_BUILD_STAGE="pre-release"
 ULTRASCHALL_BUILD_PLATFORM="macos"
 ULTRASCHALL_BUILD_DATE=$(date -ju "+%Y%m%dT%H%M%S")Z
@@ -502,7 +502,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   echo "Creating final installer package..."
   ULTRASCHALL_BUILD_NAME="<Unknown>"
   if [ $ULTRASCHALL_BUILD_RELEASE -eq 1 ]; then
-    ULTRASCHALL_BUILD_NAME="Ultraschall-5.0"
+    ULTRASCHALL_BUILD_NAME="Ultraschall-5.0.2"
   else
     ULTRASCHALL_BUILD_NAME=$ULTRASCHALL_BUILD_TAG
   fi

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <installer-gui-script minSpecVersion="1">
-  <title>Ultraschall-5.0</title>
+  <title>Ultraschall-5.0.2</title>
   <organization>fm.ultraschall</organization>
   <options customize="never" require-scripts="true" rootVolumeOnly="true" />
   <domains enable_anywhere="false" enable_localSystem="false" enable_currentUserHome="true" />
@@ -9,34 +9,34 @@
   <!-- Define documents displayed at various steps -->
   <license file="license.html" mime-type="text/html" />
   <!-- List all component packages -->
-  <pkg-ref id="fm.ultraschall.reaper.plugin" version="5.0.0">
+  <pkg-ref id="fm.ultraschall.reaper.plugin">
         ultraschall-reaper-plugin.pkg
   </pkg-ref>
-  <pkg-ref id="fm.ultraschall.reaper.theme" version="5.0.0">
+  <pkg-ref id="fm.ultraschall.reaper.theme">
           ultraschall-reaper-theme.pkg
   </pkg-ref>
-  <pkg-ref id="fm.ultraschall.reaper.api" version="5.0.0">
+  <pkg-ref id="fm.ultraschall.reaper.api">
         ultraschall-reaper-api.pkg
   </pkg-ref>
-  <pkg-ref id="fm.ultraschall.soundboard" version="3.1.1">
+  <pkg-ref id="fm.ultraschall.soundboard">
         ultraschall-soundboard.pkg
   </pkg-ref>
-  <pkg-ref id="fm.ultraschall.studiolink" version="17.0.3">
+  <pkg-ref id="fm.ultraschall.studiolink">
         studio-link.pkg
   </pkg-ref>
-  <pkg-ref id="fm.ultraschall.studiolink.onair" version="17.0.3">
+  <pkg-ref id="fm.ultraschall.studiolink.onair">
         studio-link-onair.pkg
   </pkg-ref>
-  <pkg-ref id="fm.ultraschall.reaper.sws.plugins" version="2.10.0">
+  <pkg-ref id="fm.ultraschall.reaper.sws.plugins">
         reaper-sws-extension-plugins.pkg
   </pkg-ref>
-  <pkg-ref id="fm.ultraschall.reaper.sws.scripts" version="2.10.0">
+  <pkg-ref id="fm.ultraschall.reaper.sws.scripts">
         reaper-sws-extension-scripts.pkg
   </pkg-ref>
-  <pkg-ref id="fm.ultraschall.reaper.js" version="0.995">
+  <pkg-ref id="fm.ultraschall.reaper.js">
         reaper-js-extension.pkg
   </pkg-ref>
-  <pkg-ref id="fm.ultraschall.reaper.reapack" version="1.2.2">
+  <pkg-ref id="fm.ultraschall.reaper.reapack">
         reaper-reapack-extension.pkg
   </pkg-ref>
   <!-- List them again here. They can now be organised as a hierarchy if you want. -->
