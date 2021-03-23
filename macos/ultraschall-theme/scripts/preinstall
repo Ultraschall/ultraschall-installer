@@ -7,6 +7,11 @@ if [ -d "$HOME/Library/Application Support/REAPER" ]; then
   cp -r "$HOME/Library/Application Support/REAPER" "$BACKUP_FOLDER"
   if [ $? -eq 0 ]; then
     echo "Your current REAPER configuration has been saved to $BACKUP_FOLDER."
+    rm -rf "$HOME/Library/Application Support/REAPER"
+    mkdir -p "$HOME/Library/Application Support/REAPER"
+    if [ -f "$BACKUP_FOLDER/REAPER/reaper-license.rk" ]; then
+      cp "$BACKUP_FOLDER/REAPER/reaper-license.rk" "$HOME/Library/Application Support/REAPER"
+    fi
   else
     echo "Failed to backup your current REAPER configuration. Aborting installation..."
     exit -1

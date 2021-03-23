@@ -27,7 +27,7 @@
 ################################################################################
 
 ULTRASCHALL_BUILD_PRODUCT="ultraschall"
-ULTRASCHALL_BUILD_VERSION="5.0.2"
+ULTRASCHALL_BUILD_VERSION="5.0.2-pre2"
 ULTRASCHALL_BUILD_STAGE="pre-release"
 ULTRASCHALL_BUILD_PLATFORM="macos"
 ULTRASCHALL_BUILD_DATE=$(date -ju "+%Y%m%dT%H%M%S")Z
@@ -442,6 +442,10 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   echo "" >> $ULTRASCHALL_BOM_NAME
   echo "Done."
 
+  echo "Configure user access rights..."
+  chown -R $(whoami) .
+  echo "Done."
+
   echo "Creating installer packages directory..."
   if [ ! -d installer-packages ]; then
     mkdir installer-packages
@@ -502,7 +506,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   echo "Creating final installer package..."
   ULTRASCHALL_BUILD_NAME="<Unknown>"
   if [ $ULTRASCHALL_BUILD_RELEASE -eq 1 ]; then
-    ULTRASCHALL_BUILD_NAME="Ultraschall-5.0.2"
+    ULTRASCHALL_BUILD_NAME="Ultraschall-5.0.2-pre2"
   else
     ULTRASCHALL_BUILD_NAME=$ULTRASCHALL_BUILD_TAG
   fi
