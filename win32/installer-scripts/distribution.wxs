@@ -22,18 +22,12 @@
     <Media Id="1" Cabinet="Ultraschall.cab" EmbedCab="yes" DiskPrompt="CD-ROM #1" />
 
     <Binary Id="ULTRASCHALL_CustomActions" SourceFile=".\installer-action\release\custom-action.CA.dll" />
-    <CustomAction Id="ULTRASCHALL_PreInstallActionId" BinaryKey="ULTRASCHALL_CustomActions" DllEntry="PreInstallAction" Execute="deferred" HideTarget="yes" />
-    <!-- <CustomAction Id="ULTRASCHALL_PostInstallActionId" BinaryKey="ULTRASCHALL_CustomActions" DllEntry="PostInstallAction" Execute="deferred" HideTarget="yes" /> -->
+    <CustomAction Id="ULTRASCHALL_PreInstallActionId" BinaryKey="ULTRASCHALL_CustomActions" DllEntry="PreInstallAction" Execute="immediate" HideTarget="yes" />
     <InstallExecuteSequence>
-      <Custom Action="ULTRASCHALL_PreInstallActionId" After="InstallInitialize">
-        (NOT Installed) AND (NOT REINSTALL) AND (NOT UPGRADINGPRODUCTCODE) AND (NOT REMOVE)
-      </Custom>
-      <!-- <Custom Action="ULTRASCHALL_PostInstallActionId" Before="InstallFinalize">
-        NOT REMOVE
-      </Custom> -->
+      <Custom Action="ULTRASCHALL_PreInstallActionId" After="InstallInitialize">NOT REMOVE</Custom>
     </InstallExecuteSequence>
 
-    <Property Id="DiskPrompt" Value="Ultraschall 5.0.2 Installation [1]" />
+    <Property Id="DiskPrompt" Value="Ultraschall 5.0.2-pre2 Installation [1]" />
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="AppDataFolder">
         <Directory Id="ReaperFolder" Name="REAPER">
@@ -91,7 +85,7 @@
               <Shortcut Id="InstallShortcut" Directory="ShortcutsFolder" Name="INSTALL.html" />
             </File>
             <File Name="fm.ultraschall.ultradeck.streamDeckPlugin" DiskId="1" Source=".\build\ultraschall-stream-deck-plugin\fm.ultraschall.ultradeck.streamDeckPlugin">
-                <Shortcut Id="StreamDeckShortcut" Directory="ShortcutsFolder" Name="fm.ultraschall.ultradeck.streamDeckPlugin" />
+              <Shortcut Id="StreamDeckShortcut" Directory="ShortcutsFolder" Name="fm.ultraschall.ultradeck.streamDeckPlugin" />
             </File>
             <!-- <File Id="UltraschallThemeIcon" Name="ultraschall.ico" Source=".\installer-resources\ultraschall.ico" /> -->
           </Component>

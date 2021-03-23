@@ -131,7 +131,7 @@ if ($BuildFailed -eq $False) {
 if ($BuildFailed -eq $False) {
   Push-Location $PluginDirectory
   if ($BuildRelease -eq $True) {
-    $BuildId = "5.0.2"
+    $BuildId = "5.0.2-pre2"
   }
   Else {
     $BuildId = (git describe --tags | Out-String).Trim()
@@ -372,7 +372,7 @@ if ($BuildFailed -eq $False) {
   Write-Host "Building installer package..."
   & $CandleProgramPath -nologo -arch x64 -out ./build/distribution.wixobj ./installer-scripts/distribution.wxs
   if ($LASTEXITCODE -eq 0) {
-    & $LightProgramPath -nologo -sice:ICE64 -sice:ICE38 -sice:ICE57 -sw1076 -ext WixUIExtension -cultures:en-us -spdb -out "$BuildId.msi" ./build/distribution.wixobj ./build/ultraschall-api.wixobj ./build/ultraschall-theme.wixobj
+    & $LightProgramPath -nologo -sice:ICE64 -sice:ICE38 -sw1076 -ext WixUIExtension -cultures:en-us -spdb -out "$BuildId.msi" ./build/distribution.wixobj ./build/ultraschall-api.wixobj ./build/ultraschall-theme.wixobj
     if ($LASTEXITCODE -ne 0) {
       $BuildFailed = $True
     }
