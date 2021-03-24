@@ -27,7 +27,7 @@
 ################################################################################
 
 ULTRASCHALL_BUILD_PRODUCT="ultraschall"
-ULTRASCHALL_BUILD_VERSION="5.0.2-pre2"
+ULTRASCHALL_BUILD_VERSION="5.0.2-pre3"
 ULTRASCHALL_BUILD_STAGE="pre-release"
 ULTRASCHALL_BUILD_PLATFORM="macos"
 ULTRASCHALL_BUILD_DATE=$(date -ju "+%Y%m%dT%H%M%S")Z
@@ -159,48 +159,50 @@ if [ ! -d $ULTRASCHALL_TOOLS_DIRECTORY ]; then
   mkdir -p $ULTRASCHALL_TOOLS_DIRECTORY
 fi
 
-ULTRASCHALL_PANDOC_TOOL="$ULTRASCHALL_TOOLS_DIRECTORY/pandoc-2.11.1.1/bin/pandoc"
-ULTRASCHALL_CMAKE_TOOL="$ULTRASCHALL_TOOLS_DIRECTORY/cmake-3.19.6-macos-universal/CMake.app/Contents/bin/cmake"
+# ULTRASCHALL_PANDOC_TOOL="$ULTRASCHALL_TOOLS_DIRECTORY/pandoc-2.11.1.1/bin/pandoc"
+# ULTRASCHALL_CMAKE_TOOL="$ULTRASCHALL_TOOLS_DIRECTORY/cmake-3.19.6-macos-universal/CMake.app/Contents/bin/cmake"
+ULTRASCHALL_PANDOC_TOOL="pandoc"
+ULTRASCHALL_CMAKE_TOOL="cmake"
 
-if [ -d $ULTRASCHALL_TOOLS_DIRECTORY ]; then
-  pushd $ULTRASCHALL_TOOLS_DIRECTORY > /dev/null
+# if [ -d $ULTRASCHALL_TOOLS_DIRECTORY ]; then
+#   pushd $ULTRASCHALL_TOOLS_DIRECTORY > /dev/null
 
-  if [ ! -d "$ULTRASCHALL_TOOLS_DIRECTORY/cmake-3.19.6-macos-universal" ]; then
-    echo "Downloading cmake..."
-    curl -LO "https://github.com/Kitware/CMake/releases/download/v3.19.6/cmake-3.19.6-macos-universal.tar.gz"
-    if [ $? -ne 0 ]; then
-      echo "Failed to download cmake."
-      exit -1
-    fi
-    tar xvzf "cmake-3.19.6-macos-universal.tar.gz";
-    if [ $? -ne 0 ]; then
-      echo "Failed to install cmake."
-      exit -1
-    fi
-    if [ -f "cmake-3.19.6-macos-universal.tar.gz" ]; then
-      rm -f "cmake-3.19.6-macos-universal.tar.gz"
-    fi
-  fi
+#   if [ ! -d "$ULTRASCHALL_TOOLS_DIRECTORY/cmake-3.19.6-macos-universal" ]; then
+#     echo "Downloading cmake..."
+#     curl -LO "https://github.com/Kitware/CMake/releases/download/v3.19.6/cmake-3.19.6-macos-universal.tar.gz"
+#     if [ $? -ne 0 ]; then
+#       echo "Failed to download cmake."
+#       exit -1
+#     fi
+#     tar xvzf "cmake-3.19.6-macos-universal.tar.gz";
+#     if [ $? -ne 0 ]; then
+#       echo "Failed to install cmake."
+#       exit -1
+#     fi
+#     if [ -f "cmake-3.19.6-macos-universal.tar.gz" ]; then
+#       rm -f "cmake-3.19.6-macos-universal.tar.gz"
+#     fi
+#   fi
 
-  if [ ! -d "$ULTRASCHALL_TOOLS_DIRECTORY/pandoc-2.11.1.1" ]; then
-    echo "Downloading pandoc..."
-    curl -LO "https://github.com/jgm/pandoc/releases/download/2.11.1.1/pandoc-2.11.1.1-macOS.zip"
-    if [ $? -ne 0 ]; then
-      echo "Failed to download pandoc."
-      exit -1
-    fi
-    unzip "pandoc-2.11.1.1-macOS.zip";
-    if [ $? -ne 0 ]; then
-      echo "Failed to install pandoc."
-      exit -1
-    fi
-    if [ -f "pandoc-2.11.1.1-macOS.zip" ]; then
-      rm -f "pandoc-2.11.1.1-macOS.zip"
-    fi
-  fi
-  popd > /dev/null
-  echo "Done."
-fi
+#   if [ ! -d "$ULTRASCHALL_TOOLS_DIRECTORY/pandoc-2.11.1.1" ]; then
+#     echo "Downloading pandoc..."
+#     curl -LO "https://github.com/jgm/pandoc/releases/download/2.11.1.1/pandoc-2.11.1.1-macOS.zip"
+#     if [ $? -ne 0 ]; then
+#       echo "Failed to download pandoc."
+#       exit -1
+#     fi
+#     unzip "pandoc-2.11.1.1-macOS.zip";
+#     if [ $? -ne 0 ]; then
+#       echo "Failed to install pandoc."
+#       exit -1
+#     fi
+#     if [ -f "pandoc-2.11.1.1-macOS.zip" ]; then
+#       rm -f "pandoc-2.11.1.1-macOS.zip"
+#     fi
+#   fi
+#   popd > /dev/null
+#   echo "Done."
+# fi
 
 ULTRASCHALL_PAYLOAD_DIRECTORY="$ULTRASCHALL_BUILD_DIRECTORY/payload"
 if [ ! -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
@@ -354,7 +356,8 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
     echo "Failed to configure Ultraschall REAPER Plug-in."
     exit -1
   fi
-  $ULTRASCHALL_CMAKE_TOOL --build . --target reaper_ultraschall --config Release -j $(nproc --all)
+  # $ULTRASCHALL_CMAKE_TOOL --build . --target reaper_ultraschall --config Release -j $(nproc --all)
+  $ULTRASCHALL_CMAKE_TOOL --build . --target reaper_ultraschall --config Release -j
   if [ $? -ne 0 ]; then
     echo "Failed to build Ultraschall REAPER Plug-in."
     exit -1
@@ -506,7 +509,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   echo "Creating final installer package..."
   ULTRASCHALL_BUILD_NAME="<Unknown>"
   if [ $ULTRASCHALL_BUILD_RELEASE -eq 1 ]; then
-    ULTRASCHALL_BUILD_NAME="Ultraschall-5.0.2-pre2"
+    ULTRASCHALL_BUILD_NAME="Ultraschall-5.0.2-pre3"
   else
     ULTRASCHALL_BUILD_NAME=$ULTRASCHALL_BUILD_TAG
   fi
