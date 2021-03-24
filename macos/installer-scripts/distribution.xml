@@ -36,9 +36,6 @@
   <pkg-ref id="fm.ultraschall.reaper.js" version="5.0.2">
         reaper-js-extension.pkg
   </pkg-ref>
-  <pkg-ref id="fm.ultraschall.reaper.reapack" version="5.0.2">
-        reaper-reapack-extension.pkg
-  </pkg-ref>
   <!-- List them again here. They can now be organised as a hierarchy if you want. -->
   <choices-outline>
     <line choice="fm.ultraschall.reaper.plugin" />
@@ -49,7 +46,6 @@
     <line choice="fm.ultraschall.studiolink.onair" />
     <line choice="fm.ultraschall.reaper.sws" />
     <line choice="fm.ultraschall.reaper.js" />
-    <line choice="fm.ultraschall.reaper.reapack" />
   </choices-outline>
   <!-- Define each choice above -->
   <choice id="fm.ultraschall.reaper.plugin" visible="true" title="Ultraschall REAPER Extension" description="Ultraschall REAPER Plug-in." start_selected="true">
@@ -76,8 +72,5 @@
   </choice>
   <choice id="fm.ultraschall.reaper.js" visible="true" title="REAPER JS Extension" description="REAPER JS Extension (see https://github.com/juliansader/ReaExtensions)" start_selected="true">
     <pkg-ref id="fm.ultraschall.reaper.js" />
-  </choice>
-  <choice id="fm.ultraschall.reaper.reapack" visible="true" title="REAPER ReaPack Extension" description="REAPER ReaPack Extension (see https://reapack.com)" start_selected="true">
-    <pkg-ref id="fm.ultraschall.reaper.reapack" />
   </choice>
 </installer-gui-script>

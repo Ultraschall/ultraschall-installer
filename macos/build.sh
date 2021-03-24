@@ -491,10 +491,6 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   pkgbuild --root $ULTRASCHALL_ROOT_DIRECTORY/js-extension/payload --scripts $ULTRASCHALL_ROOT_DIRECTORY/js-extension/scripts --identifier fm.ultraschall.reaper.js --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/reaper-js-extension.pkg
   echo "Done."
 
-  echo "Creating REAPER ReaPack Extension installer package..."
-  pkgbuild --root $ULTRASCHALL_ROOT_DIRECTORY/reapack-extension/payload --scripts $ULTRASCHALL_ROOT_DIRECTORY/reapack-extension/scripts --identifier fm.ultraschall.reaper.reapack --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/reaper-reapack-extension.pkg
-  echo "Done."
-
   echo "Creating intermediate installer package..."
   if [ ! -d ultraschall-product ]; then
     mkdir ultraschall-product
