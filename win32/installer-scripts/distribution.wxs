@@ -24,7 +24,7 @@
     <Binary Id="ULTRASCHALL_CustomActions" SourceFile=".\installer-action\release\custom-action.CA.dll" />
     <CustomAction Id="ULTRASCHALL_PreInstallActionId" BinaryKey="ULTRASCHALL_CustomActions" DllEntry="PreInstallAction" Execute="immediate" HideTarget="yes" />
     <InstallExecuteSequence>
-      <Custom Action="ULTRASCHALL_PreInstallActionId" After="InstallInitialize">NOT REMOVE</Custom>
+      <Custom Action="ULTRASCHALL_PreInstallActionId" Before="CostInitialize">NOT REMOVE</Custom>
     </InstallExecuteSequence>
 
     <Property Id="DiskPrompt" Value="Ultraschall 5.0.2-pre3 Installation [1]" />
@@ -41,7 +41,6 @@
               <File Id="ReaperUltraschallDll" Name="reaper_ultraschall.dll" DiskId="1" Source=".\build\ultraschall-plugin\build\src\Release\reaper_ultraschall.dll" />
               <File Name="reaper_sws-x64.dll" DiskId="1" Source="..\sws-extension\reaper_sws-x64.dll" />
               <File Name="reaper_js_ReaScriptAPI64.dll" DiskId="1" Source="..\js-extension\reaper_js_ReaScriptAPI64.dll" />
-              <File Name="reaper_reapack-x64.dll" DiskId="1" Source="..\reapack-extension\reaper_reapack-x64.dll" />
             </Component>
             <Directory Id="VstPluginFolder" Name="FX">
               <Component Id="VstPluginComponent" Guid="A22C272D-F6F2-4564-B9DD-BF385A80F5B3" Win64="yes">
