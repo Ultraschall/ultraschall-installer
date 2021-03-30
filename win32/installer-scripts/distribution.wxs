@@ -27,7 +27,7 @@
       <Custom Action="ULTRASCHALL_PreInstallActionId" Before="CostInitialize">NOT REMOVE</Custom>
     </InstallExecuteSequence>
 
-    <Property Id="DiskPrompt" Value="Ultraschall 5.0.2 Installation [1]" />
+    <Property Id="DiskPrompt" Value="Ultraschall 5.0.3 Installation [1]" />
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="AppDataFolder">
         <Directory Id="ReaperFolder" Name="REAPER">
