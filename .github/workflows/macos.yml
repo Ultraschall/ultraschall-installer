@@ -2,25 +2,32 @@ name: macos
 
 on:
   push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+  schedule:
+    # run every night at 5:30 on the default branch, e.g. develop
+    -cron: "30 5 * * *"
 
 jobs:
   build-macos:
     name: Build macOS installer
-    # runs-on: macos-11.0
-    runs-on: macos-10.15
+    runs-on: macos-11.0
+    # runs-on: macos-10.15
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Run installer script
-      run: |
-        cd macos
-        ./build.sh
+      - name: Run installer script
+        run: |
+          cd macos
+          ./build.sh
 
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: ultraschall-build-macos
-        path: |
-          macos/*.dmg
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ultraschall-build-macos
+          path: |
+            macos/*.dmg
