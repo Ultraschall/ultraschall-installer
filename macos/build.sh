@@ -43,6 +43,7 @@ ULTRASCHALL_ROOT_DIRECTORY=$('pwd')
 ULTRASCHALL_RESOURCES_DIRECTORY="$ULTRASCHALL_ROOT_DIRECTORY/installer-resources"
 ULTRASCHALL_SCRIPTS_DIRECTORY="$ULTRASCHALL_ROOT_DIRECTORY/installer-scripts"
 ULTRASCHALL_BUILD_DIRECTORY="$ULTRASCHALL_ROOT_DIRECTORY/build"
+ULTRASCHALL_TOOLS_DIRECTORY="$ULTRASCHALL_BUILD_DIRECTORY/tools"
 ULTRASCHALL_PAYLOAD_DIRECTORY="$ULTRASCHALL_BUILD_DIRECTORY/payload"
 
 ULTRASCHALL_PLUGIN_URL="https://github.com/Ultraschall/ultraschall-plugin.git"
@@ -142,8 +143,73 @@ fi
 # Enter build directory
 pushd $ULTRASCHALL_BUILD_DIRECTORY > /dev/null
 
-ULTRASCHALL_PANDOC_TOOL="pandoc"
 ULTRASCHALL_CMAKE_TOOL="cmake"
+if [ ! -x "$(command -v $ULTRASCHALL_CMAKE_TOOL)" ]; then
+  ULTRASCHALL_CMAKE_TOOL="$ULTRASCHALL_TOOLS_DIRECTORY/cmake-3.19.6-macos-universal/CMake.app/Contents/bin/cmake"
+  if [ ! -f "$ULTRASCHALL_CMAKE_TOOL" ]; then
+    if [ ! -d $ULTRASCHALL_TOOLS_DIRECTORY ]; then
+      mkdir -p $ULTRASCHALL_TOOLS_DIRECTORY
+    fi
+    if [ -d $ULTRASCHALL_TOOLS_DIRECTORY ]; then
+      pushd $ULTRASCHALL_TOOLS_DIRECTORY > /dev/null
+      echo "Downloading cmake..."
+      curl -LO "https://github.com/Kitware/CMake/releases/download/v3.19.6/cmake-3.19.6-macos-universal.tar.gz"
+      if [ $? -ne 0 ]; then
+        echo "Failed to download cmake."
+        exit -1
+      fi
+      echo "Done."
+      echo "Installing cmake ..."
+      tar xvzf "cmake-3.19.6-macos-universal.tar.gz";
+      if [ $? -ne 0 ]; then
+        echo "Failed to install cmake."
+        exit -1
+      fi
+      echo "Done."
+      if [ -f "cmake-3.19.6-macos-universal.tar.gz" ]; then
+        rm -f "cmake-3.19.6-macos-universal.tar.gz"
+      fi
+      popd > /dev/null
+    else
+      echo "Failed to create tools directory."
+      exit -1
+    fi
+  fi
+fi
+
+ULTRASCHALL_PANDOC_TOOL="pandoc"
+if [ ! -x "$(command -v $ULTRASCHALL_PANDOC_TOOL)" ]; then
+  ULTRASCHALL_PANDOC_TOOL="$ULTRASCHALL_TOOLS_DIRECTORY/pandoc-2.11.1.1/bin/pandoc"
+  if [ ! -f $ULTRASCHALL_PANDOC_TOOL ]; then
+    if [ ! -d $ULTRASCHALL_TOOLS_DIRECTORY ]; then
+        mkdir -p $ULTRASCHALL_TOOLS_DIRECTORY
+    fi
+    if [ -d $ULTRASCHALL_TOOLS_DIRECTORY ]; then
+      pushd $ULTRASCHALL_TOOLS_DIRECTORY > /dev/null
+      echo "Downloading pandoc..."
+      curl -LO "https://github.com/jgm/pandoc/releases/download/2.11.1.1/pandoc-2.11.1.1-macOS.zip"
+      if [ $? -ne 0 ]; then
+        echo "Failed to download pandoc."
+        exit -1
+      fi
+      echo "Done."
+      echo "Installing pandoc..."
+      unzip "pandoc-2.11.1.1-macOS.zip";
+      if [ $? -ne 0 ]; then
+        echo "Failed to install pandoc."
+        exit -1
+      fi
+      echo "Done."
+      if [ -f "pandoc-2.11.1.1-macOS.zip" ]; then
+        rm -f "pandoc-2.11.1.1-macOS.zip"
+      fi
+      popd > /dev/null
+    else
+      echo "Failed to create tools directory."
+      exit -1
+    fi
+  fi
+fi
 
 ULTRASCHALL_PAYLOAD_DIRECTORY="$ULTRASCHALL_BUILD_DIRECTORY/payload"
 if [ ! -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
@@ -285,8 +351,20 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   #-------------------------------------------------------------------------------
   echo "Building Ultraschall documentation files..."
   $ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --standalone --self-contained --quiet --css=$ULTRASCHALL_SCRIPTS_DIRECTORY/ultraschall.css --output=installer-root/README.html ultraschall-plugin/docs/README.md
+  if [ $? -ne 0 ]; then
+    echo "Failed to convert README.md."
+    exit -1
+  fi
   $ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --standalone --self-contained --quiet --css=$ULTRASCHALL_SCRIPTS_DIRECTORY/ultraschall.css --output=installer-root/INSTALL.html ultraschall-plugin/docs/INSTALL.md
+  if [ $? -ne 0 ]; then
+    echo "Failed to convert INSTALL.md."
+    exit -1
+  fi
   $ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --standalone --self-contained --quiet --css=$ULTRASCHALL_SCRIPTS_DIRECTORY/ultraschall.css --output=installer-root/CHANGELOG.html ultraschall-plugin/docs/CHANGELOG.md
+  if [ $? -ne 0 ]; then
+    echo "Failed to convert CHANGELOG.md."
+    exit -1
+  fi
   echo "Done."
 
   #-------------------------------------------------------------------------------
