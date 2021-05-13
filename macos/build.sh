@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ################################################################################
 #
@@ -27,7 +27,7 @@
 ################################################################################
 
 ULTRASCHALL_BUILD_PRODUCT="ultraschall"
-ULTRASCHALL_BUILD_VERSION="5.0.2"
+ULTRASCHALL_BUILD_VERSION="5.1"
 ULTRASCHALL_BUILD_STAGE="pre-release"
 ULTRASCHALL_BUILD_PLATFORM="macos"
 ULTRASCHALL_BUILD_DATE=$(date -ju "+%Y%m%dT%H%M%S")Z
@@ -35,7 +35,6 @@ ULTRASCHALL_BUILD_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')
 
 ULTRASCHALL_BUILD_BOOTSTRAP=0
 ULTRASCHALL_BUILD_CLEAN=0
-ULTRASCHALL_BUILD_ALL=0
 ULTRASCHALL_BUILD_RELEASE=0
 ULTRASCHALL_BUILD_CODESIGN=0
 ULTRASCHALL_BUILD_UPDATE=0
@@ -44,12 +43,14 @@ ULTRASCHALL_ROOT_DIRECTORY=$('pwd')
 ULTRASCHALL_RESOURCES_DIRECTORY="$ULTRASCHALL_ROOT_DIRECTORY/installer-resources"
 ULTRASCHALL_SCRIPTS_DIRECTORY="$ULTRASCHALL_ROOT_DIRECTORY/installer-scripts"
 ULTRASCHALL_BUILD_DIRECTORY="$ULTRASCHALL_ROOT_DIRECTORY/build"
-ULTRASCHALL_TOOLS_DIRECTORY="$ULTRASCHALL_BUILD_DIRECTORY/tools"
 ULTRASCHALL_PAYLOAD_DIRECTORY="$ULTRASCHALL_BUILD_DIRECTORY/payload"
 
 ULTRASCHALL_PLUGIN_URL="https://github.com/Ultraschall/ultraschall-plugin.git"
 ULTRASCHALL_PLUGIN_BRANCH="<Unknown>"
 ULTRASCHALL_PLUGIN_COMMIT="<Unknown>"
+ULTRASCHALL_SOUNDBOARD_URL="https://github.com/Ultraschall/ultraschall-soundboard.git"
+ULTRASCHALL_SOUNDBOARD_BRANCH="<Unknown>"
+ULTRASCHALL_SOUNDBOARD_COMMIT="<Unknown>"
 ULTRASCHALL_PORTABLE_URL="https://github.com/Ultraschall/ultraschall-portable.git"
 ULTRASCHALL_PORTABLE_BRANCH="<Unknown>"
 ULTRASCHALL_PORTABLE_COMMIT="<Unknown>"
@@ -63,10 +64,6 @@ ULTRASCHALL_ASSETS_COMMIT="<Unknown>"
 for arg in "$@"
 do
 case $arg in
-    "-a"|"--all")
-    ULTRASCHALL_BUILD_ALL=1
-    shift # past argument
-    ;;
     "-b"|"--bootstrap")
     ULTRASCHALL_BUILD_BOOTSTRAP=1
     shift # past argument
@@ -79,7 +76,6 @@ case $arg in
     echo "Usage: build.sh [Options]"
     echo ""
     echo "Options:"
-    echo "  -a|--all        Use with --clean to remove the build tools as well"
     echo "  -b|--bootstrap  Reinitialize build tools and build targets"
     echo "  -c|--clean      Delete intermediate build targets"
     echo "  -h|--help       Print this help screen"
@@ -115,12 +111,6 @@ if [ $ULTRASCHALL_BUILD_CLEAN -eq 1 ]; then
   if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
     rm -rf $ULTRASCHALL_PAYLOAD_DIRECTORY
   fi
-  if [ $ULTRASCHALL_BUILD_ALL -eq 1 ]; then
-    if [ -d $ULTRASCHALL_TOOLS_DIRECTORY ]; then
-      rm -rf $ULTRASCHALL_TOOLS_DIRECTORY
-    fi
-    rm -rf $ULTRASCHALL_BUILD_DIRECTORY
-  fi
   exit 0
 fi
 
@@ -128,9 +118,6 @@ fi
 if [ $ULTRASCHALL_BUILD_BOOTSTRAP -eq 1 ]; then
   if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
     rm -rf $ULTRASCHALL_PAYLOAD_DIRECTORY
-  fi
-  if [ -d $ULTRASCHALL_TOOLS_DIRECTORY ]; then
-    rm -rf $ULTRASCHALL_TOOLS_DIRECTORY
   fi
 fi
 
@@ -149,60 +136,14 @@ echo "**********************************************************************"
 
 # Create folder for intermediate data
 if [ ! -d $ULTRASCHALL_BUILD_DIRECTORY ]; then
-  mkdir $ULTRASCHALL_BUILD_DIRECTORY
+  mkdir -p $ULTRASCHALL_BUILD_DIRECTORY
 fi
 
 # Enter build directory
 pushd $ULTRASCHALL_BUILD_DIRECTORY > /dev/null
 
-if [ ! -d $ULTRASCHALL_TOOLS_DIRECTORY ]; then
-  mkdir -p $ULTRASCHALL_TOOLS_DIRECTORY
-fi
-
-# ULTRASCHALL_PANDOC_TOOL="$ULTRASCHALL_TOOLS_DIRECTORY/pandoc-2.11.1.1/bin/pandoc"
-# ULTRASCHALL_CMAKE_TOOL="$ULTRASCHALL_TOOLS_DIRECTORY/cmake-3.19.6-macos-universal/CMake.app/Contents/bin/cmake"
 ULTRASCHALL_PANDOC_TOOL="pandoc"
 ULTRASCHALL_CMAKE_TOOL="cmake"
-
-# if [ -d $ULTRASCHALL_TOOLS_DIRECTORY ]; then
-#   pushd $ULTRASCHALL_TOOLS_DIRECTORY > /dev/null
-
-#   if [ ! -d "$ULTRASCHALL_TOOLS_DIRECTORY/cmake-3.19.6-macos-universal" ]; then
-#     echo "Downloading cmake..."
-#     curl -LO "https://github.com/Kitware/CMake/releases/download/v3.19.6/cmake-3.19.6-macos-universal.tar.gz"
-#     if [ $? -ne 0 ]; then
-#       echo "Failed to download cmake."
-#       exit -1
-#     fi
-#     tar xvzf "cmake-3.19.6-macos-universal.tar.gz";
-#     if [ $? -ne 0 ]; then
-#       echo "Failed to install cmake."
-#       exit -1
-#     fi
-#     if [ -f "cmake-3.19.6-macos-universal.tar.gz" ]; then
-#       rm -f "cmake-3.19.6-macos-universal.tar.gz"
-#     fi
-#   fi
-
-#   if [ ! -d "$ULTRASCHALL_TOOLS_DIRECTORY/pandoc-2.11.1.1" ]; then
-#     echo "Downloading pandoc..."
-#     curl -LO "https://github.com/jgm/pandoc/releases/download/2.11.1.1/pandoc-2.11.1.1-macOS.zip"
-#     if [ $? -ne 0 ]; then
-#       echo "Failed to download pandoc."
-#       exit -1
-#     fi
-#     unzip "pandoc-2.11.1.1-macOS.zip";
-#     if [ $? -ne 0 ]; then
-#       echo "Failed to install pandoc."
-#       exit -1
-#     fi
-#     if [ -f "pandoc-2.11.1.1-macOS.zip" ]; then
-#       rm -f "pandoc-2.11.1.1-macOS.zip"
-#     fi
-#   fi
-#   popd > /dev/null
-#   echo "Done."
-# fi
 
 ULTRASCHALL_PAYLOAD_DIRECTORY="$ULTRASCHALL_BUILD_DIRECTORY/payload"
 if [ ! -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
@@ -229,6 +170,26 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   ULTRASCHALL_PLUGIN_BRANCH=$(git rev-parse --abbrev-ref HEAD)
   ULTRASCHALL_PLUGIN_COMMIT=$(git rev-parse HEAD)
   ULTRASCHALL_BUILD_TAG="ULTRASCHALL_$(git describe --tags)"
+  popd > /dev/null
+  echo "Done."
+
+  if [ ! -d ultraschall-soundboard ]; then
+    echo "Downloading Ultraschall Soundbaord..."
+    git clone --branch main --depth 1 $ULTRASCHALL_SOUNDBOARD_URL ultraschall-soundboard
+    if [ ! -d ultraschall-soundboard ]; then
+      echo "Failed to download Ultraschall Soundboard."
+      exit -1
+    fi
+  else
+    echo "Updating Ultraschall Soundboard..."
+    pushd ultraschall-soundboard > /dev/null
+    git pull
+    popd > /dev/null
+  fi
+  pushd ultraschall-soundboard > /dev/null
+  ULTRASCHALL_SOUNDBOARD_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  ULTRASCHALL_SOUNDBOARD_COMMIT=$(git rev-parse HEAD)
+  # ULTRASCHALL_BUILD_TAG="ULTRASCHALL_$(git describe --tags)"
   popd > /dev/null
   echo "Done."
 
@@ -309,7 +270,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   echo "Copying installer background image..."
   if [ ! -d installer-root/.background ]; then
-    mkdir installer-root/.background
+    mkdir -p installer-root/.background
   fi
   cp $ULTRASCHALL_RESOURCES_DIRECTORY/image-background.png installer-root/.background/background.png
   echo "Done."
@@ -326,7 +287,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   echo "Copying Ultraschall Extras..."
   if [ ! -d installer-root/Extras ]; then
-    mkdir installer-root/Extras
+    mkdir -p installer-root/Extras
   fi
   cp ultraschall-assets/keyboard-layout/Keymap.pdf "installer-root/Extras/Ultraschall Keyboard Layout.pdf"
   cp ultraschall-assets/source/us-banner_400.png "installer-root/Extras/Ultraschall Badge 400px.png"
@@ -337,34 +298,31 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   echo "Copying Ultraschall Utilities..."
   if [ ! -d installer-root/Utilities ]; then
-    mkdir installer-root/Utilities
+    mkdir -p installer-root/Utilities
   fi
   cp $ULTRASCHALL_PAYLOAD_DIRECTORY/ultraschall-streamdeck/fm.ultraschall.ultradeck.streamDeckPlugin "installer-root/Utilities/fm.ultraschall.ultradeck.streamDeckPlugin"
   cp $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-hub/UltraschallHub-2015-11-12.pkg "installer-root/Utilities/Ultraschall Hub.pkg"
   cp "$ULTRASCHALL_ROOT_DIRECTORY/ultraschall-scripts/Remove legacy audio devices.command" "installer-root/Utilities/Remove legacy audio devices.command"
   echo "Done."
 
-  echo "Building Ultraschall REAPER Plug-in"
+  #-------------------------------------------------------------------------------
+  # ultraschall-plugin
+  #-------------------------------------------------------------------------------
+  echo "Building Ultraschall REAPER Plug-in..."
   pushd ultraschall-plugin > /dev/null
 
-  if [ ! -d build ]; then
-    mkdir build
-  fi
-  pushd build > /dev/null
-  $ULTRASCHALL_CMAKE_TOOL -G"Unix Makefiles" -Wno-dev -DCMAKE_BUILD_TYPE=Release ../
+  $ULTRASCHALL_CMAKE_TOOL -B build -G"Unix Makefiles" -Wno-dev -DCMAKE_BUILD_TYPE=Release 2> build.log
   if [ $? -ne 0 ]; then
     echo "Failed to configure Ultraschall REAPER Plug-in."
     exit -1
   fi
-  # $ULTRASCHALL_CMAKE_TOOL --build . --target reaper_ultraschall --config Release -j $(nproc --all)
-  $ULTRASCHALL_CMAKE_TOOL --build . --target reaper_ultraschall --config Release -j
+  $ULTRASCHALL_CMAKE_TOOL --build build --target reaper_ultraschall --config Release -j 2>> build.log
   if [ $? -ne 0 ]; then
     echo "Failed to build Ultraschall REAPER Plug-in."
     exit -1
   fi
-  mkdir -p release
-  cp ./src/reaper_ultraschall.dylib release/
-  popd > /dev/null
+  mkdir -p ./build/release
+  cp ./build/src/reaper_ultraschall.dylib ./build/release/
   popd > /dev/null
   echo "Done."
 
@@ -377,13 +335,46 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
     fi
     echo "Done."
   fi
+  #-------------------------------------------------------------------------------
+
+  #-------------------------------------------------------------------------------
+  # ultraschall-soundboard
+  #-------------------------------------------------------------------------------
+  echo "Building Ultraschall Soundboard..."
+  pushd ultraschall-soundboard > /dev/null
+
+  $ULTRASCHALL_CMAKE_TOOL -B build -G"Unix Makefiles" -Wno-dev -DCMAKE_BUILD_TYPE=Release 2> build.log
+  if [ $? -ne 0 ]; then
+    echo "Failed to configure Ultraschall Soundboard."
+    exit -1
+  fi
+  $ULTRASCHALL_CMAKE_TOOL --build build --target UltraschallSoundboard_AU --config Release -j 2>> build.log
+  if [ $? -ne 0 ]; then
+    echo "Failed to build Ultraschall Soundboard."
+    exit -1
+  fi
+  mkdir -p build/release
+  cp -R ./build/UltraschallSoundboard_artefacts/Release/AU/Soundboard.component ./build/release
+  popd > /dev/null
+  echo "Done."
+
+  if [ $ULTRASCHALL_BUILD_CODESIGN -eq 1 ]; then
+    echo "Signing ULTRASCHALL Soundboard..."
+    codesign --force --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" ultraschall-soundboard/build/UltraschallSoundboard_artefacts/Release/AU/Soundboard.component
+    if [ $? -ne 0 ]; then
+      echo "Failed to sign ULTRASCHALL Soundboard."
+      exit -1
+    fi
+    echo "Done."
+  fi
+  #-------------------------------------------------------------------------------
 
   echo "Building ULTRASCHALL REAPER API..."
   if [ ! -d ultraschall-api ]; then
-    mkdir ultraschall-api
+    mkdir -p ultraschall-api
   fi
   if [ ! -d ultraschall-api/ultraschall_api ]; then
-    mkdir ultraschall-api/ultraschall_api
+    mkdir -p ultraschall-api/ultraschall_api
   fi
   cp -r ultraschall-portable/UserPlugins/ultraschall_api ultraschall-api
   cp ultraschall-portable/UserPlugins/ultraschall_api.lua ultraschall-api/
@@ -392,7 +383,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   echo "Building ULTRASCHALL REAPER Theme..."
   if [ ! -d ultraschall-theme ]; then
-    mkdir ultraschall-theme
+    mkdir -p ultraschall-theme
   fi
   cp -r ultraschall-portable/ ultraschall-theme
   rm -rf ultraschall-theme/Plugins
@@ -403,11 +394,6 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   rm -f ultraschall-theme/ColorThemes/Default_5.0.ReaperThemeZip
   rm -f ultraschall-theme/ColorThemes/Ultraschall_3.1.ReaperThemeZip
   rm -rf ultraschall-theme/osFiles
-
-  # ----------------------------------------------------------------------
-  # FIXME Still required by Ultraschall 5
-  # rm -f ultraschall-theme/ColorThemes/Ultraschall_3.1.ReaperTheme
-  # ----------------------------------------------------------------------
 
   echo "Done."
 
@@ -430,6 +416,10 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   echo "      url:    $ULTRASCHALL_PORTABLE_URL" >> $ULTRASCHALL_BOM_NAME
   echo "      branch: $ULTRASCHALL_PORTABLE_BRANCH" >> $ULTRASCHALL_BOM_NAME
   echo "      commit: $ULTRASCHALL_PORTABLE_COMMIT" >> $ULTRASCHALL_BOM_NAME
+  echo "    - name: ultraschall-soundboard" >> $ULTRASCHALL_BOM_NAME
+  echo "      url:    $ULTRASCHALL_SOUNDBOARD_URL" >> $ULTRASCHALL_BOM_NAME
+  echo "      branch: $ULTRASCHALL_SOUNDBOARD_BRANCH" >> $ULTRASCHALL_BOM_NAME
+  echo "      commit: $ULTRASCHALL_SOUNDBOARD_COMMIT" >> $ULTRASCHALL_BOM_NAME
   echo "    - name: ultraschall-plugin" >> $ULTRASCHALL_BOM_NAME
   echo "      url:    $ULTRASCHALL_PLUGIN_URL" >> $ULTRASCHALL_BOM_NAME
   echo "      branch: $ULTRASCHALL_PLUGIN_BRANCH" >> $ULTRASCHALL_BOM_NAME
@@ -451,12 +441,8 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   echo "Creating installer packages directory..."
   if [ ! -d installer-packages ]; then
-    mkdir installer-packages
+    mkdir -p installer-packages
   fi
-  echo "Done."
-
-  echo "Creating Ultraschall REAPER Plug-in installer package..."
-  pkgbuild --root ultraschall-plugin/build/release --scripts $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-plugin/scripts --identifier fm.ultraschall.reaper.plugin --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/ultraschall-reaper-plugin.pkg
   echo "Done."
 
   echo "Creating Ultraschall REAPER Theme installer package..."
@@ -468,7 +454,12 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   echo "Done."
 
   echo "Creating Ultraschall Soundboard installer package..."
-  pkgbuild --root $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-soundboard/payload --scripts $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-soundboard/scripts --identifier fm.ultraschall.soundboard --install-location "/Library/Audio/Plug-Ins/Components" installer-packages/ultraschall-soundboard.pkg
+  # pkgbuild --root $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-soundboard/payload --scripts $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-soundboard/scripts --identifier fm.ultraschall.soundboard --install-location "/Library/Audio/Plug-Ins/Components" installer-packages/ultraschall-soundboard.pkg
+  pkgbuild --root ultraschall-soundboard/build/UltraschallSoundboard_artefacts/Release/AU --scripts $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-soundboard/scripts --identifier fm.ultraschall.soundboard --install-location "/Library/Audio/Plug-Ins/Components" installer-packages/ultraschall-soundboard.pkg
+  echo "Done."
+
+  echo "Creating Ultraschall REAPER Plug-in installer package..."
+  pkgbuild --root ultraschall-plugin/build/release --scripts $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-plugin/scripts --identifier fm.ultraschall.reaper.plugin --install-location "/Library/Application Support/REAPER/UserPlugins" installer-packages/ultraschall-reaper-plugin.pkg
   echo "Done."
 
   echo "Creating StudioLink installer packager..."
@@ -493,7 +484,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   echo "Creating intermediate installer package..."
   if [ ! -d ultraschall-product ]; then
-    mkdir ultraschall-product
+    mkdir -p ultraschall-product
   fi
   productbuild --distribution $ULTRASCHALL_SCRIPTS_DIRECTORY/distribution.xml --resources $ULTRASCHALL_RESOURCES_DIRECTORY --package-path installer-packages ultraschall-product/ultraschall-intermediate.pkg
   if [ $? -ne 0 ]; then
@@ -538,7 +529,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   echo "Mounting intermediate installer disk image..."
   if [ ! -d ultraschall-intermediate ]; then
-    mkdir ultraschall-intermediate
+    mkdir -p ultraschall-intermediate
   fi
   hdiutil attach -mountpoint ./ultraschall-intermediate ./ultraschall-product/ultraschall-intermediate.dmg
   if [ $? -ne 0 ]; then
