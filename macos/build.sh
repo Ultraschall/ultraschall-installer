@@ -46,6 +46,8 @@ ULTRASCHALL_BUILD_DIRECTORY="$ULTRASCHALL_ROOT_DIRECTORY/build"
 ULTRASCHALL_TOOLS_DIRECTORY="$ULTRASCHALL_BUILD_DIRECTORY/tools"
 ULTRASCHALL_PAYLOAD_DIRECTORY="$ULTRASCHALL_BUILD_DIRECTORY/payload"
 
+ULTRASCHALL_THREAD_COUNT=$(sysctl -n hw.ncpu)
+
 ULTRASCHALL_PLUGIN_URL="https://github.com/Ultraschall/ultraschall-plugin.git"
 ULTRASCHALL_PLUGIN_BRANCH="<Unknown>"
 ULTRASCHALL_PLUGIN_COMMIT="<Unknown>"
@@ -404,7 +406,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   fi
   echo "Done."
   echo "Building Ultraschall REAPER Plug-in..."
-  $ULTRASCHALL_CMAKE_TOOL --build build --target reaper_ultraschall --config Release -j 2>> build.log
+  $ULTRASCHALL_CMAKE_TOOL --build build --target reaper_ultraschall --config Release -j $ULTRASCHALL_THREAD_COUNT 2>> build.log
   if [ $? -ne 0 ]; then
     echo "Failed to build Ultraschall REAPER Plug-in."
     exit -1
@@ -435,7 +437,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   fi
   echo "Done."
   echo "Building Ultraschall Soundboard..."
-  $ULTRASCHALL_CMAKE_TOOL --build build --target UltraschallSoundboard_AU --config Release -j 2>> build.log
+  $ULTRASCHALL_CMAKE_TOOL --build build --target UltraschallSoundboard_AU --config Release -j $ULTRASCHALL_THREAD_COUNT 2>> build.log
   if [ $? -ne 0 ]; then
     echo "Failed to build Ultraschall Soundboard."
     exit -1
