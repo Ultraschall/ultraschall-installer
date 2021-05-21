@@ -14,7 +14,7 @@ if [ -d "$HOME/.config/REAPER" ]; then
 fi
 
 echo "Installing the Ultraschall REAPER Theme..."
-unzip -o ./themes/Ultraschall_4.0.ReaperConfigZip -d "$HOME/.config/REAPER"
+tar xf ./themes/ultraschall-theme.tar -C "$HOME/.config/REAPER"
 if [ $? -eq 0 ]; then
     echo "Done."
     echo "Installing the Ultraschall REAPER Plug-ins..."

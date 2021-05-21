@@ -177,12 +177,24 @@ cp ultraschall-assets/source/us-banner_2000.png "installer-package/resources/Ult
 echo "Done."
 
 echo "Copying Ultraschall themes..."
-cp ../ultraschall-theme/Ultraschall_4.0.ReaperConfigZip installer-package/themes/Ultraschall_4.0.ReaperConfigZip
+cp -r ultraschall-portable/ ultraschall-theme
+rm -rf ultraschall-theme/Plugins
+rm -rf ultraschall-theme/UserPlugins
+rm -f ultraschall-theme/Default_6.0.ReaperThemeZip
+rm -f ultraschall-theme/reamote.exe
+rm -f ultraschall-theme/ColorThemes/Default_6.0.ReaperThemeZip
+rm -f ultraschall-theme/ColorThemes/Default_5.0.ReaperThemeZip
+rm -f ultraschall-theme/ColorThemes/Ultraschall_3.1.ReaperThemeZip
+rm -rf ultraschall-theme/osFiles
+# create a tar file
+pushd ultraschall-theme > /dev/null
+tar cvf ../installer-package/themes/ultraschall-theme.tar *
+popd > /dev/null
 echo "Done."
 
 echo "Copying Ultraschall plugins..."
 cp ../js-extension/reaper_js_ReaScriptAPI64.so installer-package/plugins/reaper_js_ReaScriptAPI64.so
-cp ../reapack-extension/reaper_reapack64.so installer-package/plugins/reaper_reapack64.so
+cp ../reapack-extension/reaper_reapack-x86_64.so installer-package/plugins/reaper_reapack-x86_64.so
 cp ../sws-extension/reaper_sws-x86_64.so installer-package/plugins/reaper_sws-x86_64.so
 cp ../sws-extension/sws_python64.py installer-package/scripts/sws_python64.py
 cp ../sws-extension/sws_python.py installer-package/scripts/sws_python.py
