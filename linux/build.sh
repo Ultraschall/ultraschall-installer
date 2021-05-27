@@ -24,7 +24,11 @@ fi
 echo "Building installer from $SOURCE_BRANCH branch..."
 
 # Specify build id
-ULTRASCHALL_BUILD_ID='R5.0.0_GENERIC'
+if [ $BUILD_RELEASE = 1 ]; then
+  ULTRASCHALL_BUILD_ID='4.1.0'
+else
+  ULTRASCHALL_BUILD_ID='R5.0.0_GENERIC'
+fi
 
 # Specify build directory
 ULTRASCHALL_BUILD_DIRECTORY='./build'
@@ -131,13 +135,7 @@ echo "Done."
 echo "Building Ultraschall REAPER Plug-in"
 pushd ultraschall-plugin > /dev/null
 
-if [ $BUILD_RELEASE = 1 ]; then
-  ULTRASCHALL_BUILD_ID='Ultraschall-4.1.0'
-else
-  git describe --tags > ../version.txt
-  ULTRASCHALL_BUILD_TAG=$(<../version.txt)
-  ULTRASCHALL_BUILD_ID="ULTRASCHALL_$ULTRASCHALL_BUILD_TAG"
-fi
+
 
 if [ ! -d build ]; then
  mkdir build
@@ -177,7 +175,19 @@ cp ultraschall-assets/source/us-banner_2000.png "installer-package/resources/Ult
 echo "Done."
 
 echo "Copying Ultraschall themes..."
-cp ../ultraschall-theme/Ultraschall_4.0.ReaperConfigZip installer-package/themes/Ultraschall_4.0.ReaperConfigZip
+cp -r ultraschall-portable/ ultraschall-theme
+rm -rf ultraschall-theme/Plugins
+rm -rf ultraschall-theme/UserPlugins
+rm -f ultraschall-theme/Default_6.0.ReaperThemeZip
+rm -f ultraschall-theme/reamote.exe
+rm -f ultraschall-theme/ColorThemes/Default_6.0.ReaperThemeZip
+rm -f ultraschall-theme/ColorThemes/Default_5.0.ReaperThemeZip
+rm -f ultraschall-theme/ColorThemes/Ultraschall_3.1.ReaperThemeZip
+rm -rf ultraschall-theme/osFiles
+# create a tar file
+pushd ultraschall-theme > /dev/null
+tar cvf ../installer-package/themes/ultraschall-theme.tar *
+popd > /dev/null
 echo "Done."
 
 echo "Copying Ultraschall plugins..."
@@ -201,7 +211,7 @@ chmod +x installer-package/install.sh
 echo "Done."
 
 echo "Creating installer package..."
-tar -czf "../$ULTRASCHALL_BUILD_ID.tar.gz" installer-package
+tar -czf "../Ultraschall_$ULTRASCHALL_BUILD_ID.tar.gz" installer-package
 if [ $? -ne 0 ]; then
   echo "Failed to build final installer package."
   exit -1
