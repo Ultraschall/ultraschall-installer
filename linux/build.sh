@@ -8,6 +8,14 @@ echo "**********************************************************************"
 
 # Specify build type
 BUILD_RELEASE=0
+ULTRASCHALL_THREAD_COUNT=$(nproc)
+
+# Configuration
+ULTRASCHALL_CMAKE_TOOL=cmake
+
+STUDIO_LINK_PLUGIN_RELEASE=v21.03.2-stable
+
+ULTRASCHALL_SOUNDBOARD_URL="https://github.com/Ultraschall/ultraschall-soundboard.git"
 
 if [ "$1" = "--help" ]; then
   echo "Usage: build.sh [ --release ]"
@@ -25,9 +33,9 @@ echo "Building installer from $SOURCE_BRANCH branch..."
 
 # Specify build id
 if [ $BUILD_RELEASE = 1 ]; then
-  ULTRASCHALL_BUILD_ID='4.1.0'
+  ULTRASCHALL_BUILD_ID='R5.0.3'
 else
-  ULTRASCHALL_BUILD_ID='R5.0.0_GENERIC'
+  ULTRASCHALL_BUILD_ID='R5.0.0alpha1'
 fi
 
 # Specify build directory
@@ -106,6 +114,21 @@ else
 fi
 echo "Done."
 
+if [ ! -d ultraschall-soundboard ]; then
+  echo "Downloading Ultraschall Soundboard..."
+  git clone --branch main --depth 1 $ULTRASCHALL_SOUNDBOARD_URL ultraschall-soundboard
+  if [ ! -d ultraschall-soundboard ]; then
+    echo "Failed to download Ultraschall Soundboard."
+    exit -1
+  fi
+else
+  echo "Updating Ultraschall Soundboard..."
+  pushd ultraschall-soundboard > /dev/null
+  git pull
+  popd > /dev/null
+fi
+echo "Done."
+
 echo "Creating installer package directories..."
 if [ ! -d installer-package ]; then
   mkdir installer-package
@@ -122,6 +145,9 @@ if [ ! -d themes ]; then
 fi
 if [ ! -d resources ]; then
   mkdir resources
+fi
+if [ ! -d custom-plugins ]; then
+  mkdir custom-plugins
 fi
 popd
 echo "Done."
@@ -167,6 +193,33 @@ cp ultraschall-portable/UserPlugins/ultraschall_api.lua ultraschall-api/
 cp ultraschall-portable/UserPlugins/ultraschall_api_readme.txt ultraschall-api/
 echo "Done."
 
+pushd ultraschall-soundboard > /dev/null
+echo "Configuring Ultraschall Soundboard..."
+$ULTRASCHALL_CMAKE_TOOL -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release --log-level=ERROR 2> build.log
+if [ $? -ne 0 ]; then
+  echo "Failed to configure Ultraschall Soundboard."
+  exit -1
+fi
+echo "Done."
+echo "Building Ultraschall Soundboard..."
+$ULTRASCHALL_CMAKE_TOOL --build build --target UltraschallSoundboard_VST3 --config Release -j $ULTRASCHALL_THREAD_COUNT 2>> build.log
+if [ $? -ne 0 ]; then
+  echo "Failed to build Ultraschall Soundboard."
+  exit -1
+fi
+mkdir -p build/release
+cp -R ./build/UltraschallSoundboard_artefacts/Release/VST3/Soundboard.vst3 ./build/release
+cp -R ./build
+popd > /dev/null
+echo "Done."
+
+echo "Fetching StudioLink LV2 plugin"
+curl https://download.studio.link/releases/$STUDIO_LINK_PLUGIN_RELEASE/linux/studio-link-plugin.zip -o studio-link-plugin.zip
+rm -rf studio-link.lv2
+unzip studio-link-plugin.zip
+
+
+
 echo "Copying Ultraschall resources..."
 cp ultraschall-assets/keyboard-layout/Keymap.pdf "installer-package/resources/Ultraschall Keyboard Layout.pdf"
 cp ultraschall-assets/source/us-banner_400.png "installer-package/resources/Ultraschall Badge 400px.png"
@@ -196,9 +249,9 @@ cp ../reapack-extension/reaper_reapack-x86_64.so installer-package/plugins/reape
 cp ../sws-extension/reaper_sws-x86_64.so installer-package/plugins/reaper_sws-x86_64.so
 cp ../sws-extension/sws_python64.py installer-package/scripts/sws_python64.py
 cp ../sws-extension/sws_python.py installer-package/scripts/sws_python.py
-# FIXME studiolink
+cp -r studio-link.lv2 installer-package/custom-plugins
 # FIXME studiolink-onair
-# FIXME soundboard
+cp -r ultraschall-soundboard/build/release/Soundboard.vst3 installer-package/custom-plugins
 cp ultraschall-plugin/build/src/reaper_ultraschall.so installer-package/plugins/reaper_ultraschall.so
 cp -R ultraschall-api/ultraschall_api/ installer-package/plugins/ultraschall_api/
 cp ultraschall-api/ultraschall_api.lua installer-package/plugins/ultraschall_api.lua
