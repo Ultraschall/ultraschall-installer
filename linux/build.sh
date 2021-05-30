@@ -204,7 +204,7 @@ pushd ultraschall-soundboard > /dev/null
 echo "Configuring Ultraschall Soundboard..."
 $ULTRASCHALL_CMAKE_TOOL -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release --log-level=ERROR 2> build.log
 if [ $? -ne 0 ]; then
-  cat build/CMakeFiles/CMakeOutput.log
+  cat build.log
   echo "Failed to configure Ultraschall Soundboard."
   exit -1
 fi
