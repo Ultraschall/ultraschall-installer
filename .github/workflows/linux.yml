@@ -9,17 +9,22 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Run installer script
-      run: |
-        cd linux
-        ./build.sh
+      - name: Install packages
+        uses: mstksg/get-package@v1
+        with:
+          # libx* are used for soundboard
+          apt-get: libxrandr-dev
 
-    - uses: actions/upload-artifact@v2
-      with:
-        name: ultraschall-build-linux
-        path: |
-          linux/*.tar.gz
+      - name: Run installer script
+        run: |
+          cd linux
+          ./build.sh
 
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ultraschall-build-linux
+          path: |
+            linux/*.tar.gz
