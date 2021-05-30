@@ -245,7 +245,6 @@ echo "Done."
 
 echo "Copying Ultraschall plugins..."
 cp ../js-extension/reaper_js_ReaScriptAPI64.so installer-package/plugins/reaper_js_ReaScriptAPI64.so
-cp ../reapack-extension/reaper_reapack-x86_64.so installer-package/plugins/reaper_reapack-x86_64.so
 cp ../sws-extension/reaper_sws-x86_64.so installer-package/plugins/reaper_sws-x86_64.so
 cp ../sws-extension/sws_python64.py installer-package/scripts/sws_python64.py
 cp ../sws-extension/sws_python.py installer-package/scripts/sws_python.py
