@@ -16,7 +16,7 @@ jobs:
         uses: mstksg/get-package@v1
         with:
           # libx* are used for soundboard
-          apt-get: libxrandr-dev libxinerama-dev libxcursor-dev
+          apt-get: libxrandr-dev libxinerama-dev libxcursor-dev libasound2-dev
 
       - name: Run installer script
         run: |
