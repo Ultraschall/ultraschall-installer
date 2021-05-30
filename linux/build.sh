@@ -212,6 +212,7 @@ echo "Done."
 echo "Building Ultraschall Soundboard..."
 $ULTRASCHALL_CMAKE_TOOL --build build --target UltraschallSoundboard_VST3 --config Release -j $ULTRASCHALL_THREAD_COUNT 2>> build.log
 if [ $? -ne 0 ]; then
+  cat build.log
   echo "Failed to build Ultraschall Soundboard."
   exit -1
 fi
