@@ -33,6 +33,13 @@ rm -rf "$HOME/.lv2/studio-link.lv2"
 cp -fr ./custom-plugins/studio-link.lv2 "$HOME/.lv2"
 echo "Done."
 
+echo "Installing the Ultraschall StudioLink OnAir plugin..."
+mkdir -p "$HOME/.lv2"
+rm -rf "$HOME/.lv2/studio-link-onair.lv2"
+cp -fr ./custom-plugins/studio-link-onair.lv2 "$HOME/.lv2"
+echo "Done."
+
+
 echo "Installing the Ultraschall Soundboard plugin..."
 mkdir -p "$HOME/.vst3"
 rm -rf "$HOME/.vst3/Soundboard.vst3"
