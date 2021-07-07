@@ -28,9 +28,9 @@ cp -fr ./plugins/* "$HOME/.config/REAPER/UserPlugins"
 echo "Done."
 
 echo "Installing the Ultraschall StudioLink plugin..."
-mkdir -p "$HOME/.lv2"
-rm -rf "$HOME/.lv2/studio-link.lv2"
-cp -fr ./custom-plugins/studio-link.lv2 "$HOME/.lv2"
+mkdir -p "$HOME/.vst3"
+rm -rf "$HOME/.vst3/studio-link-plugin.vst"
+cp -fr ./custom-plugins/studio-link-plugin.vst "$HOME/.vst3"
 echo "Done."
 
 echo "Installing the Ultraschall StudioLink OnAir plugin..."
