@@ -24,10 +24,12 @@ ULTRASCHALL_BUILD_DIRECTORY="$ULTRASCHALL_ROOT_DIRECTORY/build"
 PANDOC_PACKAGE_URL="https://github.com/jgm/pandoc/releases/download/2.9.1.1/pandoc-2.9.1.1-linux-amd64.tar.gz"
 ULTRASCHALL_PLUGIN_URL="https://github.com/Ultraschall/ultraschall-plugin.git"
 ULTRASCHALL_SOUNDBOARD_URL="https://github.com/Ultraschall/ultraschall-soundboard.git"
-ULTRASCHALL_PORTABLE_URL="https://github.com/Ultraschall/ultraschall-portable.git"
+# ULTRASCHALL_PORTABLE_URL="https://github.com/Ultraschall/ultraschall-portable.git"
+ULTRASCHALL_PORTABLE_URL="https://github.com/nethad/ultraschall-portable.git"
+ULTRASCHALL_PORTABLE_BRANCH="linux-project-and-track-templates"
 ULTRASCHALL_ASSETS_URL="https://github.com/Ultraschall/ultraschall-assets.git"
 
-STUDIO_LINK_PLUGIN_RELEASE=v21.03.2-stable
+STUDIO_LINK_PLUGIN_RELEASE=v21.07.0-stable
 
 if [ "$1" = "--help" ]; then
   echo "Usage: build.sh [ --release ]"
@@ -95,7 +97,7 @@ echo "Done."
 
 if [ ! -d ultraschall-portable ]; then
   echo "Downloading Ultraschall REAPER API..."
-  git clone --branch master --depth 1 $ULTRASCHALL_PORTABLE_URL ultraschall-portable
+  git clone --branch $ULTRASCHALL_PORTABLE_BRANCH --depth 1 $ULTRASCHALL_PORTABLE_URL ultraschall-portable
   if [ ! -d ultraschall-portable ]; then
     echo "Failed to download Ultraschall REAPER API."
     exit -1
@@ -222,10 +224,10 @@ cp -R ./build
 popd > /dev/null
 echo "Done."
 
-echo "Fetching StudioLink LV2 plugin"
-curl https://download.studio.link/releases/$STUDIO_LINK_PLUGIN_RELEASE/linux/studio-link-plugin.zip -o studio-link-plugin.zip
-rm -rf studio-link.lv2
-unzip studio-link-plugin.zip
+echo "Fetching StudioLink plugin"
+curl https://download.studio.link/releases/$STUDIO_LINK_PLUGIN_RELEASE/linux/vst/studio-link-plugin.zip -o studio-link-plugin.zip
+rm -rf studio-link-plugin.vst
+unzip -d studio-link-plugin.vst studio-link-plugin.zip
 
 echo "Fetching StudioLink OnAir plugin"
 curl https://download.studio.link/releases/$STUDIO_LINK_PLUGIN_RELEASE/linux/studio-link-plugin-onair.zip -o studio-link-plugin-onair.zip
@@ -240,7 +242,9 @@ cp ultraschall-assets/source/us-banner_2000.png "ultraschall-installer/resources
 echo "Done."
 
 echo "Copying Ultraschall themes..."
-cp -r ultraschall-portable/ ultraschall-theme
+rm -rf ultraschall-theme
+cp -r ultraschall-portable ultraschall-theme
+
 rm -rf ultraschall-theme/Plugins
 rm -rf ultraschall-theme/UserPlugins
 rm -f ultraschall-theme/Default_6.0.ReaperThemeZip
@@ -248,7 +252,13 @@ rm -f ultraschall-theme/reamote.exe
 rm -f ultraschall-theme/ColorThemes/Default_6.0.ReaperThemeZip
 rm -f ultraschall-theme/ColorThemes/Default_5.0.ReaperThemeZip
 rm -f ultraschall-theme/ColorThemes/Ultraschall_3.1.ReaperThemeZip
+
+rm -rf ultraschall-theme/TrackTemplates
+cp -r ultraschall-theme/osFiles/Linux/TrackTemplates ultraschall-theme
+rm -rf ultraschall-theme/ProjectTemplates
+cp -r ultraschall-theme/osFiles/Linux/ProjectTemplates ultraschall-theme
 rm -rf ultraschall-theme/osFiles
+
 # create a tar file
 pushd ultraschall-theme > /dev/null
 tar cvf ../ultraschall-installer/themes/ultraschall-theme.tar *
@@ -260,7 +270,7 @@ cp ../js-extension/reaper_js_ReaScriptAPI64.so ultraschall-installer/plugins/rea
 cp ../sws-extension/reaper_sws-x86_64.so ultraschall-installer/plugins/reaper_sws-x86_64.so
 cp ../sws-extension/sws_python64.py ultraschall-installer/scripts/sws_python64.py
 cp ../sws-extension/sws_python.py ultraschall-installer/scripts/sws_python.py
-cp -r studio-link.lv2 ultraschall-installer/custom-plugins
+cp -r studio-link-plugin.vst ultraschall-installer/custom-plugins
 cp -r studio-link-onair.lv2 ultraschall-installer/custom-plugins
 cp -r ultraschall-soundboard/build/release/Soundboard.vst3 ultraschall-installer/custom-plugins
 cp ultraschall-plugin/build/src/reaper_ultraschall.so ultraschall-installer/plugins/reaper_ultraschall.so
