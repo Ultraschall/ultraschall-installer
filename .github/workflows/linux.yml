@@ -1,0 +1,30 @@
+name: linux
+
+on:
+  push:
+
+jobs:
+  build-linux:
+    name: Build Linux installer
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install packages
+        uses: mstksg/get-package@v1
+        with:
+          # libx* are used for soundboard
+          apt-get: libxrandr-dev libxinerama-dev libxcursor-dev libasound2-dev
+
+      - name: Run installer script
+        run: |
+          cd linux
+          ./build.sh
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ultraschall-build-linux
+          path: |
+            linux/*.tar.gz

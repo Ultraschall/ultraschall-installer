@@ -6,28 +6,51 @@ echo "*            BUILDING ULTRASCHALL INSTALLER PACKAGE                  *"
 echo "*                                                                    *"
 echo "**********************************************************************"
 
-# Specify build type
-BUILD_RELEASE=0
+# Configuration
+ULTRASCHALL_THREAD_COUNT=$(nproc)
+ULTRASCHALL_CMAKE_TOOL=cmake
+ULTRASCHALL_INSTALLER_DIR="ultraschall-installer"
+
+ULTRASCHALL_BUILD_PRODUCT="ultraschall"
+ULTRASCHALL_BUILD_VERSION="5.1"
+ULTRASCHALL_BUILD_DATE=$(date -u "+%Y%m%dT%H%M%S")Z
+ULTRASCHALL_BUILD_ID=$(uuidgen)
+
+ULTRASCHALL_BUILD_RELEASE=0
+
+ULTRASCHALL_ROOT_DIRECTORY=$('pwd')
+ULTRASCHALL_BUILD_DIRECTORY="$ULTRASCHALL_ROOT_DIRECTORY/build"
+
+PANDOC_PACKAGE_URL="https://github.com/jgm/pandoc/releases/download/2.9.1.1/pandoc-2.9.1.1-linux-amd64.tar.gz"
+ULTRASCHALL_PLUGIN_URL="https://github.com/Ultraschall/ultraschall-plugin.git"
+ULTRASCHALL_SOUNDBOARD_URL="https://github.com/Ultraschall/ultraschall-soundboard.git"
+# ULTRASCHALL_PORTABLE_URL="https://github.com/Ultraschall/ultraschall-portable.git"
+ULTRASCHALL_PORTABLE_URL="https://github.com/nethad/ultraschall-portable.git"
+ULTRASCHALL_PORTABLE_BRANCH="linux-project-and-track-templates"
+ULTRASCHALL_ASSETS_URL="https://github.com/Ultraschall/ultraschall-assets.git"
+
+STUDIO_LINK_PLUGIN_RELEASE=v21.07.0-stable
 
 if [ "$1" = "--help" ]; then
   echo "Usage: build.sh [ --release ]"
   exit 0
 elif [ "$1" = "--release" ]; then
-  BUILD_RELEASE=1
+  ULTRASCHALL_BUILD_RELEASE=1
 fi
 
 SOURCE_BRANCH='develop'
-if [ $BUILD_RELEASE = 1 ]; then
+if [ $ULTRASCHALL_BUILD_RELEASE = 1 ]; then
   SOURCE_BRANCH='master'
 fi
 
 echo "Building installer from $SOURCE_BRANCH branch..."
 
 # Specify build id
-ULTRASCHALL_BUILD_ID='R5.0.0_GENERIC'
-
-# Specify build directory
-ULTRASCHALL_BUILD_DIRECTORY='./build'
+if [ $ULTRASCHALL_BUILD_RELEASE = 1 ]; then
+  ULTRASCHALL_BUILD_ID='R5.0.3'
+else
+  ULTRASCHALL_BUILD_ID='R5.1.0alpha1'
+fi
 
 # Create folder for intermediate data
 if [ ! -d $ULTRASCHALL_BUILD_DIRECTORY ]; then
@@ -39,18 +62,18 @@ pushd $ULTRASCHALL_BUILD_DIRECTORY > /dev/null
 if [ ! -d pandoc-tool ]; then
   echo "Downloading Pandoc Universal Markup Converter..."
   mkdir pandoc-tool && pushd pandoc-tool > /dev/null
-  curl -LO https://github.com/jgm/pandoc/releases/download/2.9.1.1/pandoc-2.9.1.1-linux-amd64.tar.gz;
+  curl -L -o pandoc.tar.gz $PANDOC_PACKAGE_URL
   if [ $? -ne 0 ]; then
     echo "Failed to download Pandoc Universal Markup Converter."
     exit -1
   fi
-  gunzip pandoc-2.9.1.1-linux-amd64.tar.gz;
-  tar -xvf pandoc-2.9.1.1-linux-amd64.tar
+  mkdir pandoc
+  tar xvf pandoc.tar.gz --directory pandoc --strip-components=1
   if [ $? -ne 0 ]; then
     echo "Failed to install Pandoc Universal Markup Converter."
     exit -1
   else
-    rm pandoc-2.9.1.1-linux-amd64.tar
+    rm pandoc.tar.gz
   fi
 
   popd > /dev/null
@@ -59,7 +82,7 @@ fi
 
 if [ ! -d ultraschall-plugin ]; then
   echo "Downloading Ultraschall REAPER Plug-in..."
-  git clone --branch $SOURCE_BRANCH --depth 1 https://github.com/Ultraschall/ultraschall-plugin.git ultraschall-plugin
+  git clone --branch $SOURCE_BRANCH --depth 1 $ULTRASCHALL_PLUGIN_URL ultraschall-plugin
   if [ ! -d ultraschall-plugin ]; then
     echo "Failed to download Ultraschall REAPER Plug-in."
     exit -1
@@ -74,7 +97,7 @@ echo "Done."
 
 if [ ! -d ultraschall-portable ]; then
   echo "Downloading Ultraschall REAPER API..."
-  git clone --branch master --depth 1 https://github.com/Ultraschall/ultraschall-portable.git ultraschall-portable
+  git clone --branch $ULTRASCHALL_PORTABLE_BRANCH --depth 1 $ULTRASCHALL_PORTABLE_URL ultraschall-portable
   if [ ! -d ultraschall-portable ]; then
     echo "Failed to download Ultraschall REAPER API."
     exit -1
@@ -89,7 +112,7 @@ echo "Done."
 
 if [ ! -d ultraschall-assets ]; then
   echo "Downloading Ultraschall REAPER Resources..."
-  git clone https://github.com/Ultraschall/ultraschall-assets.git ultraschall-assets
+  git clone $ULTRASCHALL_ASSETS_URL ultraschall-assets
   if [ ! -d ultraschall-assets ]; then
     echo "Failed to download Ultraschall REAPER Resources."
     exit -1
@@ -102,11 +125,26 @@ else
 fi
 echo "Done."
 
-echo "Creating installer package directories..."
-if [ ! -d installer-package ]; then
-  mkdir installer-package
+if [ ! -d ultraschall-soundboard ]; then
+  echo "Downloading Ultraschall Soundboard..."
+  git clone --branch main --depth 1 $ULTRASCHALL_SOUNDBOARD_URL ultraschall-soundboard
+  if [ ! -d ultraschall-soundboard ]; then
+    echo "Failed to download Ultraschall Soundboard."
+    exit -1
+  fi
+else
+  echo "Updating Ultraschall Soundboard..."
+  pushd ultraschall-soundboard > /dev/null
+  git pull
+  popd > /dev/null
 fi
-pushd installer-package > /dev/null
+echo "Done."
+
+echo "Creating installer package directories..."
+if [ ! -d ultraschall-installer ]; then
+  mkdir ultraschall-installer
+fi
+pushd ultraschall-installer > /dev/null
 if [ ! -d plugins ]; then
   mkdir plugins
 fi
@@ -119,25 +157,20 @@ fi
 if [ ! -d resources ]; then
   mkdir resources
 fi
+if [ ! -d custom-plugins ]; then
+  mkdir custom-plugins
+fi
 popd
 echo "Done."
 
 echo "Building Ultraschall documentation files..."
-pandoc-tool/pandoc-2.9.1.1/bin/pandoc --from=markdown --to=html --standalone --self-contained --quiet --css=../installer-scripts/ultraschall.css --output=installer-package/README.html ultraschall-plugin/docs/README.md
-pandoc-tool/pandoc-2.9.1.1/bin/pandoc --from=markdown --to=html --standalone --self-contained --quiet --css=../installer-scripts/ultraschall.css --output=installer-package/INSTALL.html ultraschall-plugin/docs/INSTALL.md
-pandoc-tool/pandoc-2.9.1.1/bin/pandoc --from=markdown --to=html --standalone --self-contained --quiet --css=../installer-scripts/ultraschall.css --output=installer-package/CHANGELOG.html ultraschall-plugin/docs/CHANGELOG.md
+pandoc-tool/pandoc/bin/pandoc --from=markdown --to=html --standalone --self-contained --quiet --css=../installer-scripts/ultraschall.css --output=ultraschall-installer/README.html ultraschall-plugin/docs/README.md
+pandoc-tool/pandoc/bin/pandoc --from=markdown --to=html --standalone --self-contained --quiet --css=../installer-scripts/ultraschall.css --output=ultraschall-installer/INSTALL.html ultraschall-plugin/docs/INSTALL.md
+pandoc-tool/pandoc/bin/pandoc --from=markdown --to=html --standalone --self-contained --quiet --css=../installer-scripts/ultraschall.css --output=ultraschall-installer/CHANGELOG.html ultraschall-plugin/docs/CHANGELOG.md
 echo "Done."
 
 echo "Building Ultraschall REAPER Plug-in"
 pushd ultraschall-plugin > /dev/null
-
-if [ $BUILD_RELEASE = 1 ]; then
-  ULTRASCHALL_BUILD_ID='Ultraschall-4.1.0'
-else
-  git describe --tags > ../version.txt
-  ULTRASCHALL_BUILD_TAG=$(<../version.txt)
-  ULTRASCHALL_BUILD_ID="ULTRASCHALL_$ULTRASCHALL_BUILD_TAG"
-fi
 
 if [ ! -d build ]; then
  mkdir build
@@ -148,7 +181,7 @@ if [ $? -ne 0 ]; then
   echo "Failed to configure Ultraschall REAPER Plug-in."
   exit -1
 fi
-cmake --build . --target reaper_ultraschall --config Release -j 6
+cmake --build . --target reaper_ultraschall --config Release -j $ULTRASCHALL_THREAD_COUNT
 if [ $? -ne 0 ]; then
   echo "Failed to build Ultraschall REAPER Plug-in."
   exit -1
@@ -169,39 +202,90 @@ cp ultraschall-portable/UserPlugins/ultraschall_api.lua ultraschall-api/
 cp ultraschall-portable/UserPlugins/ultraschall_api_readme.txt ultraschall-api/
 echo "Done."
 
+pushd ultraschall-soundboard > /dev/null
+echo "Configuring Ultraschall Soundboard..."
+$ULTRASCHALL_CMAKE_TOOL -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release --log-level=ERROR 2> build.log
+if [ $? -ne 0 ]; then
+  cat build.log
+  echo "Failed to configure Ultraschall Soundboard."
+  exit -1
+fi
+echo "Done."
+echo "Building Ultraschall Soundboard..."
+$ULTRASCHALL_CMAKE_TOOL --build build --target UltraschallSoundboard_VST3 --config Release -j $ULTRASCHALL_THREAD_COUNT 2>> build.log
+if [ $? -ne 0 ]; then
+  cat build.log
+  echo "Failed to build Ultraschall Soundboard."
+  exit -1
+fi
+mkdir -p build/release
+cp -R ./build/UltraschallSoundboard_artefacts/Release/VST3/Soundboard.vst3 ./build/release
+cp -R ./build
+popd > /dev/null
+echo "Done."
+
+echo "Fetching StudioLink plugin"
+curl https://download.studio.link/releases/$STUDIO_LINK_PLUGIN_RELEASE/linux/vst/studio-link-plugin.zip -o studio-link-plugin.zip
+rm -rf studio-link-plugin.vst
+unzip -d studio-link-plugin.vst studio-link-plugin.zip
+
+echo "Fetching StudioLink OnAir plugin"
+curl https://download.studio.link/releases/$STUDIO_LINK_PLUGIN_RELEASE/linux/studio-link-plugin-onair.zip -o studio-link-plugin-onair.zip
+rm -rf studio-link-onair.lv2
+unzip studio-link-plugin-onair.zip
+
 echo "Copying Ultraschall resources..."
-cp ultraschall-assets/keyboard-layout/Keymap.pdf "installer-package/resources/Ultraschall Keyboard Layout.pdf"
-cp ultraschall-assets/source/us-banner_400.png "installer-package/resources/Ultraschall Badge 400px.png"
-cp ultraschall-assets/source/us-banner_800.png "installer-package/resources/Ultraschall Badge 800px.png"
-cp ultraschall-assets/source/us-banner_2000.png "installer-package/resources/Ultraschall Badge 2000px.png"
+cp ultraschall-assets/keyboard-layout/Keymap.pdf "ultraschall-installer/resources/Ultraschall Keyboard Layout.pdf"
+cp ultraschall-assets/source/us-banner_400.png "ultraschall-installer/resources/Ultraschall Badge 400px.png"
+cp ultraschall-assets/source/us-banner_800.png "ultraschall-installer/resources/Ultraschall Badge 800px.png"
+cp ultraschall-assets/source/us-banner_2000.png "ultraschall-installer/resources/Ultraschall Badge 2000px.png"
 echo "Done."
 
 echo "Copying Ultraschall themes..."
-cp ../ultraschall-theme/Ultraschall_4.0.ReaperConfigZip installer-package/themes/Ultraschall_4.0.ReaperConfigZip
+rm -rf ultraschall-theme
+cp -r ultraschall-portable ultraschall-theme
+
+rm -rf ultraschall-theme/Plugins
+rm -rf ultraschall-theme/UserPlugins
+rm -f ultraschall-theme/Default_6.0.ReaperThemeZip
+rm -f ultraschall-theme/reamote.exe
+rm -f ultraschall-theme/ColorThemes/Default_6.0.ReaperThemeZip
+rm -f ultraschall-theme/ColorThemes/Default_5.0.ReaperThemeZip
+rm -f ultraschall-theme/ColorThemes/Ultraschall_3.1.ReaperThemeZip
+
+rm -rf ultraschall-theme/TrackTemplates
+cp -r ultraschall-theme/osFiles/Linux/TrackTemplates ultraschall-theme
+rm -rf ultraschall-theme/ProjectTemplates
+cp -r ultraschall-theme/osFiles/Linux/ProjectTemplates ultraschall-theme
+rm -rf ultraschall-theme/osFiles
+
+# create a tar file
+pushd ultraschall-theme > /dev/null
+tar cvf ../ultraschall-installer/themes/ultraschall-theme.tar *
+popd > /dev/null
 echo "Done."
 
 echo "Copying Ultraschall plugins..."
-cp ../js-extension/reaper_js_ReaScriptAPI64.so installer-package/plugins/reaper_js_ReaScriptAPI64.so
-cp ../reapack-extension/reaper_reapack64.so installer-package/plugins/reaper_reapack64.so
-cp ../sws-extension/reaper_sws-x86_64.so installer-package/plugins/reaper_sws-x86_64.so
-cp ../sws-extension/sws_python64.py installer-package/scripts/sws_python64.py
-cp ../sws-extension/sws_python.py installer-package/scripts/sws_python.py
-# FIXME studiolink
-# FIXME studiolink-onair
-# FIXME soundboard
-cp ultraschall-plugin/build/src/reaper_ultraschall.so installer-package/plugins/reaper_ultraschall.so
-cp -R ultraschall-api/ultraschall_api/ installer-package/plugins/ultraschall_api/
-cp ultraschall-api/ultraschall_api.lua installer-package/plugins/ultraschall_api.lua
-cp ultraschall-api/ultraschall_api_readme.txt installer-package/plugins/ultraschall_api_readme.txt
+cp ../js-extension/reaper_js_ReaScriptAPI64.so ultraschall-installer/plugins/reaper_js_ReaScriptAPI64.so
+cp ../sws-extension/reaper_sws-x86_64.so ultraschall-installer/plugins/reaper_sws-x86_64.so
+cp ../sws-extension/sws_python64.py ultraschall-installer/scripts/sws_python64.py
+cp ../sws-extension/sws_python.py ultraschall-installer/scripts/sws_python.py
+cp -r studio-link-plugin.vst ultraschall-installer/custom-plugins
+cp -r studio-link-onair.lv2 ultraschall-installer/custom-plugins
+cp -r ultraschall-soundboard/build/release/Soundboard.vst3 ultraschall-installer/custom-plugins
+cp ultraschall-plugin/build/src/reaper_ultraschall.so ultraschall-installer/plugins/reaper_ultraschall.so
+cp -R ultraschall-api/ultraschall_api/ ultraschall-installer/plugins/ultraschall_api/
+cp ultraschall-api/ultraschall_api.lua ultraschall-installer/plugins/ultraschall_api.lua
+cp ultraschall-api/ultraschall_api_readme.txt ultraschall-installer/plugins/ultraschall_api_readme.txt
 echo "Done."
 
 echo "Copying install script..."
-cp ../installer-scripts/install.sh installer-package
-chmod +x installer-package/install.sh
+cp ../installer-scripts/install.sh ultraschall-installer
+chmod +x ultraschall-installer/install.sh
 echo "Done."
 
 echo "Creating installer package..."
-tar -czf "../$ULTRASCHALL_BUILD_ID.tar.gz" installer-package
+tar -czf "../Ultraschall_$ULTRASCHALL_BUILD_ID.tar.gz" ultraschall-installer
 if [ $? -ne 0 ]; then
   echo "Failed to build final installer package."
   exit -1
