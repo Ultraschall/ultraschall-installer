@@ -399,14 +399,14 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   pushd ultraschall-plugin > /dev/null
 
   echo "Configuring Ultraschall REAPER Plug-in..."
-  $ULTRASCHALL_CMAKE_TOOL -B build -G "Unix Makefiles" -Wno-dev -DCMAKE_BUILD_TYPE=Release --log-level=ERROR 2> build.log
+  $ULTRASCHALL_CMAKE_TOOL -B build -G "Unix Makefiles" -Wno-dev -DCMAKE_BUILD_TYPE=Release --log-level=ERROR
   if [ $? -ne 0 ]; then
     echo "Failed to configure Ultraschall REAPER Plug-in."
     exit -1
   fi
   echo "Done."
   echo "Building Ultraschall REAPER Plug-in..."
-  $ULTRASCHALL_CMAKE_TOOL --build build --target reaper_ultraschall --config Release -j $ULTRASCHALL_THREAD_COUNT 2>> build.log
+  $ULTRASCHALL_CMAKE_TOOL --build build --target reaper_ultraschall --config Release -j $ULTRASCHALL_THREAD_COUNT
   if [ $? -ne 0 ]; then
     echo "Failed to build Ultraschall REAPER Plug-in."
     exit -1
@@ -430,14 +430,14 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   pushd ultraschall-soundboard > /dev/null
 
   echo "Configuring Ultraschall Soundboard..."
-  $ULTRASCHALL_CMAKE_TOOL -B build -G "Unix Makefiles" -Wno-dev -DCMAKE_BUILD_TYPE=Release --log-level=ERROR 2> build.log
+  $ULTRASCHALL_CMAKE_TOOL -B build -G "Unix Makefiles" -Wno-dev -DCMAKE_BUILD_TYPE=Release --log-level=ERROR
   if [ $? -ne 0 ]; then
     echo "Failed to configure Ultraschall Soundboard."
     exit -1
   fi
   echo "Done."
   echo "Building Ultraschall Soundboard..."
-  $ULTRASCHALL_CMAKE_TOOL --build build --target UltraschallSoundboard_AU --config Release -j $ULTRASCHALL_THREAD_COUNT 2>> build.log
+  $ULTRASCHALL_CMAKE_TOOL --build build --target UltraschallSoundboard_AU --config Release -j $ULTRASCHALL_THREAD_COUNT
   if [ $? -ne 0 ]; then
     echo "Failed to build Ultraschall Soundboard."
     exit -1
