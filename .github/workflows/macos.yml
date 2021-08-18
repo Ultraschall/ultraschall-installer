@@ -14,7 +14,7 @@ on:
 jobs:
   build-macos:
     name: Build macOS installer
-    runs-on: macos-11.0
+    runs-on: macos-11
 
     steps:
       - name: Checkout code
