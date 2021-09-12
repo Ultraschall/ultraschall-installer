@@ -43,7 +43,7 @@ jobs:
           arch: x64
 
       - name: build (linux)
-        run: build.sh
+        run: ls -l
         working-directory: ${{runner.workspace}}/linux
         if: matrix.os == 'ubuntu-latest'
 
