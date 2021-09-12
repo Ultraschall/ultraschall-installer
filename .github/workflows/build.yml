@@ -1,0 +1,76 @@
+name: build
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+
+jobs:
+  configure:
+    runs-on: ubuntu-latest
+    outputs:
+      build_timestamp: ${{steps.timestamp.outputs.timestamp}}
+      build_id: R5.1.0_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
+    steps:
+      - name: configure build id
+        id: timestamp
+        run: echo "::set-output name=timestamp::$(date -u +'%Y%m%d%H%M')"
+
+  build:
+    needs: configure
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install (linux)
+        run: sudo apt-get install ninja-build libxrandr-dev libxinerama-dev libxcursor-dev libasound2-dev
+        if: matrix.os == 'ubuntu-latest'
+
+      - name: install (windows)
+        run: choco install ninja
+        if: matrix.os == 'windows-latest'
+
+      - name: install (macos)
+        run: brew install ninja
+        if: matrix.os == 'macos-latest'
+
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: build (linux)
+        run: cd linux && build.sh
+        if: matrix.os == 'ubuntu-latest'
+
+      - name: build (windows)
+        run: cd win32 && build.ps1
+        if: matrix.os == 'windows-latest'
+
+      - name: build (macos)
+        run: cd macos && build.sh
+        if: matrix.os == 'macos-latest'
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{needs.configure.outputs.build_id}}
+          path: ${{runner.workspace}}/build/artifacts/*
+
+  release:
+    needs: [configure, build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: ${{needs.configure.outputs.build_id}}
+          path: ${{runner.workspace}}/artifacts
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{secrets.GITHUB_TOKEN}}"
+          automatic_release_tag: "${{needs.configure.outputs.build_id}}"
+          prerelease: true
+          files: ${{runner.workspace}}/artifacts/*
