@@ -49,12 +49,14 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
 
       - name: build (windows)
-        run: build.ps1
-        working-directory: ${{runner.workspace}}/win32
+          cd win32
+          ./build.ps1
+        if: matrix.os == 'windows-latest'
 
       - name: build (macos)
-        run: build.sh
-        working-directory: ${{runner.workspace}}/macos
+          cd macos
+          ./build.sh
+        if: matrix.os == 'macos-latest'
 
       - uses: actions/upload-artifact@v2
         with:
