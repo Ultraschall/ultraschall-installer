@@ -44,16 +44,16 @@ jobs:
 
       - name: build (linux)
         run: build.sh
-        working_directory: ${{runner.workspace}}/linux
+        working-directory: ${{runner.workspace}}/linux
         if: matrix.os == 'ubuntu-latest'
 
       - name: build (windows)
         run: build.ps1
-        working_directory: ${{runner.workspace}}/win32
+        working-directory: ${{runner.workspace}}/win32
 
       - name: build (macos)
         run: build.sh
-        working_directory: ${{runner.workspace}}/macos
+        working-directory: ${{runner.workspace}}/macos
 
       - uses: actions/upload-artifact@v2
         with:
