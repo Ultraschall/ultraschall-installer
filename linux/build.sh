@@ -9,7 +9,6 @@ echo "**********************************************************************"
 # Configuration
 ULTRASCHALL_THREAD_COUNT=$(nproc)
 ULTRASCHALL_CMAKE_TOOL=cmake
-ULTRASCHALL_INSTALLER_DIR="ultraschall-installer"
 
 ULTRASCHALL_BUILD_PRODUCT="ultraschall"
 ULTRASCHALL_BUILD_VERSION="5.1"
@@ -51,6 +50,8 @@ if [ $ULTRASCHALL_BUILD_RELEASE = 1 ]; then
 else
   ULTRASCHALL_BUILD_ID='R5.1.0-alpha1'
 fi
+
+ULTRASCHALL_INSTALLER_DIR="ULTRASCHALL_$ULTRASCHALL_BUILD_ID"
 
 # Create folder for intermediate data
 if [ ! -d $ULTRASCHALL_BUILD_DIRECTORY ]; then
@@ -141,10 +142,10 @@ fi
 echo "Done."
 
 echo "Creating installer package directories..."
-if [ ! -d ultraschall-installer ]; then
-  mkdir ultraschall-installer
+if [ ! -d "$ULTRASCHALL_INSTALLER_DIR" ]; then
+  mkdir "$ULTRASCHALL_INSTALLER_DIR"
 fi
-pushd ultraschall-installer > /dev/null
+pushd "$ULTRASCHALL_INSTALLER_DIR" > /dev/null
 if [ ! -d plugins ]; then
   mkdir plugins
 fi
@@ -160,13 +161,13 @@ fi
 if [ ! -d custom-plugins ]; then
   mkdir custom-plugins
 fi
-popd
+popd > /dev/null
 echo "Done."
 
 echo "Building Ultraschall documentation files..."
-pandoc-tool/pandoc/bin/pandoc --from=markdown --to=html --standalone --self-contained --quiet --css=../installer-scripts/ultraschall.css --output=ultraschall-installer/README.html ultraschall-plugin/docs/README.md
-pandoc-tool/pandoc/bin/pandoc --from=markdown --to=html --standalone --self-contained --quiet --css=../installer-scripts/ultraschall.css --output=ultraschall-installer/INSTALL.html ultraschall-plugin/docs/INSTALL.md
-pandoc-tool/pandoc/bin/pandoc --from=markdown --to=html --standalone --self-contained --quiet --css=../installer-scripts/ultraschall.css --output=ultraschall-installer/CHANGELOG.html ultraschall-plugin/docs/CHANGELOG.md
+pandoc-tool/pandoc/bin/pandoc --from=markdown --to=html --standalone --self-contained --quiet --css=../installer-scripts/ultraschall.css --output="$ULTRASCHALL_INSTALLER_DIR/README.html" ultraschall-plugin/docs/README.md
+pandoc-tool/pandoc/bin/pandoc --from=markdown --to=html --standalone --self-contained --quiet --css=../installer-scripts/ultraschall.css --output="$ULTRASCHALL_INSTALLER_DIR/INSTALL.html" ultraschall-plugin/docs/INSTALL.md
+pandoc-tool/pandoc/bin/pandoc --from=markdown --to=html --standalone --self-contained --quiet --css=../installer-scripts/ultraschall.css --output="$ULTRASCHALL_INSTALLER_DIR/CHANGELOG.html" ultraschall-plugin/docs/CHANGELOG.md
 echo "Done."
 
 echo "Building Ultraschall REAPER Plug-in"
@@ -235,10 +236,10 @@ rm -rf studio-link-onair.lv2
 unzip studio-link-plugin-onair.zip
 
 echo "Copying Ultraschall resources..."
-cp ultraschall-assets/keyboard-layout/Keymap.pdf "ultraschall-installer/resources/Ultraschall Keyboard Layout.pdf"
-cp ultraschall-assets/source/us-banner_400.png "ultraschall-installer/resources/Ultraschall Badge 400px.png"
-cp ultraschall-assets/source/us-banner_800.png "ultraschall-installer/resources/Ultraschall Badge 800px.png"
-cp ultraschall-assets/source/us-banner_2000.png "ultraschall-installer/resources/Ultraschall Badge 2000px.png"
+cp ultraschall-assets/keyboard-layout/Keymap.pdf "$ULTRASCHALL_INSTALLER_DIR/resources/Ultraschall Keyboard Layout.pdf"
+cp ultraschall-assets/source/us-banner_400.png "$ULTRASCHALL_INSTALLER_DIR/resources/Ultraschall Badge 400px.png"
+cp ultraschall-assets/source/us-banner_800.png "$ULTRASCHALL_INSTALLER_DIR/resources/Ultraschall Badge 800px.png"
+cp ultraschall-assets/source/us-banner_2000.png "$ULTRASCHALL_INSTALLER_DIR/resources/Ultraschall Badge 2000px.png"
 echo "Done."
 
 echo "Copying Ultraschall themes..."
@@ -261,27 +262,27 @@ rm -rf ultraschall-theme/osFiles
 
 # create a tar file
 pushd ultraschall-theme > /dev/null
-tar cvf ../ultraschall-installer/themes/ultraschall-theme.tar *
+tar cvf "../$ULTRASCHALL_INSTALLER_DIR/themes/ultraschall-theme.tar" * > /dev/null
 popd > /dev/null
 echo "Done."
 
 echo "Copying Ultraschall plugins..."
-cp ../js-extension/reaper_js_ReaScriptAPI64.so ultraschall-installer/plugins/reaper_js_ReaScriptAPI64.so
-cp ../sws-extension/reaper_sws-x86_64.so ultraschall-installer/plugins/reaper_sws-x86_64.so
-cp ../sws-extension/sws_python64.py ultraschall-installer/scripts/sws_python64.py
-cp ../sws-extension/sws_python.py ultraschall-installer/scripts/sws_python.py
-cp -r studio-link-plugin.vst ultraschall-installer/custom-plugins
-cp -r studio-link-onair.lv2 ultraschall-installer/custom-plugins
-cp -r ultraschall-soundboard/build/release/Soundboard.vst3 ultraschall-installer/custom-plugins
-cp ultraschall-plugin/build/src/reaper_ultraschall.so ultraschall-installer/plugins/reaper_ultraschall.so
-cp -R ultraschall-api/ultraschall_api/ ultraschall-installer/plugins/ultraschall_api/
-cp ultraschall-api/ultraschall_api.lua ultraschall-installer/plugins/ultraschall_api.lua
-cp ultraschall-api/ultraschall_api_readme.txt ultraschall-installer/plugins/ultraschall_api_readme.txt
+cp ../js-extension/reaper_js_ReaScriptAPI64.so "$ULTRASCHALL_INSTALLER_DIR/plugins/reaper_js_ReaScriptAPI64.so"
+cp ../sws-extension/reaper_sws-x86_64.so "$ULTRASCHALL_INSTALLER_DIR/plugins/reaper_sws-x86_64.so"
+cp ../sws-extension/sws_python64.py "$ULTRASCHALL_INSTALLER_DIR/scripts/sws_python64.py"
+cp ../sws-extension/sws_python.py "$ULTRASCHALL_INSTALLER_DIR/scripts/sws_python.py"
+cp -r studio-link-plugin.vst "$ULTRASCHALL_INSTALLER_DIR/custom-plugins"
+cp -r studio-link-onair.lv2 "$ULTRASCHALL_INSTALLER_DIR/custom-plugins"
+cp -r ultraschall-soundboard/build/release/Soundboard.vst3 "$ULTRASCHALL_INSTALLER_DIR/custom-plugins"
+cp ultraschall-plugin/build/src/reaper_ultraschall.so "$ULTRASCHALL_INSTALLER_DIR/plugins/reaper_ultraschall.so"
+cp -R ultraschall-api/ultraschall_api/ "$ULTRASCHALL_INSTALLER_DIR/plugins/ultraschall_api/"
+cp ultraschall-api/ultraschall_api.lua "$ULTRASCHALL_INSTALLER_DIR/plugins/ultraschall_api.lua"
+cp ultraschall-api/ultraschall_api_readme.txt "$ULTRASCHALL_INSTALLER_DIR/plugins/ultraschall_api_readme.txt"
 echo "Done."
 
 echo "Copying install script..."
-cp ../installer-scripts/install.sh ultraschall-installer
-chmod +x ultraschall-installer/install.sh
+cp ../installer-scripts/install.sh "$ULTRASCHALL_INSTALLER_DIR"
+chmod +x "$ULTRASCHALL_INSTALLER_DIR/install.sh"
 echo "Done."
 
 echo "Creating installer package..."
@@ -289,7 +290,7 @@ if [ -d "artifacts" ]; then
   rm -rf "artifacts"
 fi
 mkdir "artifacts"
-tar -czf "artifacts/ULTRASCHALL_$ULTRASCHALL_BUILD_ID.tar.gz" ultraschall-installer
+tar -czf "artifacts/ULTRASCHALL_$ULTRASCHALL_BUILD_ID.tar.gz" "$ULTRASCHALL_INSTALLER_DIR"
 if [ $? -ne 0 ]; then
   echo "Failed to build final installer package."
   exit -1
