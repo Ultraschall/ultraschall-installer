@@ -63,7 +63,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: ${{needs.configure.outputs.build_id}}
-          path: ${{runner.workspace}}/build/artifacts/*
+          path: linux/build/artifacts/*
 
   release:
     needs: [configure, build]
