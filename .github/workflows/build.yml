@@ -44,7 +44,7 @@ jobs:
 
       - name: build (linux)
         run: |
-          cd ${{runner.workspace}}/linux
+          cd linux
           ./build.sh
         if: matrix.os == 'ubuntu-latest'
 
