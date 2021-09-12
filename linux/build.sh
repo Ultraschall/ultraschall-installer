@@ -47,9 +47,9 @@ echo "Building installer from $SOURCE_BRANCH branch..."
 
 # Specify build id
 if [ $ULTRASCHALL_BUILD_RELEASE = 1 ]; then
-  ULTRASCHALL_BUILD_ID='R5.0.3'
+  ULTRASCHALL_BUILD_ID='R5.1.0'
 else
-  ULTRASCHALL_BUILD_ID='R5.1.0alpha1'
+  ULTRASCHALL_BUILD_ID='R5.1.0-alpha1'
 fi
 
 # Create folder for intermediate data
@@ -285,7 +285,11 @@ chmod +x ultraschall-installer/install.sh
 echo "Done."
 
 echo "Creating installer package..."
-tar -czf "../Ultraschall_$ULTRASCHALL_BUILD_ID.tar.gz" ultraschall-installer
+if [ -d "artifacts" ]; then
+  rm -rf "artifacts"
+fi
+mkdir "artifacts"
+tar -czf "artifacts/ULTRASCHALL_$ULTRASCHALL_BUILD_ID.tar.gz" ultraschall-installer
 if [ $? -ne 0 ]; then
   echo "Failed to build final installer package."
   exit -1

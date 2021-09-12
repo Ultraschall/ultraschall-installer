@@ -49,11 +49,13 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
 
       - name: build (windows)
+        run: |
           cd win32
           ./build.ps1
         if: matrix.os == 'windows-latest'
 
       - name: build (macos)
+        run: |
           cd macos
           ./build.sh
         if: matrix.os == 'macos-latest'
