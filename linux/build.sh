@@ -18,7 +18,7 @@ ULTRASCHALL_BUILD_ID=$(uuidgen)
 
 ULTRASCHALL_BUILD_RELEASE=0
 
-ULTRASCHALL_ROOT_DIRECTORY=$('pwd')
+ULTRASCHALL_ROOT_DIRECTORY=$(pwd)
 ULTRASCHALL_BUILD_DIRECTORY="$ULTRASCHALL_ROOT_DIRECTORY/build"
 
 PANDOC_PACKAGE_URL="https://github.com/jgm/pandoc/releases/download/2.9.1.1/pandoc-2.9.1.1-linux-amd64.tar.gz"
@@ -50,7 +50,7 @@ echo "Done."
 
 SOURCE_BRANCH='develop'
 if [ $ULTRASCHALL_BUILD_RELEASE = 1 ]; then
-  SOURCE_BRANCH='master'
+  SOURCE_BRANCH='main'
 fi
 
 echo "Building installer from $SOURCE_BRANCH branch..."
@@ -59,7 +59,7 @@ echo "Building installer from $SOURCE_BRANCH branch..."
 if [ $ULTRASCHALL_BUILD_RELEASE = 1 ]; then
   ULTRASCHALL_BUILD_ID='5.1.0'
 else
-  ULTRASCHALL_BUILD_ID='R5.1.0-alpha'
+  ULTRASCHALL_BUILD_ID='R5.1.0-preview'
 fi
 
 ULTRASCHALL_INSTALLER_DIR="$ULTRASCHALL_BUILD_ID"
@@ -70,30 +70,6 @@ if [ ! -d $ULTRASCHALL_BUILD_DIRECTORY ]; then
 fi
 
 pushd $ULTRASCHALL_BUILD_DIRECTORY > /dev/null
-
-if [ ! -x "$(command -v pandoc)" ]; then
-  if [ ! -d pandoc-tool ]; then
-    echo "Downloading Pandoc Universal Markup Converter..."
-    mkdir pandoc-tool && pushd pandoc-tool > /dev/null
-    curl -L -o pandoc.tar.gz $PANDOC_PACKAGE_URL
-    if [ $? -ne 0 ]; then
-      echo "Failed to download Pandoc Universal Markup Converter."
-      exit -1
-    fi
-    mkdir pandoc
-    tar xvf pandoc.tar.gz --directory pandoc --strip-components=1
-    if [ $? -ne 0 ]; then
-      echo "Failed to install Pandoc Universal Markup Converter."
-      exit -1
-    else
-      rm pandoc.tar.gz
-    fi
-
-    ULTRASCHALL_PANDOC_TOOL=pandoc-tool/pandoc/bin/pandoc
-    popd > /dev/null
-    echo "Done."
-  fi
-fi
 
 if [ ! -d ultraschall-plugin ]; then
   echo "Downloading Ultraschall REAPER Plug-in..."
