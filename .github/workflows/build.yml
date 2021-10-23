@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: install (linux)
-        run: sudo apt-get install ninja-build libxrandr-dev libxinerama-dev libxcursor-dev libasound2-dev
+        run: sudo apt-get install ninja-build pandoc libxrandr-dev libxinerama-dev libxcursor-dev libasound2-dev
         if: matrix.os == 'ubuntu-latest'
 
       - name: install (windows)
