@@ -18,35 +18,26 @@ $ ./build.sh
 
 ## Linux
 
-**experimental - for testing only**
+**in development - currently testing only**
 
 1. clone this repository
-```bash
-$ git clone https://github.com/Ultraschall/ultraschall-installer.git 
-```
 
-2. change directory 
+2. change directory
+
 ```bash
 $ cd ultraschall-installer/linux
 ```
 
 3. build
+
 ```bash
 $ ./build.sh
 ```
 
-4. change directory 
-```bash
-$ cd build/installer-package
-```
+To install Ultraschall, get the installer artifact in `linux/build/artifacts` (tar.gz file):
 
-5. install (you must have Reaper installed) 
 ```bash
+$ tar xvf ULTRASCHALL_R5.1.0-preview.tar.gz
+$ cd R5.1.0-preview
 $ ./install.sh
 ```
-
-
-## Notice for Linux: 
-Some features like StudioLink, StudioLink-onair and soundboard are still missing. 
-A StudioLink VST is available for testing: https://download.studio.link/releases/v20.12.1-stable/linux/vst/studio-link-plugin.zip 
-Download the file and extract it to `$HOME/.vst3` 
