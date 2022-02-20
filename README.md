@@ -1,6 +1,6 @@
 ## Windows
 
-Building on Windows requires Visual Studio 2019 16.2.
+Building on Windows requires Visual Studio 2019 or later.
 
 ```powershell
 PS> cd win32/
@@ -9,7 +9,7 @@ PS> ./build.ps1
 
 ## macOS
 
-Building on macOS requires Xcode 10.3.
+Building on macOS requires Xcode 11 or later.
 
 ```bash
 $ cd macos/
