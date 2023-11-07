@@ -38,7 +38,7 @@ ULTRASCHALL_CMAKE_TOOL=cmake
 ULTRASCHALL_PANDOC_TOOL=pandoc
 
 ULTRASCHALL_BUILD_PRODUCT="ultraschall"
-ULTRASCHALL_BUILD_VERSION="5.1"
+ULTRASCHALL_BUILD_VERSION="5.1.0"
 ULTRASCHALL_BUILD_DATE=$(date -u "+%Y%m%dT%H%M%S")Z
 ULTRASCHALL_BUILD_ID=$(uuidgen)
 
@@ -64,7 +64,7 @@ elif [ "$1" = "--release" ]; then
 fi
 
 echo "Checking whether required software packages are installed..."
-ULTRASCHALL_DEPENDENCIES="cmake pandoc ninja-build libxrandr-dev libxinerama-dev libxcursor-dev libasound2-dev"
+ULTRASCHALL_DEPENDENCIES="cmake pandoc ninja-build libxrandr-dev libxinerama-dev libxcursor-dev libasound2-dev libcurl4-openssl-dev"
 dpkg -l $ULTRASCHALL_DEPENDENCIES > /dev/null
 if [ $? -ne 0 ]; then
   echo "Dependency check failed, required packages:"
@@ -180,9 +180,9 @@ popd > /dev/null
 echo "Done."
 
 echo "Building Ultraschall documentation files..."
-$ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --standalone --self-contained --quiet --css=../installer-scripts/ultraschall.css --output="$ULTRASCHALL_INSTALLER_DIR/README.html" ultraschall-plugin/docs/README.md
-$ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --standalone --self-contained --quiet --css=../installer-scripts/ultraschall.css --output="$ULTRASCHALL_INSTALLER_DIR/INSTALL.html" ultraschall-plugin/docs/INSTALL.md
-$ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --standalone --self-contained --quiet --css=../installer-scripts/ultraschall.css --output="$ULTRASCHALL_INSTALLER_DIR/CHANGELOG.html" ultraschall-plugin/docs/CHANGELOG.md
+$ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --embed-resources --standalone --quiet --css=../installer-scripts/ultraschall.css --output="$ULTRASCHALL_INSTALLER_DIR/README.html" ultraschall-plugin/docs/README.md
+$ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --embed-resources --standalone --quiet --css=../installer-scripts/ultraschall.css --output="$ULTRASCHALL_INSTALLER_DIR/INSTALL.html" ultraschall-plugin/docs/INSTALL.md
+$ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --embed-resources --standalone --quiet --css=../installer-scripts/ultraschall.css --output="$ULTRASCHALL_INSTALLER_DIR/CHANGELOG.html" ultraschall-plugin/docs/CHANGELOG.md
 echo "Done."
 
 pushd ultraschall-plugin > /dev/null
