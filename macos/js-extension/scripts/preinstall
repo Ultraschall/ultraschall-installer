@@ -1,5 +1,0 @@
-#!/bin/sh
-
-if [ -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_js_ReaScriptAPI64.dylib ]; then
-	rm -f ~/Library/Application\ Support/REAPER/UserPlugins/reaper_js_ReaScriptAPI64.dylib
-fi
