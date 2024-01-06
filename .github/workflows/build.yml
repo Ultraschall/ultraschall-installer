@@ -74,7 +74,7 @@ jobs:
           name: ${{needs.configure.outputs.build_id}}
           path: ${{runner.workspace}}/artifacts
 
-      - uses: "marvinpinto/action-automatic-releases@latest"
+      - uses: "marvinpinto/action-automatic-releases@v1.2.1"
         with:
           repo_token: "${{secrets.GITHUB_TOKEN}}"
           automatic_release_tag: "${{needs.configure.outputs.build_id}}"
