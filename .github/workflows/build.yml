@@ -60,7 +60,7 @@ jobs:
           ./build.sh
         if: matrix.os == 'macos-latest'
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: ${{needs.configure.outputs.build_id}}
           path: linux/build/artifacts/*
