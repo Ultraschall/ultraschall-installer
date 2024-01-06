@@ -197,9 +197,10 @@ popd > /dev/null
 echo "Done."
 
 echo "Building Ultraschall documentation files..."
-$ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --embed-resources --standalone --quiet --css=../installer-scripts/ultraschall.css --output="$ULTRASCHALL_INSTALLER_DIR/README.html" ultraschall-plugin/docs/README.md
-$ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --embed-resources --standalone --quiet --css=../installer-scripts/ultraschall.css --output="$ULTRASCHALL_INSTALLER_DIR/INSTALL.html" ultraschall-plugin/docs/INSTALL.md
-$ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --embed-resources --standalone --quiet --css=../installer-scripts/ultraschall.css --output="$ULTRASCHALL_INSTALLER_DIR/CHANGELOG.html" ultraschall-plugin/docs/CHANGELOG.md
+# Use deprecated option '--self-contained' instead of '--embed-resources --standalone' to support outdated pandoc versions in Github Actions linux runners
+$ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --self-contained --quiet --css=../installer-scripts/ultraschall.css --output="$ULTRASCHALL_INSTALLER_DIR/README.html" ultraschall-plugin/docs/README.md
+$ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --self-contained --quiet --css=../installer-scripts/ultraschall.css --output="$ULTRASCHALL_INSTALLER_DIR/INSTALL.html" ultraschall-plugin/docs/INSTALL.md
+$ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --self-contained --quiet --css=../installer-scripts/ultraschall.css --output="$ULTRASCHALL_INSTALLER_DIR/CHANGELOG.html" ultraschall-plugin/docs/CHANGELOG.md
 echo "Done."
 
 pushd ultraschall-plugin > /dev/null
