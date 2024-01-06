@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: configure build id
         id: timestamp
-        run: echo "::set-output name=timestamp::$(date -u +'%Y%m%d%H%M')"
+        run: echo "timestamp=$(date -u +'%Y%m%d%H%M')" >> "$GITHUB_OUTPUT"
 
   build:
     needs: configure
