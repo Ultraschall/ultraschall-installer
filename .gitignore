@@ -2,6 +2,7 @@
 .DS_Store
 _build/
 build/
+build.log
 *.msi
 *.pkg
 *.dmg
