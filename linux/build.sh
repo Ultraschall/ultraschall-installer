@@ -60,7 +60,7 @@ ULTRASCHALL_PORTABLE_BRANCH="linux-project-and-track-templates"
 ULTRASCHALL_ASSETS_URL="https://github.com/Ultraschall/ultraschall-assets.git"
 ULTRASCHALL_ASSETS_BRANCH="master"
 
-STUDIO_LINK_PLUGIN_RELEASE=v21.07.0-stable
+STUDIO_LINK_PLUGIN_RELEASE=v21.12.0-beta-5cf3b28
 
 if [ "$1" = "--help" ]; then
   echo "Usage: build.sh [ --release ]"
@@ -256,7 +256,8 @@ cp ultraschall-portable/UserPlugins/ultraschall_api_readme.txt ultraschall-api/
 echo "Done."
 
 echo "Downloading StudioLink plugin..."
-if ! curl -LO https://download.studio.link/releases/$STUDIO_LINK_PLUGIN_RELEASE/linux/vst/studio-link-plugin.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+#curl -LO https://download.studio.link/releases/$STUDIO_LINK_PLUGIN_RELEASE/linux/vst/studio-link-plugin.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+if ! curl -LO https://download.studio.link/devel/openssl3/$STUDIO_LINK_PLUGIN_RELEASE/linux/vst/studio-link-plugin.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
 then
   echo "Failed to download StudioLink plugin."
   exit
@@ -270,7 +271,8 @@ fi
 echo "Done."
 
 echo "Downloading StudioLink OnAir plugin..."
-if ! curl -LO https://download.studio.link/releases/$STUDIO_LINK_PLUGIN_RELEASE/linux/studio-link-plugin-onair.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+#curl -LO https://download.studio.link/releases/$STUDIO_LINK_PLUGIN_RELEASE/linux/studio-link-plugin-onair.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+if ! curl -LO https://download.studio.link/devel/openssl3/$STUDIO_LINK_PLUGIN_RELEASE/linux/studio-link-plugin-onair.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
 then
   echo "Failed to download StudioLink OnAir plugin."
   exit
