@@ -36,9 +36,9 @@ echo "**********************************************************************"
 ULTRASCHALL_CMAKE_TOOL=cmake
 ULTRASCHALL_PANDOC_TOOL=pandoc
 
-ULTRASCHALL_BUILD_PRODUCT="ultraschall"
-ULTRASCHALL_BUILD_VERSION="5.1.0"
-ULTRASCHALL_BUILD_DATE=$(date -u "+%Y%m%dT%H%M%S")Z
+#ULTRASCHALL_BUILD_PRODUCT="ultraschall"
+#ULTRASCHALL_BUILD_VERSION="5.1.0"
+#ULTRASCHALL_BUILD_DATE=$(date -u "+%Y%m%dT%H%M%S")Z
 ULTRASCHALL_BUILD_ID=$(uuidgen)
 
 ULTRASCHALL_BUILD_RELEASE=0
@@ -77,7 +77,7 @@ fi
 # if [ $? -ne 0 ]; then
 #   echo "Dependency check failed, required packages:"
 #   echo "$ULTRASCHALL_DEPENDENCIES"
-#   exit -1
+#   exit
 # fi
 # echo "Done."
 
@@ -98,75 +98,75 @@ fi
 ULTRASCHALL_INSTALLER_DIR="$ULTRASCHALL_BUILD_ID"
 
 # Create build log
-if [ -f $ULTRASCHALL_BUILD_LOG ]; then
-  rm -f $ULTRASCHALL_BUILD_LOG
+if [ -f "$ULTRASCHALL_BUILD_LOG" ]; then
+  rm -f "$ULTRASCHALL_BUILD_LOG"
 fi
-touch $ULTRASCHALL_BUILD_LOG
+touch "$ULTRASCHALL_BUILD_LOG"
 
 # Create intermediate data folder
-if [ ! -d $ULTRASCHALL_BUILD_DIRECTORY ]; then
-  mkdir $ULTRASCHALL_BUILD_DIRECTORY
+if [ ! -d "$ULTRASCHALL_BUILD_DIRECTORY" ]; then
+  mkdir "$ULTRASCHALL_BUILD_DIRECTORY"
 fi
 
-pushd $ULTRASCHALL_BUILD_DIRECTORY > /dev/null
+pushd "$ULTRASCHALL_BUILD_DIRECTORY" > /dev/null || exit
 
 if [ ! -d ultraschall-plugin ]; then
   echo "Downloading Ultraschall REAPER Plug-in..."
-  git clone --branch $ULTRASCHALL_PLUGIN_BRANCH --depth 1 $ULTRASCHALL_PLUGIN_URL ultraschall-plugin >> $ULTRASCHALL_BUILD_LOG 2>> $ULTRASCHALL_BUILD_LOG
+  git clone --branch $ULTRASCHALL_PLUGIN_BRANCH --depth 1 $ULTRASCHALL_PLUGIN_URL ultraschall-plugin >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
   if [ ! -d ultraschall-plugin ]; then
     echo "Failed to download Ultraschall REAPER Plug-in."
-    exit -1
+    exit
   fi
 else
   echo "Updating Ultraschall REAPER Plug-in..."
-  pushd ultraschall-plugin > /dev/null
-  git pull >> $ULTRASCHALL_BUILD_LOG 2>> $ULTRASCHALL_BUILD_LOG
-  popd > /dev/null
+  pushd ultraschall-plugin > /dev/null || exit
+  git pull >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+  popd > /dev/null || exit
 fi
 echo "Done."
 
 if [ ! -d ultraschall-soundboard ]; then
   echo "Downloading Ultraschall Soundboard..."
-  git clone --branch $ULTRASCHALL_SOUNDBOARD_BRANCH --depth 1 $ULTRASCHALL_SOUNDBOARD_URL ultraschall-soundboard >> $ULTRASCHALL_BUILD_LOG 2>> $ULTRASCHALL_BUILD_LOG
+  git clone --branch $ULTRASCHALL_SOUNDBOARD_BRANCH --depth 1 $ULTRASCHALL_SOUNDBOARD_URL ultraschall-soundboard >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
   if [ ! -d ultraschall-soundboard ]; then
     echo "Failed to download Ultraschall Soundboard."
-    exit -1
+    exit
   fi
 else
   echo "Updating Ultraschall Soundboard..."
-  pushd ultraschall-soundboard > /dev/null
-  git pull >> $ULTRASCHALL_BUILD_LOG 2>> $ULTRASCHALL_BUILD_LOG
-  popd > /dev/null
+  pushd ultraschall-soundboard > /dev/null || exit
+  git pull >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+  popd > /dev/null || exit
 fi
 echo "Done."
 
 if [ ! -d ultraschall-portable ]; then
   echo "Downloading Ultraschall REAPER API..."
-  git clone --branch $ULTRASCHALL_PORTABLE_BRANCH --depth 1 $ULTRASCHALL_PORTABLE_URL ultraschall-portable >> $ULTRASCHALL_BUILD_LOG 2>> $ULTRASCHALL_BUILD_LOG
+  git clone --branch $ULTRASCHALL_PORTABLE_BRANCH --depth 1 $ULTRASCHALL_PORTABLE_URL ultraschall-portable >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
   if [ ! -d ultraschall-portable ]; then
     echo "Failed to download Ultraschall REAPER API."
-    exit -1
+    exit
   fi
 else
   echo "Updating Ultraschall REAPER API..."
-  pushd ultraschall-portable > /dev/null
-  git pull >> $ULTRASCHALL_BUILD_LOG 2>> $ULTRASCHALL_BUILD_LOG
-  popd > /dev/null
+  pushd ultraschall-portable > /dev/null || exit
+  git pull >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+  popd > /dev/null || exit
 fi
 echo "Done."
 
 if [ ! -d ultraschall-assets ]; then
   echo "Downloading Ultraschall REAPER Resources..."
-  git clone --branch $ULTRASCHALL_ASSETS_BRANCH --depth 1 $ULTRASCHALL_ASSETS_URL ultraschall-assets >> $ULTRASCHALL_BUILD_LOG 2>> $ULTRASCHALL_BUILD_LOG
+  git clone --branch $ULTRASCHALL_ASSETS_BRANCH --depth 1 $ULTRASCHALL_ASSETS_URL ultraschall-assets >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
   if [ ! -d ultraschall-assets ]; then
     echo "Failed to download Ultraschall REAPER Resources."
-    exit -1
+    exit
   fi
 else
   echo "Updating Ultraschall REAPER Resources..."
-  pushd ultraschall-assets > /dev/null
-  git pull >> $ULTRASCHALL_BUILD_LOG 2>> $ULTRASCHALL_BUILD_LOG
-  popd > /dev/null
+  pushd ultraschall-assets > /dev/null || exit
+  git pull >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+  popd > /dev/null || exit
 fi
 echo "Done."
 
@@ -174,7 +174,7 @@ echo "Creating installer package directories..."
 if [ ! -d "$ULTRASCHALL_INSTALLER_DIR" ]; then
   mkdir "$ULTRASCHALL_INSTALLER_DIR"
 fi
-pushd "$ULTRASCHALL_INSTALLER_DIR" > /dev/null
+pushd "$ULTRASCHALL_INSTALLER_DIR" > /dev/null || exit
 if [ ! -d plugins ]; then
   mkdir plugins
 fi
@@ -193,7 +193,7 @@ fi
 if [ ! -d fonts ]; then
   mkdir fonts
 fi
-popd > /dev/null
+popd > /dev/null || exit
 echo "Done."
 
 echo "Building Ultraschall documentation files..."
@@ -203,44 +203,44 @@ $ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --self-contained --quiet --cs
 $ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --self-contained --quiet --css=../installer-scripts/ultraschall.css --output="$ULTRASCHALL_INSTALLER_DIR/CHANGELOG.html" ultraschall-plugin/docs/CHANGELOG.md
 echo "Done."
 
-pushd ultraschall-plugin > /dev/null
+pushd ultraschall-plugin > /dev/null || exit
 echo "Configuring Ultraschall REAPER Plug-in..."
-$ULTRASCHALL_CMAKE_TOOL -Bbuild -GNinja -Wno-dev -DCMAKE_BUILD_TYPE=Release --log-level=ERROR >> $ULTRASCHALL_BUILD_LOG 2>> $ULTRASCHALL_BUILD_LOG
-if [ $? -ne 0 ]; then
+if ! $ULTRASCHALL_CMAKE_TOOL -Bbuild -GNinja -Wno-dev -DCMAKE_BUILD_TYPE=Release --log-level=ERROR >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+then
   cat build.log
   echo "Failed to configure Ultraschall REAPER Plug-in."
-  exit -1
+  exit
 fi
 echo "Done."
 echo "Building Ultraschall REAPER Plug-in..."
-$ULTRASCHALL_CMAKE_TOOL --build build --target reaper_ultraschall --config Release -j >> $ULTRASCHALL_BUILD_LOG 2>> $ULTRASCHALL_BUILD_LOG
-if [ $? -ne 0 ]; then
+if ! $ULTRASCHALL_CMAKE_TOOL --build build --target reaper_ultraschall --config Release -j >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+then
   cat build.log
   echo "Failed to build Ultraschall REAPER Plug-in."
-  exit -1
+  exit
 fi
-popd > /dev/null
+popd > /dev/null || exit
 echo "Done."
 
-pushd ultraschall-soundboard > /dev/null
+pushd ultraschall-soundboard > /dev/null || exit
 echo "Configuring Ultraschall Soundboard..."
-$ULTRASCHALL_CMAKE_TOOL -Bbuild -GNinja -Wno-dev -DCMAKE_BUILD_TYPE=Release --log-level=ERROR >> $ULTRASCHALL_BUILD_LOG 2>> $ULTRASCHALL_BUILD_LOG
-if [ $? -ne 0 ]; then
+if ! $ULTRASCHALL_CMAKE_TOOL -Bbuild -GNinja -Wno-dev -DCMAKE_BUILD_TYPE=Release --log-level=ERROR >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+then
   cat build.log
   echo "Failed to configure Ultraschall Soundboard."
-  exit -1
+  exit
 fi
 echo "Done."
 echo "Building Ultraschall Soundboard..."
-$ULTRASCHALL_CMAKE_TOOL --build build --target UltraschallSoundboard_VST3 --config Release -j >> $ULTRASCHALL_BUILD_LOG 2>> $ULTRASCHALL_BUILD_LOG
-if [ $? -ne 0 ]; then
+if ! $ULTRASCHALL_CMAKE_TOOL --build build --target UltraschallSoundboard_VST3 --config Release -j >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+then
   cat build.log
   echo "Failed to build Ultraschall Soundboard."
-  exit -1
+  exit
 fi
 mkdir -p build/release
 cp -R ./build/UltraschallSoundboard_artefacts/Release/VST3/Soundboard.vst3 ./build/release
-popd > /dev/null
+popd > /dev/null || exit
 echo "Done."
 
 echo "Building ULTRASCHALL REAPER API..."
@@ -256,44 +256,44 @@ cp ultraschall-portable/UserPlugins/ultraschall_api_readme.txt ultraschall-api/
 echo "Done."
 
 echo "Downloading StudioLink plugin..."
-curl -LO https://download.studio.link/releases/$STUDIO_LINK_PLUGIN_RELEASE/linux/vst/studio-link-plugin.zip >> $ULTRASCHALL_BUILD_LOG 2>> $ULTRASCHALL_BUILD_LOG
-if [ $? -ne 0 ]; then
+if ! curl -LO https://download.studio.link/releases/$STUDIO_LINK_PLUGIN_RELEASE/linux/vst/studio-link-plugin.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+then
   echo "Failed to download StudioLink plugin."
-  exit -1
+  exit
 fi
 rm -rf studio-link-plugin.vst
-unzip -d studio-link-plugin.vst studio-link-plugin.zip >> $ULTRASCHALL_BUILD_LOG 2>> $ULTRASCHALL_BUILD_LOG
-if [ $? -ne 0 ]; then
+if ! unzip -d studio-link-plugin.vst studio-link-plugin.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+then
   echo "Failed to extract StudioLink plugin."
-  exit -1
+  exit
 fi
 echo "Done."
 
 echo "Downloading StudioLink OnAir plugin..."
-curl -LO https://download.studio.link/releases/$STUDIO_LINK_PLUGIN_RELEASE/linux/studio-link-plugin-onair.zip >> $ULTRASCHALL_BUILD_LOG 2>> $ULTRASCHALL_BUILD_LOG
-if [ $? -ne 0 ]; then
+if ! curl -LO https://download.studio.link/releases/$STUDIO_LINK_PLUGIN_RELEASE/linux/studio-link-plugin-onair.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+then
   echo "Failed to download StudioLink OnAir plugin."
-  exit -1
+  exit
 fi
 rm -rf studio-link-onair.lv2
-unzip studio-link-plugin-onair.zip >> $ULTRASCHALL_BUILD_LOG 2>> $ULTRASCHALL_BUILD_LOG
-if [ $? -ne 0 ]; then
+if ! unzip studio-link-plugin-onair.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+then
   echo "Failed to extract StudioLink OnAir plugin."
-  exit -1
+  exit
 fi
 echo "Done."
 
 echo "Downloading Liberation fonts..."
-curl -LO "https://github.com/liberationfonts/liberation-fonts/files/7261482/liberation-fonts-ttf-2.1.5.tar.gz" >> $ULTRASCHALL_BUILD_LOG 2>> $ULTRASCHALL_BUILD_LOG
-if [ $? -ne 0 ]; then
+if ! curl -LO "https://github.com/liberationfonts/liberation-fonts/files/7261482/liberation-fonts-ttf-2.1.5.tar.gz" >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+then
   echo "Failed to download Liberation fonts."
-  exit -1
+  exit
 fi
 rm -rf liberation-fonts-ttf-2.1.5
-tar -xf liberation-fonts-ttf-2.1.5.tar.gz
-if [ $? -ne 0 ]; then
+if ! tar -xf liberation-fonts-ttf-2.1.5.tar.gz
+then
   echo "Failed to extract Liberation fonts."
-  exit -1
+  exit
 fi
 echo "Done."
 
@@ -327,9 +327,9 @@ cp -r ultraschall-theme/osFiles/Linux/ProjectTemplates ultraschall-theme
 rm -rf ultraschall-theme/osFiles
 
 # create a tar file
-pushd ultraschall-theme > /dev/null
-tar cvf "../$ULTRASCHALL_INSTALLER_DIR/themes/ultraschall-theme.tar" * > /dev/null
-popd > /dev/null
+pushd ultraschall-theme > /dev/null || exit
+tar cvf "../$ULTRASCHALL_INSTALLER_DIR/themes/ultraschall-theme.tar" ./* > /dev/null
+popd > /dev/null || exit
 echo "Done."
 
 echo "Copying Ultraschall plugins..."
@@ -356,13 +356,13 @@ if [ -d "artifacts" ]; then
   rm -rf "artifacts"
 fi
 mkdir "artifacts"
-tar -czf "artifacts/ULTRASCHALL_$ULTRASCHALL_BUILD_ID.tar.gz" "$ULTRASCHALL_INSTALLER_DIR"
-if [ $? -ne 0 ]; then
+if ! tar -czf "artifacts/ULTRASCHALL_$ULTRASCHALL_BUILD_ID.tar.gz" "$ULTRASCHALL_INSTALLER_DIR"
+then
   echo "Failed to build final installer package."
-  exit -1
+  exit
 fi
 echo "Done."
 
-popd > /dev/null
+popd > /dev/null || exit
 
 exit 0
