@@ -53,9 +53,8 @@ ULTRASCHALL_PLUGIN_BRANCH="main"
 ULTRASCHALL_SOUNDBOARD_URL="https://github.com/Ultraschall/ultraschall-soundboard.git"
 ULTRASCHALL_SOUNDBOARD_BRANCH="main"
 
-# ULTRASCHALL_PORTABLE_URL="https://github.com/Ultraschall/ultraschall-portable.git"
-ULTRASCHALL_PORTABLE_URL="https://github.com/nethad/ultraschall-portable.git"
-ULTRASCHALL_PORTABLE_BRANCH="linux-project-and-track-templates"
+ULTRASCHALL_PORTABLE_URL="https://github.com/Ultraschall/ultraschall-portable.git"
+ULTRASCHALL_PORTABLE_BRANCH="master"
 
 ULTRASCHALL_ASSETS_URL="https://github.com/Ultraschall/ultraschall-assets.git"
 ULTRASCHALL_ASSETS_BRANCH="master"
