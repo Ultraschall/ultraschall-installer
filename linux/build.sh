@@ -269,13 +269,24 @@ then
 fi
 echo "Done."
 
-echo "Downloading StudioLink OnAir plugin..."
-#curl -LO https://download.studio.link/releases/$STUDIO_LINK_PLUGIN_RELEASE/linux/studio-link-plugin-onair.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
-if ! curl -LO https://download.studio.link/devel/openssl3/$STUDIO_LINK_PLUGIN_RELEASE/linux/studio-link-plugin-onair.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
-then
-  echo "Failed to download StudioLink OnAir plugin."
-  exit
-fi
+#echo "Downloading StudioLink OnAir plugin..."
+echo "copy StudioLink OnAir plugin..."
+echo "*********************************"
+pwd
+echo "---------------------------------"
+ls -la ..
+echo "---------------------------------"
+ls -la .
+echo "---------------------------------"
+stat ../studio-link-plugin-onair.zip
+echo "*********************************"
+#if ! curl -LO https://download.studio.link/devel/openssl3/$STUDIO_LINK_PLUGIN_RELEASE/linux/studio-link-plugin-onair.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+cp "../studio-link-plugin-onair.zip" "."
+# then
+#   echo "Failed to copy StudioLink OnAir plugin."
+#   exit
+# fi
+ls -la .
 rm -rf studio-link-onair.lv2
 if ! unzip studio-link-plugin-onair.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
 then
