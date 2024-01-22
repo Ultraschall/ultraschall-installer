@@ -54,7 +54,7 @@ ULTRASCHALL_SOUNDBOARD_URL="https://github.com/Ultraschall/ultraschall-soundboar
 ULTRASCHALL_SOUNDBOARD_BRANCH="main"
 
 ULTRASCHALL_PORTABLE_URL="https://github.com/Ultraschall/ultraschall-portable.git"
-ULTRASCHALL_PORTABLE_BRANCH="master"
+ULTRASCHALL_PORTABLE_BRANCH="feature/linux-font-settings"
 
 ULTRASCHALL_ASSETS_URL="https://github.com/Ultraschall/ultraschall-assets.git"
 ULTRASCHALL_ASSETS_BRANCH="master"
