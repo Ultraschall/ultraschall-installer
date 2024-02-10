@@ -5,7 +5,7 @@ Write-Host "*                                                                   
 Write-Host "**********************************************************************"
 
 $BuildDirectory = "./build"
-$BuildId = "Ultraschall-5.1.0"
+$BuildId = "ULTRASCHALL-R5.1.0-preview"
 $BuildFailed = $False
 
 if ((Test-Path -PathType Container $BuildDirectory) -eq $False) {
@@ -15,32 +15,32 @@ Write-Host "Entering build directory..."
 Push-Location $BuildDirectory
 Write-Host "Done."
 
-if ($BuildFailed -eq $False) {
-  $PandocDirectory = "./pandoc-tool"
-  if ((Test-Path -PathType Container $PandocDirectory) -eq $False) {
-    Write-Host "Downloading Pandoc Universal Markup Converter..."
-    New-Item -ItemType Directory -Path $PandocDirectory | Out-Null
-    Push-Location $PandocDirectory
-    Invoke-WebRequest -Uri "https://github.com/jgm/pandoc/releases/download/3.1.9/pandoc-3.1.9-windows-x86_64.zip" -OutFile "./pandoc-3.1.9-windows-x86_64.zip"
-    Expand-Archive -Force -Path "./pandoc-3.1.9-windows-x86_64.zip" -DestinationPath "./"
-    if ((Test-Path -PathType Leaf "./pandoc-3.1.9/pandoc.exe") -eq $False) {
-      Write-Host -Foreground Red "Failed to download Pandoc Universal Markup Converter."
-      $BuildFailed = $True
-    }
-    Write-Host "Done."
-    Pop-Location
-  }
-}
+# if ($BuildFailed -eq $False) {
+#   $PandocDirectory = "./pandoc-tool"
+#   if ((Test-Path -PathType Container $PandocDirectory) -eq $False) {
+#     Write-Host "Downloading Pandoc Universal Markup Converter..."
+#     New-Item -ItemType Directory -Path $PandocDirectory | Out-Null
+#     Push-Location $PandocDirectory
+#     Invoke-WebRequest -Uri "https://github.com/jgm/pandoc/releases/download/3.1.9/pandoc-3.1.9-windows-x86_64.zip" -OutFile "./pandoc-3.1.9-windows-x86_64.zip"
+#     Expand-Archive -Force -Path "./pandoc-3.1.9-windows-x86_64.zip" -DestinationPath "./"
+#     if ((Test-Path -PathType Leaf "./pandoc-3.1.9/pandoc.exe") -eq $False) {
+#       Write-Host -Foreground Red "Failed to download Pandoc Universal Markup Converter."
+#       $BuildFailed = $True
+#     }
+#     Write-Host "Done."
+#     Pop-Location
+#   }
+# }
 
-if ($BuildFailed -eq $False) {
-  if ((Test-Path -PathType Leaf "./pandoc-tool/pandoc-3.1.9/pandoc.exe") -ne $False) {
-    $PandocProgramPath = Get-ChildItem "./pandoc-tool/pandoc-3.1.9/pandoc.exe" | Select-Object $_.FullName
-  }
-  else {
-    Write-Host -Foreground Red "Failed to download Pandoc Universal Markup Converter."
-    $BuildFailed = $True
-  }
-}
+# if ($BuildFailed -eq $False) {
+#   if ((Test-Path -PathType Leaf "./pandoc-tool/pandoc-3.1.9/pandoc.exe") -ne $False) {
+#     $PandocProgramPath = Get-ChildItem "./pandoc-tool/pandoc-3.1.9/pandoc.exe" | Select-Object $_.FullName
+#   }
+#   else {
+#     Write-Host -Foreground Red "Failed to download Pandoc Universal Markup Converter."
+#     $BuildFailed = $True
+#   }
+# }
 
 if ($BuildFailed -eq $False) {
   $WixDirectory = "./wix-tool"
@@ -158,6 +158,8 @@ if ($BuildFailed -eq $False) {
 
 if ($BuildFailed -eq $False) {
   $ResourcesDirectory = "./ultraschall-resources"
+  $PandocProgramPath = "pandoc"
+
   Write-Host "Building Ultraschall documentation files..."
   if ((Test-Path -PathType Container $ResourcesDirectory) -eq $False) {
     New-Item -ItemType Directory -Path $ResourcesDirectory | Out-Null
