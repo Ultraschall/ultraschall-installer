@@ -8,7 +8,7 @@ on:
 
 jobs:
   configure:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     outputs:
       build_timestamp: ${{steps.timestamp.outputs.timestamp}}
       build_id: R5.1.0_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
@@ -31,11 +31,11 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
 
       - name: install (windows)
-        run: choco install ninja
+        run: choco install cmake pandoc ninja
         if: matrix.os == 'windows-latest'
 
       - name: install (macos)
-        run: brew install ninja
+        run: brew install cmake pandoc ninja
         if: matrix.os == 'macos-latest'
 
       - uses: ilammy/msvc-dev-cmd@v1
@@ -50,7 +50,7 @@ jobs:
 
       - name: build (windows)
         run: |
-          cd win32
+          cd windows
           ./build.ps1
         if: matrix.os == 'windows-latest'
 
@@ -64,6 +64,13 @@ jobs:
         with:
           name: ${{needs.configure.outputs.build_id}}
           path: linux/build/artifacts/*
+        if: matrix.os == 'ubuntu-latest'
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{needs.configure.outputs.build_id}}
+          path: windows/build/artifacts/*
+        if: matrix.os == 'windows-latest'
 
   release:
     needs: [configure, build]
