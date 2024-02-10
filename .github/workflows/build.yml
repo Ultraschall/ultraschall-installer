@@ -21,7 +21,7 @@ jobs:
     needs: configure
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -31,7 +31,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
 
       - name: install (windows)
-        run: choco install ninja
+        run: choco install pandoc
         if: matrix.os == 'windows-latest'
 
       - name: install (macos)
@@ -50,7 +50,7 @@ jobs:
 
       - name: build (windows)
         run: |
-          cd win32
+          cd windows
           ./build.ps1
         if: matrix.os == 'windows-latest'
 
@@ -69,9 +69,14 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: ${{needs.configure.outputs.build_id}}
+          path: windows/build/artifacts/*
+        if: matrix.os == 'windows-latest'
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{needs.configure.outputs.build_id}}
           path: macos/build/artifacts/*
         if: matrix.os == 'macos-latest'
-
   release:
     needs: [configure, build]
     runs-on: ubuntu-latest

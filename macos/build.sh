@@ -307,7 +307,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   #-------------------------------------------------------------------------------
   echo "Creating final installer package..."
-  ULTRASCHALL_BUILD_NAME="ULTRASCHALL-R5.1.0-preview"
+  ULTRASCHALL_BUILD_NAME="ULTRASCHALL_R5.1.0-preview"
 
   if [ $ULTRASCHALL_BUILD_CODESIGN -eq 1 ]; then
     productsign --sign "Developer ID Installer: Heiko Panjas (8J2G689FCZ)" ultraschall-product/ultraschall-intermediate.pkg "installer-root/$ULTRASCHALL_BUILD_NAME.pkg"

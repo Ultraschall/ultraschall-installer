@@ -58,19 +58,19 @@
             <RemoveFolder Id="RemoveUltraschallComponent" Directory="UltraschallFolder" On="uninstall" />
             <RegistryValue Root="HKCU" Key="Software\Ultraschall" Name="Uninstall" Type="string" Value="1.0.0.0" KeyPath="yes" />
             <!-- <File Name="Ultraschall_4.1.ReaperConfigZip" DiskId="1" Source=".\ultraschall-theme\4.1\Ultraschall_4.1.ReaperConfigZip" /> -->
-            <File Name="Ultraschall Keyboard Layout.pdf" DiskId="1" Source="_build\ultraschall-assets\keyboard-layout\Keymap.pdf">
+            <File Name="Ultraschall Keyboard Layout.pdf" DiskId="1" Source="build\ultraschall-assets\keyboard-layout\Keymap.pdf">
               <Shortcut Id="KeyboardLayoutPdfShortcut" Directory="ShortcutsFolder" Name="Ultraschall Keyboard Layout.pdf" />
             </File>
-            <File Name="README.html" DiskId="1" Source=".\_build\ultraschall-resources\README.html">
+            <File Name="README.html" DiskId="1" Source=".\build\ultraschall-resources\README.html">
               <Shortcut Id="ReadmeShortcut" Directory="ShortcutsFolder" Name="README.html" />
             </File>
-            <File Name="CHANGELOG.html" DiskId="1" Source=".\_build\ultraschall-resources\CHANGELOG.html">
+            <File Name="CHANGELOG.html" DiskId="1" Source=".\build\ultraschall-resources\CHANGELOG.html">
               <Shortcut Id="ChangelogShortcut" Directory="ShortcutsFolder" Name="CHANGELOG.html" />
             </File>
-            <File Name="INSTALL.html" DiskId="1" Source=".\_build\ultraschall-resources\INSTALL.html">
+            <File Name="INSTALL.html" DiskId="1" Source=".\build\ultraschall-resources\INSTALL.html">
               <Shortcut Id="InstallShortcut" Directory="ShortcutsFolder" Name="INSTALL.html" />
             </File>
-            <File Name="fm.ultraschall.ultradeck.streamDeckPlugin" DiskId="1" Source=".\_build\ultraschall-stream-deck-plugin\fm.ultraschall.ultradeck.streamDeckPlugin">
+            <File Name="fm.ultraschall.ultradeck.streamDeckPlugin" DiskId="1" Source=".\build\ultraschall-stream-deck-plugin\fm.ultraschall.ultradeck.streamDeckPlugin">
               <Shortcut Id="StreamDeckShortcut" Directory="ShortcutsFolder" Name="fm.ultraschall.ultradeck.streamDeckPlugin" />
             </File>
             <!-- <File Id="UltraschallThemeIcon" Name="ultraschall.ico" Source=".\installer-resources\ultraschall.ico" /> -->
