@@ -21,7 +21,7 @@ jobs:
     needs: configure
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -35,7 +35,7 @@ jobs:
         if: matrix.os == 'windows-latest'
 
       - name: install (macos)
-        run: brew install ninja
+        run: brew install pandoc
         if: matrix.os == 'macos-latest'
 
       - uses: ilammy/msvc-dev-cmd@v1
@@ -64,6 +64,13 @@ jobs:
         with:
           name: ${{needs.configure.outputs.build_id}}
           path: linux/build/artifacts/*
+        if: matrix.os == 'ubuntu-latest'
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{needs.configure.outputs.build_id}}
+          path: macos/build/artifacts/*
+        if: matrix.os == 'macos-latest'
 
   release:
     needs: [configure, build]

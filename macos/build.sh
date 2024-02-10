@@ -36,6 +36,7 @@ ULTRASCHALL_ROOT_DIRECTORY=$('pwd')
 ULTRASCHALL_RESOURCES_DIRECTORY="$ULTRASCHALL_ROOT_DIRECTORY/installer-resources"
 ULTRASCHALL_SCRIPTS_DIRECTORY="$ULTRASCHALL_ROOT_DIRECTORY/installer-scripts"
 ULTRASCHALL_BUILD_DIRECTORY="$ULTRASCHALL_ROOT_DIRECTORY/build"
+ULTRASCHALL_ARTIFACTS_DIRECTORY="$ULTRASCHALL_BUILD_DIRECTORY/artifacts"
 ULTRASCHALL_TOOLS_DIRECTORY="$ULTRASCHALL_BUILD_DIRECTORY/tools"
 ULTRASCHALL_PAYLOAD_DIRECTORY="$ULTRASCHALL_BUILD_DIRECTORY/payload"
 
@@ -306,7 +307,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   #-------------------------------------------------------------------------------
   echo "Creating final installer package..."
-  ULTRASCHALL_BUILD_NAME="Ultraschall-5.1.0"
+  ULTRASCHALL_BUILD_NAME="ULTRASCHALL-R5.1.0-preview"
 
   if [ $ULTRASCHALL_BUILD_CODESIGN -eq 1 ]; then
     productsign --sign "Developer ID Installer: Heiko Panjas (8J2G689FCZ)" ultraschall-product/ultraschall-intermediate.pkg "installer-root/$ULTRASCHALL_BUILD_NAME.pkg"
@@ -417,10 +418,13 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   #-------------------------------------------------------------------------------
   echo "Finalizing installer disk image..."
-  if [ -f "$ULTRASCHALL_ROOT_DIRECTORY/$ULTRASCHALL_BUILD_NAME.dmg" ]; then
-    rm "$ULTRASCHALL_ROOT_DIRECTORY/$ULTRASCHALL_BUILD_NAME.dmg"
+  if [ ! -d "$ULTRASCHALL_ARTIFACTS_DIRECTORY" ]; then
+    mkdir -p "$ULTRASCHALL_ARTIFACTS_DIRECTORY"
   fi
-  hdiutil convert -format UDRO -o "$ULTRASCHALL_ROOT_DIRECTORY/$ULTRASCHALL_BUILD_NAME.dmg" ultraschall-product/ultraschall-intermediate.dmg
+  if [ -f "$ULTRASCHALL_ARTIFACTS_DIRECTORY/$ULTRASCHALL_BUILD_NAME.dmg" ]; then
+    rm "$ULTRASCHALL_ARTIFACTS_DIRECTORY/$ULTRASCHALL_BUILD_NAME.dmg"
+  fi
+  hdiutil convert -format UDRO -o "$ULTRASCHALL_ARTIFACTS_DIRECTORY/$ULTRASCHALL_BUILD_NAME.dmg" ultraschall-product/ultraschall-intermediate.dmg
   if [ $? -ne 0 ]; then
     echo "Failed to finalize installer disk image."
     exit -1
