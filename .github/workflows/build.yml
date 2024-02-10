@@ -8,7 +8,7 @@ on:
 
 jobs:
   configure:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     outputs:
       build_timestamp: ${{steps.timestamp.outputs.timestamp}}
       build_id: R5.1.0_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
@@ -21,7 +21,7 @@ jobs:
     needs: configure
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
