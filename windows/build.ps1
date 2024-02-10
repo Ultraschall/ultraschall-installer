@@ -4,7 +4,7 @@ Write-Host "*            BUILDING ULTRASCHALL INSTALLER PACKAGE                 
 Write-Host "*                                                                    *"
 Write-Host "**********************************************************************"
 
-$BuildDirectory = "./_build"
+$BuildDirectory = "./build"
 $BuildId = "Ultraschall-5.1.0"
 $BuildFailed = $False
 
@@ -91,7 +91,8 @@ if ($BuildFailed -eq $False) {
   $PortableDirectory = "./ultraschall-portable"
   if ((Test-Path -PathType Container $PortableDirectory) -eq $False) {
     Write-Host "Downloading Ultraschall REAPER API..."
-    git clone --branch master https://github.com/Ultraschall/ultraschall-portable.git $PortableDirectory
+    # git clone --branch master https://github.com/Ultraschall/ultraschall-portable.git $PortableDirectory
+    git clone --branch master https://github.com/heikopanjas/ultraschall-portable.git $PortableDirectory
     if ((Test-Path -PathType Container $PortableDirectory) -eq $False) {
       Write-Host -Foreground Red "Failed to download Ultraschall REAPER API."
       $BuildFailed = $True
@@ -234,13 +235,13 @@ Pop-Location
 Write-Host "Done."
 
 $env:ULTRASCHALL_BUILD_ID = $BuildId
-$env:ULTRASCHALL_THEME_SOURCE = ".\_build\ultraschall-theme"
+$env:ULTRASCHALL_THEME_SOURCE = ".\build\ultraschall-theme"
 
 if ($BuildFailed -eq $False) {
   Write-Host "Compiling Theme Files..."
-  & $HeatProgramPath dir $env:ULTRASCHALL_THEME_SOURCE -nologo -cg UltraschallThemeFiles -ag -scom -sreg -sfrag -srd -dr ReaperFolder -var env.ULTRASCHALL_THEME_SOURCE -out ./_build/ultraschall-theme.wxs
+  & $HeatProgramPath dir $env:ULTRASCHALL_THEME_SOURCE -nologo -cg UltraschallThemeFiles -ag -scom -sreg -sfrag -srd -dr ReaperFolder -var env.ULTRASCHALL_THEME_SOURCE -out ./build/ultraschall-theme.wxs
   if ($LASTEXITCODE -eq 0) {
-    & $CandleProgramPath -nologo -arch x64 -out ./_build/ultraschall-theme.wixobj ./_build/ultraschall-theme.wxs
+    & $CandleProgramPath -nologo -arch x64 -out ./build/ultraschall-theme.wixobj ./build/ultraschall-theme.wxs
     if ($LASTEXITCODE -ne 0) {
       Write-Host -Foreground Red "Failed to compile Ultraschall Theme files."
       $BuildFailed = $True
@@ -255,9 +256,10 @@ if ($BuildFailed -eq $False) {
 
 if ($BuildFailed -eq $False) {
   Write-Host "Building installer package..."
-  & $CandleProgramPath -nologo -arch x64 -out ./_build/distribution.wixobj ./installer-scripts/distribution.wxs
+  & $CandleProgramPath -nologo -arch x64 -out ./build/distribution.wixobj ./installer-scripts/distribution.wxs
   if ($LASTEXITCODE -eq 0) {
-    & $LightProgramPath -nologo -sice:ICE64 -sice:ICE38 -sw1076 -ext WixUIExtension -cultures:en-us -spdb -out "$BuildId.msi" ./_build/distribution.wixobj ./_build/ultraschall-theme.wixobj
+    New-Item -ItemType Directory -Path "./build/artifacts" -Force | Out-Null
+    & $LightProgramPath -nologo -sice:ICE64 -sice:ICE38 -sw1076 -ext WixUIExtension -cultures:en-us -spdb -out "./build/artifacts/$BuildId.msi" ./build/distribution.wixobj ./build/ultraschall-theme.wixobj
     if ($LASTEXITCODE -ne 0) {
       Write-Host -Foreground Red "Failed to build Ultraschall Package files."
       $BuildFailed = $True
