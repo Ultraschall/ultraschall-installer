@@ -5,6 +5,8 @@ on:
     branches: [main, develop, 'feature/**']
   pull_request:
     branches: [main, develop, 'feature/**']
+  workflow_dispatch:
+    branches: [main, develop, 'feature/**']
 
 jobs:
   configure:
