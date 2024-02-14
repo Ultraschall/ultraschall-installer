@@ -242,6 +242,10 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
     mkdir -p ultraschall-theme
   fi
   cp -r ultraschall-portable/ ultraschall-theme
+
+  rm -rf ultraschall-theme/.git
+  rm -f ultraschall-theme/.gitignore
+
   rm -rf ultraschall-theme/Plugins
   rm -rf ultraschall-theme/UserPlugins/FX
   rm -r ultraschall-theme/UserPlugins/reaper_js_ReaScriptAPI64.dll
