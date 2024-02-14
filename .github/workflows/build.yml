@@ -14,26 +14,22 @@ jobs:
     outputs:
       build_timestamp: ${{steps.timestamp.outputs.timestamp}}
       build_moniker: ${{steps.moniker.outputs.moniker}}
-      build_id: R5.1.0_BUILD_${{github.run_number}}_${{steps.moniker.outputs.moniker}}_${{steps.timestamp.outputs.timestamp}}
+      build_id: R5.1.0_BUILD_${{github.run_number}}_${{env.BUILD_TYPE}}_${{steps.timestamp.outputs.timestamp}}
     steps:
       - name: configure build id
         id: timestamp
         run: echo "timestamp=$(date -u +'%Y%m%d%H%M')" >> "$GITHUB_OUTPUT"
 
-      - name: configure release build moniker
+      - name: configure build moniker
         id: moniker
-        if: github.ref_name == 'main'
-        run: echo "moniker=RELEASE" >> "$GITHUB_OUTPUT"
-
-      - name: configure preview build moniker
-        id: moniker
-        if: github.ref_name == 'develop'
-        run: echo "moniker=PREVIEW" >> "$GITHUB_OUTPUT"
-
-      - name: configure feature build moniker
-        id: moniker
-        if: (github.ref_name != 'main') && (github.ref_name != 'develop')
-        run: echo "moniker=FEATURE" >> "$GITHUB_OUTPUT"
+        run: |
+          if [[ $GITHUB_REF_NAME == 'main' ]]; then
+            echo "moniker=RELEASE" >> "$GITHUB_OUTPUT"
+          elif [[ $GITHUB_REF_NAME == 'develop' ]]; then
+            echo "moniker=PREVIEW" >> "$GITHUB_OUTPUT"
+          else
+            echo "moniker=FEATURE" >> "$GITHUB_OUTPUT"
+          fi
 
   build:
     needs: configure
