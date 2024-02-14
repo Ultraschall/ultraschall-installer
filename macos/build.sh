@@ -276,7 +276,10 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
     mkdir -p ultraschall-theme
   fi
   cp -r ultraschall-portable/ ultraschall-theme
+
   rm -rf ultraschall-theme/.git
+  rm -f ultraschall-theme/.gitignore
+
   rm -rf ultraschall-theme/Plugins/FX
   rm -r ultraschall-theme/Plugins/*.dll
   rm -r ultraschall-theme/Plugins/*.exe

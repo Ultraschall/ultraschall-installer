@@ -166,8 +166,8 @@ if ($BuildFailed -eq $False) {
   Copy-Item -Force -Recurse "./ultraschall-portable/*" -Destination $ThemeDirectory
   if ((Test-Path -PathType Leaf $ThemeDirectory/reaper.ini) -eq $True) {
 
-    Remove-Item -Force $ThemeDirectory/.gitignore
     Remove-Item -Recurse -Force $ThemeDirectory/.git
+    Remove-Item -Force $ThemeDirectory/.gitignore
 
     Remove-Item -Force $ThemeDirectory/UserPlugins/reaper_js_ReaScriptAPI64.dylib
     Remove-Item -Force $ThemeDirectory/UserPlugins/reaper_js_ReaScriptAPI64.so

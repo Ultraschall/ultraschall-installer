@@ -312,6 +312,9 @@ echo "Copying Ultraschall theme..."
 rm -rf ultraschall-theme
 cp -r ultraschall-portable ultraschall-theme
 
+rm -rf ultraschall-theme/.git
+rm -f ultraschall-theme/.gitignore
+
 rm -rf ultraschall-theme/Plugins
 rm -rf ultraschall-theme/UserPlugins
 rm -f ultraschall-theme/Default_6.0.ReaperThemeZip
