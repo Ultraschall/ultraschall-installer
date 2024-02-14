@@ -64,8 +64,7 @@ if ($BuildFailed -eq $False) {
   $PortableDirectory = "./ultraschall-portable"
   if ((Test-Path -PathType Container $PortableDirectory) -eq $False) {
     Write-Host "Downloading Ultraschall REAPER API..."
-    # git clone --branch master https://github.com/Ultraschall/ultraschall-portable.git $PortableDirectory
-    git clone --branch master https://github.com/heikopanjas/ultraschall-portable.git $PortableDirectory
+    git clone --branch master https://github.com/Ultraschall/ultraschall-portable.git $PortableDirectory
     if ((Test-Path -PathType Container $PortableDirectory) -eq $False) {
       Write-Host -Foreground Red "Failed to download Ultraschall REAPER API."
       $BuildFailed = $True
