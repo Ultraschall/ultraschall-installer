@@ -21,7 +21,7 @@
     </Condition>
     <Media Id="1" Cabinet="Ultraschall.cab" EmbedCab="yes" DiskPrompt="CD-ROM #1" />
 
-    <Binary Id="ULTRASCHALL_CustomActions" SourceFile=".\installer-action\release\custom-action.CA.dll" />
+    <Binary Id="ULTRASCHALL_CustomActions" SourceFile=".\installer-action\custom-action.CA.dll" />
     <CustomAction Id="ULTRASCHALL_PreInstallActionId" BinaryKey="ULTRASCHALL_CustomActions" DllEntry="PreInstallAction" Execute="immediate" HideTarget="yes" />
     <InstallExecuteSequence>
       <Custom Action="ULTRASCHALL_PreInstallActionId" Before="CostInitialize">NOT REMOVE</Custom>
