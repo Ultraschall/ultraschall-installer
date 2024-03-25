@@ -21,8 +21,8 @@ if ($BuildFailed -eq $False) {
     Write-Host "Downloading WiX Toolset..."
     New-Item -ItemType Directory -Path $WixDirectory | Out-Null
     Push-Location $WixDirectory
-    Invoke-WebRequest -Uri "https://github.com/wixtoolset/wix3/releases/download/wix3111rtm/wix311-binaries.zip" -OutFile "./wix311-binaries.zip"
-    Expand-Archive -Force -Path "./wix311-binaries.zip" -DestinationPath "./"
+    Invoke-WebRequest -Uri "https://github.com/wixtoolset/wix3/releases/download/wix3141rtm/wix314-binaries.zip" -OutFile "./wix314-binaries.zip"
+    Expand-Archive -Force -Path "./wix314-binaries.zip" -DestinationPath "./"
     Write-Host "Done."
     Pop-Location
   }
