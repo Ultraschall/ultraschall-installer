@@ -49,6 +49,13 @@ ULTRASCHALL_STREAMDECK_BRANCH="main"
 ULTRASCHALL_ASSETS_URL="https://github.com/Ultraschall/ultraschall-assets.git"
 ULTRASCHALL_ASSETS_BRANCH="master"
 
+if [ "$1" = "--help" ]; then
+  echo "Usage: build.sh [ --release ]"
+  exit 0
+elif [ "$1" = "--release" ]; then
+  ULTRASCHALL_BUILD_RELEASE=1
+fi
+
 echo "**********************************************************************"
 echo "*                                                                    *"
 echo "*            BUILDING ULTRASCHALL INSTALLER PACKAGE                  *"
@@ -371,7 +378,12 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   #-------------------------------------------------------------------------------
   echo "Creating final installer package..."
-  ULTRASCHALL_BUILD_NAME="ULTRASCHALL_R5.1.0-preview"
+  if [ ULTRASCHALL_BUILD_RELEASE -eq 1 ]; then
+    ULTRASCHALL_BUILD_NAME="Ultraschall-5.1.0"
+  else
+    ULTRASCHALL_BUILD_NAME="ULTRASCHALL_R5.1.0-preview"
+  fi
+
 
   if [ $ULTRASCHALL_BUILD_CODESIGN -eq 1 ]; then
     productsign \
