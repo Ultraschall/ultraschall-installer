@@ -81,15 +81,8 @@ fi
 # fi
 # echo "Done."
 
-SOURCE_BRANCH='develop'
-if [ $ULTRASCHALL_BUILD_RELEASE = 1 ]; then
-  SOURCE_BRANCH='main'
-fi
-
-echo "Building installer from $SOURCE_BRANCH branch..."
-
 # Specify build id
-if [ ULTRASCHALL_BUILD_RELEASE -eq 1 ]; then
+if [ $ULTRASCHALL_BUILD_RELEASE -eq 1 ]; then
   ULTRASCHALL_BUILD_ID="Ultraschall-5.1.0"
 else
   ULTRASCHALL_BUILD_ID="ULTRASCHALL_R5.1.0-preview"
