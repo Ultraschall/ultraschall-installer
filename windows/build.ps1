@@ -8,6 +8,16 @@ $BuildDirectory = "./build"
 $BuildId = "ULTRASCHALL_R5.1.0-preview"
 $BuildFailed = $False
 
+if ($args.Count -gt 0) {
+  if ($args[0] -eq "--help") {
+    Write-Host "Usage: build.ps1 [ --help | --release ]"
+    return
+  }
+  elseif ($args[0] -eq "--release") {
+    $BuildId = "Ultraschall-5.1.0"
+  }
+}
+
 if ((Test-Path -PathType Container $BuildDirectory) -eq $False) {
   New-Item -ItemType Directory -Path $BuildDirectory | Out-Null
 }
