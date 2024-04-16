@@ -2,11 +2,11 @@ name: build
 
 on:
   push:
-    branches: [main, develop, 'feature/**']
+    branches: [develop, 'feature/**']
   pull_request:
-    branches: [main, develop, 'feature/**']
+    branches: [develop, 'feature/**']
   workflow_dispatch:
-    branches: [main, develop, 'feature/**']
+    branches: [develop, 'feature/**']
 
 jobs:
   configure:
