@@ -1,0 +1,92 @@
+name: release
+
+on:
+  workflow_dispatch:
+    branches: [main]
+
+jobs:
+  configure:
+    runs-on: ubuntu-latest
+    outputs:
+      build_timestamp: ${{steps.timestamp.outputs.timestamp}}
+      build_id: V5.1.0_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
+    steps:
+      - name: configure build id
+        id: timestamp
+        run: echo "timestamp=$(date -u +'%Y%m%d%H%M')" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: configure
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install (linux)
+        run: sudo apt-get install cmake pandoc ninja-build libxrandr-dev libxinerama-dev libxcursor-dev libasound2-dev libcurl4-openssl-dev
+        if: matrix.os == 'ubuntu-latest'
+
+      - name: install (windows)
+        run: choco install pandoc
+        if: matrix.os == 'windows-latest'
+
+      - name: install (macos)
+        run: brew install pandoc
+        if: matrix.os == 'macos-latest'
+
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: build (linux)
+        run: |
+          cd linux
+          ./build.sh --release
+        if: matrix.os == 'ubuntu-latest'
+
+      - name: build (windows)
+        run: |
+          cd windows
+          ./build.ps1 --release
+        if: matrix.os == 'windows-latest'
+
+      - name: build (macos)
+        run: |
+          cd macos
+          ./build.sh --release
+        if: matrix.os == 'macos-latest'
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{needs.configure.outputs.build_id}}
+          path: linux/build/artifacts/*
+        if: matrix.os == 'ubuntu-latest'
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{needs.configure.outputs.build_id}}
+          path: windows/build/artifacts/*
+        if: matrix.os == 'windows-latest'
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{needs.configure.outputs.build_id}}
+          path: macos/build/artifacts/*
+        if: matrix.os == 'macos-latest'
+  release:
+    needs: [configure, build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: ${{needs.configure.outputs.build_id}}
+          path: ${{runner.workspace}}/artifacts
+
+      - uses: "marvinpinto/action-automatic-releases@v1.2.1"
+        with:
+          repo_token: "${{secrets.GITHUB_TOKEN}}"
+          automatic_release_tag: "${{needs.configure.outputs.build_id}}"
+          prerelease: true
+          files: ${{runner.workspace}}/artifacts/*
