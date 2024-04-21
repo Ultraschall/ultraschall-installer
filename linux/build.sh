@@ -80,18 +80,11 @@ fi
 # fi
 # echo "Done."
 
-SOURCE_BRANCH='develop'
-if [ $ULTRASCHALL_BUILD_RELEASE = 1 ]; then
-  SOURCE_BRANCH='main'
-fi
-
-echo "Building installer from $SOURCE_BRANCH branch..."
-
 # Specify build id
-if [ $ULTRASCHALL_BUILD_RELEASE = 1 ]; then
-  ULTRASCHALL_BUILD_ID='5.1.0'
+if [ $ULTRASCHALL_BUILD_RELEASE -eq 1 ]; then
+  ULTRASCHALL_BUILD_ID="Ultraschall-5.1.0"
 else
-  ULTRASCHALL_BUILD_ID='R5.1.0-preview'
+  ULTRASCHALL_BUILD_ID="ULTRASCHALL_R5.1.0-preview"
 fi
 
 ULTRASCHALL_INSTALLER_DIR="$ULTRASCHALL_BUILD_ID"
@@ -315,6 +308,9 @@ echo "Done."
 echo "Copying Ultraschall theme..."
 rm -rf ultraschall-theme
 cp -r ultraschall-portable ultraschall-theme
+
+rm -rf ultraschall-theme/.git
+rm -f ultraschall-theme/.gitignore
 
 rm -rf ultraschall-theme/Plugins
 rm -rf ultraschall-theme/UserPlugins

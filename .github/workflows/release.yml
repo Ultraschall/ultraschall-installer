@@ -1,19 +1,15 @@
-name: build
+name: release
 
 on:
-  push:
-    branches: [develop, 'feature/**']
-  pull_request:
-    branches: [develop, 'feature/**']
   workflow_dispatch:
-    branches: [develop, 'feature/**']
+    branches: [main]
 
 jobs:
   configure:
     runs-on: ubuntu-latest
     outputs:
       build_timestamp: ${{steps.timestamp.outputs.timestamp}}
-      build_id: R5.1.0_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
+      build_id: V5.1.0_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
     steps:
       - name: configure build id
         id: timestamp
@@ -47,19 +43,19 @@ jobs:
       - name: build (linux)
         run: |
           cd linux
-          ./build.sh
+          ./build.sh --release
         if: matrix.os == 'ubuntu-latest'
 
       - name: build (windows)
         run: |
           cd windows
-          ./build.ps1
+          ./build.ps1 --release
         if: matrix.os == 'windows-latest'
 
       - name: build (macos)
         run: |
           cd macos
-          ./build.sh
+          ./build.sh --release
         if: matrix.os == 'macos-latest'
 
       - uses: actions/upload-artifact@v3
@@ -92,5 +88,5 @@ jobs:
         with:
           repo_token: "${{secrets.GITHUB_TOKEN}}"
           automatic_release_tag: "${{needs.configure.outputs.build_id}}"
-          prerelease: true
+          prerelease: false
           files: ${{runner.workspace}}/artifacts/*

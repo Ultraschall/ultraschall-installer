@@ -4,9 +4,19 @@ Write-Host "*            BUILDING ULTRASCHALL INSTALLER PACKAGE                 
 Write-Host "*                                                                    *"
 Write-Host "**********************************************************************"
 
-$BuildDirectory = "./_build"
-$BuildId = "Ultraschall-5.1.0"
+$BuildDirectory = "./build"
+$BuildId = "ULTRASCHALL_R5.1.0-preview"
 $BuildFailed = $False
+
+if ($args.Count -gt 0) {
+  if ($args[0] -eq "--help") {
+    Write-Host "Usage: build.ps1 [ --help | --release ]"
+    return
+  }
+  elseif ($args[0] -eq "--release") {
+    $BuildId = "Ultraschall-5.1.0"
+  }
+}
 
 if ((Test-Path -PathType Container $BuildDirectory) -eq $False) {
   New-Item -ItemType Directory -Path $BuildDirectory | Out-Null
@@ -16,40 +26,13 @@ Push-Location $BuildDirectory
 Write-Host "Done."
 
 if ($BuildFailed -eq $False) {
-  $PandocDirectory = "./pandoc-tool"
-  if ((Test-Path -PathType Container $PandocDirectory) -eq $False) {
-    Write-Host "Downloading Pandoc Universal Markup Converter..."
-    New-Item -ItemType Directory -Path $PandocDirectory | Out-Null
-    Push-Location $PandocDirectory
-    Invoke-WebRequest -Uri "https://github.com/jgm/pandoc/releases/download/3.1.9/pandoc-3.1.9-windows-x86_64.zip" -OutFile "./pandoc-3.1.9-windows-x86_64.zip"
-    Expand-Archive -Force -Path "./pandoc-3.1.9-windows-x86_64.zip" -DestinationPath "./"
-    if ((Test-Path -PathType Leaf "./pandoc-3.1.9/pandoc.exe") -eq $False) {
-      Write-Host -Foreground Red "Failed to download Pandoc Universal Markup Converter."
-      $BuildFailed = $True
-    }
-    Write-Host "Done."
-    Pop-Location
-  }
-}
-
-if ($BuildFailed -eq $False) {
-  if ((Test-Path -PathType Leaf "./pandoc-tool/pandoc-3.1.9/pandoc.exe") -ne $False) {
-    $PandocProgramPath = Get-ChildItem "./pandoc-tool/pandoc-3.1.9/pandoc.exe" | Select-Object $_.FullName
-  }
-  else {
-    Write-Host -Foreground Red "Failed to download Pandoc Universal Markup Converter."
-    $BuildFailed = $True
-  }
-}
-
-if ($BuildFailed -eq $False) {
   $WixDirectory = "./wix-tool"
   if ((Test-Path -PathType Container $WixDirectory) -eq $False) {
     Write-Host "Downloading WiX Toolset..."
     New-Item -ItemType Directory -Path $WixDirectory | Out-Null
     Push-Location $WixDirectory
-    Invoke-WebRequest -Uri "https://github.com/wixtoolset/wix3/releases/download/wix3111rtm/wix311-binaries.zip" -OutFile "./wix311-binaries.zip"
-    Expand-Archive -Force -Path "./wix311-binaries.zip" -DestinationPath "./"
+    Invoke-WebRequest -Uri "https://github.com/wixtoolset/wix3/releases/download/wix3141rtm/wix314-binaries.zip" -OutFile "./wix314-binaries.zip"
+    Expand-Archive -Force -Path "./wix314-binaries.zip" -DestinationPath "./"
     Write-Host "Done."
     Pop-Location
   }
@@ -157,6 +140,7 @@ if ($BuildFailed -eq $False) {
 
 if ($BuildFailed -eq $False) {
   $ResourcesDirectory = "./ultraschall-resources"
+  $PandocProgramPath = "pandoc"
   Write-Host "Building Ultraschall documentation files..."
   if ((Test-Path -PathType Container $ResourcesDirectory) -eq $False) {
     New-Item -ItemType Directory -Path $ResourcesDirectory | Out-Null
@@ -191,8 +175,8 @@ if ($BuildFailed -eq $False) {
   Copy-Item -Force -Recurse "./ultraschall-portable/*" -Destination $ThemeDirectory
   if ((Test-Path -PathType Leaf $ThemeDirectory/reaper.ini) -eq $True) {
 
-    Remove-Item -Force $ThemeDirectory/.gitignore
     Remove-Item -Recurse -Force $ThemeDirectory/.git
+    Remove-Item -Force $ThemeDirectory/.gitignore
 
     Remove-Item -Force $ThemeDirectory/UserPlugins/reaper_js_ReaScriptAPI64.dylib
     Remove-Item -Force $ThemeDirectory/UserPlugins/reaper_js_ReaScriptAPI64.so
@@ -234,13 +218,13 @@ Pop-Location
 Write-Host "Done."
 
 $env:ULTRASCHALL_BUILD_ID = $BuildId
-$env:ULTRASCHALL_THEME_SOURCE = ".\_build\ultraschall-theme"
+$env:ULTRASCHALL_THEME_SOURCE = ".\build\ultraschall-theme"
 
 if ($BuildFailed -eq $False) {
   Write-Host "Compiling Theme Files..."
-  & $HeatProgramPath dir $env:ULTRASCHALL_THEME_SOURCE -nologo -cg UltraschallThemeFiles -ag -scom -sreg -sfrag -srd -dr ReaperFolder -var env.ULTRASCHALL_THEME_SOURCE -out ./_build/ultraschall-theme.wxs
+  & $HeatProgramPath dir $env:ULTRASCHALL_THEME_SOURCE -nologo -cg UltraschallThemeFiles -ag -scom -sreg -sfrag -srd -dr ReaperFolder -var env.ULTRASCHALL_THEME_SOURCE -out ./build/ultraschall-theme.wxs
   if ($LASTEXITCODE -eq 0) {
-    & $CandleProgramPath -nologo -arch x64 -out ./_build/ultraschall-theme.wixobj ./_build/ultraschall-theme.wxs
+    & $CandleProgramPath -nologo -arch x64 -out ./build/ultraschall-theme.wixobj ./build/ultraschall-theme.wxs
     if ($LASTEXITCODE -ne 0) {
       Write-Host -Foreground Red "Failed to compile Ultraschall Theme files."
       $BuildFailed = $True
@@ -255,9 +239,10 @@ if ($BuildFailed -eq $False) {
 
 if ($BuildFailed -eq $False) {
   Write-Host "Building installer package..."
-  & $CandleProgramPath -nologo -arch x64 -out ./_build/distribution.wixobj ./installer-scripts/distribution.wxs
+  & $CandleProgramPath -nologo -arch x64 -out ./build/distribution.wixobj ./installer-scripts/distribution.wxs
   if ($LASTEXITCODE -eq 0) {
-    & $LightProgramPath -nologo -sice:ICE64 -sice:ICE38 -sw1076 -ext WixUIExtension -cultures:en-us -spdb -out "$BuildId.msi" ./_build/distribution.wixobj ./_build/ultraschall-theme.wixobj
+    New-Item -ItemType Directory -Path "./build/artifacts" -Force | Out-Null
+    & $LightProgramPath -nologo -sice:ICE64 -sice:ICE38 -sw1076 -ext WixUIExtension -cultures:en-us -spdb -out "./build/artifacts/$BuildId.msi" ./build/distribution.wixobj ./build/ultraschall-theme.wixobj
     if ($LASTEXITCODE -ne 0) {
       Write-Host -Foreground Red "Failed to build Ultraschall Package files."
       $BuildFailed = $True

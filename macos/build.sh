@@ -36,14 +36,25 @@ ULTRASCHALL_ROOT_DIRECTORY=$('pwd')
 ULTRASCHALL_RESOURCES_DIRECTORY="$ULTRASCHALL_ROOT_DIRECTORY/installer-resources"
 ULTRASCHALL_SCRIPTS_DIRECTORY="$ULTRASCHALL_ROOT_DIRECTORY/installer-scripts"
 ULTRASCHALL_BUILD_DIRECTORY="$ULTRASCHALL_ROOT_DIRECTORY/build"
+ULTRASCHALL_ARTIFACTS_DIRECTORY="$ULTRASCHALL_BUILD_DIRECTORY/artifacts"
 ULTRASCHALL_TOOLS_DIRECTORY="$ULTRASCHALL_BUILD_DIRECTORY/tools"
 ULTRASCHALL_PAYLOAD_DIRECTORY="$ULTRASCHALL_BUILD_DIRECTORY/payload"
 
 ULTRASCHALL_PLUGIN_URL="https://github.com/Ultraschall/ultraschall-plugin.git"
-ULTRASCHALL_SOUNDBOARD_URL="https://github.com/Ultraschall/ultraschall-soundboard.git"
+ULTRASCHALL_PLUGIN_BRANCH="main"
 ULTRASCHALL_PORTABLE_URL="https://github.com/Ultraschall/ultraschall-portable.git"
+ULTRASCHALL_PORTABLE_BRANCH="master"
 ULTRASCHALL_STREAMDECK_URL="https://github.com/Ultraschall/ultraschall-stream-deck-plugin.git"
+ULTRASCHALL_STREAMDECK_BRANCH="main"
 ULTRASCHALL_ASSETS_URL="https://github.com/Ultraschall/ultraschall-assets.git"
+ULTRASCHALL_ASSETS_BRANCH="master"
+
+if [ "$1" = "--help" ]; then
+  echo "Usage: build.sh [ --release ]"
+  exit 0
+elif [ "$1" = "--release" ]; then
+  ULTRASCHALL_BUILD_RELEASE=1
+fi
 
 echo "**********************************************************************"
 echo "*                                                                    *"
@@ -104,7 +115,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   #-------------------------------------------------------------------------------
   if [ ! -d ultraschall-plugin ]; then
     echo "Downloading Ultraschall REAPER Plugin..."
-    git clone --branch main $ULTRASCHALL_PLUGIN_URL ultraschall-plugin
+    git clone --branch $ULTRASCHALL_PLUGIN_BRANCH $ULTRASCHALL_PLUGIN_URL ultraschall-plugin
     if [ ! -d ultraschall-plugin ]; then
       echo "Failed to download Ultraschall REAPER Plugin."
       exit -1
@@ -120,7 +131,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   #-------------------------------------------------------------------------------
   if [ ! -d ultraschall-portable ]; then
     echo "Downloading Ultraschall REAPER Theme..."
-    git clone --branch master $ULTRASCHALL_PORTABLE_URL ultraschall-portable
+    git clone --branch $ULTRASCHALL_PORTABLE_BRANCH $ULTRASCHALL_PORTABLE_URL ultraschall-portable
     if [ ! -d ultraschall-portable ]; then
       echo "Failed to download Ultraschall REAPER Theme."
       exit -1
@@ -136,7 +147,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   #-------------------------------------------------------------------------------
   if [ ! -d ultraschall-assets ]; then
     echo "Downloading Ultraschall REAPER Resources..."
-    git clone --branch master $ULTRASCHALL_ASSETS_URL ultraschall-assets
+    git clone --branch $ULTRASCHALL_ASSETS_BRANCH $ULTRASCHALL_ASSETS_URL ultraschall-assets
     if [ ! -d ultraschall-assets ]; then
       echo "Failed to download Ultraschall REAPER Resources."
       exit -1
@@ -152,7 +163,7 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   #-------------------------------------------------------------------------------
   if [ ! -d ultraschall-streamdeck ]; then
     echo "Downloading Ultraschall REAPER Stream Deck Plug-in..."
-    git clone --branch main $ULTRASCHALL_STREAMDECK_URL ultraschall-streamdeck
+    git clone --branch $ULTRASCHALL_STREAMDECK_BRANCH $ULTRASCHALL_STREAMDECK_URL ultraschall-streamdeck
     if [ ! -d ultraschall-streamdeck ]; then
       echo "Failed to download Ultraschall REAPER Stream Deck Plug-in."
       exit -1
@@ -188,22 +199,44 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   if [ ! -d installer-root/.background ]; then
     mkdir -p installer-root/.background
   fi
-  cp $ULTRASCHALL_RESOURCES_DIRECTORY/image-background.png installer-root/.background/background.png
+  cp $ULTRASCHALL_RESOURCES_DIRECTORY/image-background.png \
+    installer-root/.background/background.png
   echo "Done."
 
   #-------------------------------------------------------------------------------
   echo "Building Ultraschall documentation files..."
-  $ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --embed-resources --standalone --quiet --css=$ULTRASCHALL_SCRIPTS_DIRECTORY/ultraschall.css --output=installer-root/README.html ultraschall-plugin/docs/README.md
+  $ULTRASCHALL_PANDOC_TOOL \
+    --from=markdown \
+    --to=html \
+    --embed-resources \
+    --standalone \
+    --quiet \
+    --css=$ULTRASCHALL_SCRIPTS_DIRECTORY/ultraschall.css \
+    --output=installer-root/README.html ultraschall-plugin/docs/README.md
   if [ $? -ne 0 ]; then
     echo "Failed to convert README.md."
     exit -1
   fi
-  $ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --embed-resources --standalone --quiet --css=$ULTRASCHALL_SCRIPTS_DIRECTORY/ultraschall.css --output=installer-root/INSTALL.html ultraschall-plugin/docs/INSTALL.md
+  $ULTRASCHALL_PANDOC_TOOL \
+    --from=markdown \
+    --to=html \
+    --embed-resources \
+    --standalone \
+    --quiet \
+    --css=$ULTRASCHALL_SCRIPTS_DIRECTORY/ultraschall.css \
+    --output=installer-root/INSTALL.html ultraschall-plugin/docs/INSTALL.md
   if [ $? -ne 0 ]; then
     echo "Failed to convert INSTALL.md."
     exit -1
   fi
-  $ULTRASCHALL_PANDOC_TOOL --from=markdown --to=html --embed-resources --standalone --quiet --css=$ULTRASCHALL_SCRIPTS_DIRECTORY/ultraschall.css --output=installer-root/CHANGELOG.html ultraschall-plugin/docs/CHANGELOG.md
+  $ULTRASCHALL_PANDOC_TOOL \
+    --from=markdown \
+    --to=html \
+    --embed-resources \
+    --standalone \
+    --quiet \
+    --css=$ULTRASCHALL_SCRIPTS_DIRECTORY/ultraschall.css \
+    --output=installer-root/CHANGELOG.html ultraschall-plugin/docs/CHANGELOG.md
   if [ $? -ne 0 ]; then
     echo "Failed to convert CHANGELOG.md."
     exit -1
@@ -212,7 +245,8 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   #-------------------------------------------------------------------------------
   echo "Copying utility scripts..."
-  cp $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-scripts/Uninstall.command installer-root/Uninstall.command
+  cp $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-scripts/Uninstall.command \
+    installer-root/Uninstall.command
   echo "Done."
 
   #-------------------------------------------------------------------------------
@@ -220,20 +254,28 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   if [ ! -d installer-root/Extras ]; then
     mkdir -p installer-root/Extras
   fi
-  cp ultraschall-assets/keyboard-layout/Keymap.pdf "installer-root/Extras/Ultraschall Keyboard Layout.pdf"
-  cp ultraschall-assets/source/us-banner_400.png "installer-root/Extras/Ultraschall Badge 400px.png"
-  cp ultraschall-assets/source/us-banner_800.png "installer-root/Extras/Ultraschall Badge 800px.png"
-  cp ultraschall-assets/source/us-banner_2000.png "installer-root/Extras/Ultraschall Badge 2000px.png"
-  cp ultraschall-assets/images/Ultraschall-5-Logo.png "installer-root/Extras/Ultraschall-5-Logo.png"
+  cp ultraschall-assets/keyboard-layout/Keymap.pdf \
+    "installer-root/Extras/Ultraschall Keyboard Layout.pdf"
+  cp ultraschall-assets/source/us-banner_400.png \
+    "installer-root/Extras/Ultraschall Badge 400px.png"
+  cp ultraschall-assets/source/us-banner_800.png \
+    "installer-root/Extras/Ultraschall Badge 800px.png"
+  cp ultraschall-assets/source/us-banner_2000.png \
+    "installer-root/Extras/Ultraschall Badge 2000px.png"
+  cp ultraschall-assets/images/Ultraschall-5-Logo.png \
+    "installer-root/Extras/Ultraschall-5-Logo.png"
   echo "Done."
 
   echo "Copying Ultraschall Utilities..."
   if [ ! -d installer-root/Utilities ]; then
     mkdir -p installer-root/Utilities
   fi
-  cp $ULTRASCHALL_PAYLOAD_DIRECTORY/ultraschall-streamdeck/fm.ultraschall.ultradeck.streamDeckPlugin "installer-root/Utilities/fm.ultraschall.ultradeck.streamDeckPlugin"
-  cp $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-hub/UltraschallHub-2015-11-12.pkg "installer-root/Utilities/Ultraschall Hub.pkg"
-  cp "$ULTRASCHALL_ROOT_DIRECTORY/ultraschall-scripts/Remove legacy audio devices.command" "installer-root/Utilities/Remove legacy audio devices.command"
+  cp $ULTRASCHALL_PAYLOAD_DIRECTORY/ultraschall-streamdeck/fm.ultraschall.ultradeck.streamDeckPlugin \
+    "installer-root/Utilities/fm.ultraschall.ultradeck.streamDeckPlugin"
+  cp $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-hub/UltraschallHub-2015-11-12.pkg \
+    "installer-root/Utilities/Ultraschall Hub.pkg"
+  cp "$ULTRASCHALL_ROOT_DIRECTORY/ultraschall-scripts/Remove legacy audio devices.command" \
+    "installer-root/Utilities/Remove legacy audio devices.command"
   echo "Done."
 
   echo "Building ULTRASCHALL REAPER Theme..."
@@ -241,7 +283,13 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
     mkdir -p ultraschall-theme
   fi
   cp -r ultraschall-portable/ ultraschall-theme
-  rm -rf ultraschall-theme/Plugins
+
+  rm -rf ultraschall-theme/.git
+  rm -f ultraschall-theme/.gitignore
+
+  rm -rf ultraschall-theme/Plugins/FX
+  rm -r ultraschall-theme/Plugins/*.dll
+  rm -r ultraschall-theme/Plugins/*.exe
   rm -rf ultraschall-theme/UserPlugins/FX
   rm -r ultraschall-theme/UserPlugins/reaper_js_ReaScriptAPI64.dll
   rm -r ultraschall-theme/UserPlugins/reaper_js_ReaScriptAPI64.so
@@ -274,22 +322,42 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   #-------------------------------------------------------------------------------
   echo "Creating Ultraschall REAPER Theme installer package..."
-  pkgbuild --root ultraschall-theme --scripts $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-theme/scripts --identifier fm.ultraschall.reaper.theme --install-location "/Library/Application Support/REAPER" installer-packages/ultraschall-reaper-theme.pkg
+  pkgbuild \
+    --root ultraschall-theme \
+    --scripts $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-theme/scripts \
+    --identifier fm.ultraschall.reaper.theme \
+    --install-location "/Library/Application Support/REAPER" \
+    installer-packages/ultraschall-reaper-theme.pkg
   echo "Done."
 
   #-------------------------------------------------------------------------------
   echo "Creating Ultraschall Soundboard installer package..."
-  pkgbuild --root $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-soundboard/payload --scripts $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-soundboard/scripts --identifier fm.ultraschall.soundboard --install-location "/Library/Audio/Plug-Ins/Components" installer-packages/ultraschall-soundboard.pkg
+  pkgbuild \
+    --root $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-soundboard/payload \
+    --scripts $ULTRASCHALL_ROOT_DIRECTORY/ultraschall-soundboard/scripts \
+    --identifier fm.ultraschall.soundboard \
+    --install-location "/Library/Audio/Plug-Ins/Components" \
+    installer-packages/ultraschall-soundboard.pkg
   echo "Done."
 
   #-------------------------------------------------------------------------------
   echo "Creating StudioLink installer packager..."
-  pkgbuild --root $ULTRASCHALL_ROOT_DIRECTORY/studio-link/payload --scripts $ULTRASCHALL_ROOT_DIRECTORY/studio-link/scripts --identifier fm.ultraschall.studiolink --install-location "/Library/Audio/Plug-Ins/Components" installer-packages/studio-link.pkg
+  pkgbuild \
+    --root $ULTRASCHALL_ROOT_DIRECTORY/studio-link/payload \
+    --scripts $ULTRASCHALL_ROOT_DIRECTORY/studio-link/scripts \
+    --identifier fm.ultraschall.studiolink \
+    --install-location "/Library/Audio/Plug-Ins/Components" \
+    installer-packages/studio-link.pkg
   echo "Done."
 
   #-------------------------------------------------------------------------------
   echo "Creating StudioLink OnAir installer packager..."
-  pkgbuild --root $ULTRASCHALL_ROOT_DIRECTORY/studio-link-onair/payload --scripts $ULTRASCHALL_ROOT_DIRECTORY/studio-link-onair/scripts --identifier fm.ultraschall.studiolink.onair --install-location "/Library/Audio/Plug-Ins/Components" installer-packages/studio-link-onair.pkg
+  pkgbuild \
+    --root $ULTRASCHALL_ROOT_DIRECTORY/studio-link-onair/payload \
+    --scripts $ULTRASCHALL_ROOT_DIRECTORY/studio-link-onair/scripts \
+    --identifier fm.ultraschall.studiolink.onair \
+    --install-location "/Library/Audio/Plug-Ins/Components" \
+    installer-packages/studio-link-onair.pkg
   echo "Done."
 
   #-------------------------------------------------------------------------------
@@ -297,7 +365,11 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   if [ ! -d ultraschall-product ]; then
     mkdir -p ultraschall-product
   fi
-  productbuild --distribution $ULTRASCHALL_SCRIPTS_DIRECTORY/distribution.xml --resources $ULTRASCHALL_RESOURCES_DIRECTORY --package-path installer-packages ultraschall-product/ultraschall-intermediate.pkg
+  productbuild \
+    --distribution $ULTRASCHALL_SCRIPTS_DIRECTORY/distribution.xml \
+    --resources $ULTRASCHALL_RESOURCES_DIRECTORY \
+    --package-path installer-packages \
+    ultraschall-product/ultraschall-intermediate.pkg
   if [ $? -ne 0 ]; then
     echo "Failed to build intermediate installer package."
     exit -1
@@ -306,16 +378,25 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   #-------------------------------------------------------------------------------
   echo "Creating final installer package..."
-  ULTRASCHALL_BUILD_NAME="Ultraschall-5.1.0"
+  if [ $ULTRASCHALL_BUILD_RELEASE -eq 1 ]; then
+    ULTRASCHALL_BUILD_NAME="Ultraschall-5.1.0"
+  else
+    ULTRASCHALL_BUILD_NAME="ULTRASCHALL_R5.1.0-preview"
+  fi
+
 
   if [ $ULTRASCHALL_BUILD_CODESIGN -eq 1 ]; then
-    productsign --sign "Developer ID Installer: Heiko Panjas (8J2G689FCZ)" ultraschall-product/ultraschall-intermediate.pkg "installer-root/$ULTRASCHALL_BUILD_NAME.pkg"
+    productsign \
+      --sign "Developer ID Installer: Heiko Panjas (8J2G689FCZ)" \
+      ultraschall-product/ultraschall-intermediate.pkg \
+      "installer-root/$ULTRASCHALL_BUILD_NAME.pkg"
     if [ $? -ne 0 ]; then
       echo "Failed to build final installer package."
       exit -1
     fi
   else
-    cp ultraschall-product/ultraschall-intermediate.pkg "installer-root/$ULTRASCHALL_BUILD_NAME.pkg"
+    cp ultraschall-product/ultraschall-intermediate.pkg \
+      "installer-root/$ULTRASCHALL_BUILD_NAME.pkg"
     if [ $? -ne 0 ]; then
       echo "Failed to build final installer package."
       exit -1
@@ -328,7 +409,12 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   if [ -f ultraschall-product/ultraschall-intermediate.dmg ]; then
     rm ultraschall-product/ultraschall-intermediate.dmg
   fi
-  hdiutil create -format UDRW -srcfolder installer-root -fs HFS+ -volname $ULTRASCHALL_BUILD_NAME ultraschall-product/ultraschall-intermediate.dmg
+  hdiutil create \
+    -format UDRW \
+    -srcfolder installer-root \
+    -fs HFS+ \
+    -volname $ULTRASCHALL_BUILD_NAME \
+    ultraschall-product/ultraschall-intermediate.dmg
   if [ $? -ne 0 ]; then
     echo "Failed to create intermediate installer disk image."
     exit -1
@@ -340,7 +426,9 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   if [ ! -d ultraschall-intermediate ]; then
     mkdir -p ultraschall-intermediate
   fi
-  hdiutil attach -mountpoint ./ultraschall-intermediate ./ultraschall-product/ultraschall-intermediate.dmg
+  hdiutil attach \
+    -mountpoint ./ultraschall-intermediate \
+    ./ultraschall-product/ultraschall-intermediate.dmg
   if [ $? -ne 0 ]; then
     echo "Failed to mount intermediate installer disk image."
     exit -1
@@ -352,7 +440,9 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   #-------------------------------------------------------------------------------
   if [ $ULTRASCHALL_BUILD_CODESIGN -eq 1 ]; then
     echo "Signing uninstall script..."
-    codesign --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" ./ultraschall-intermediate/Uninstall.command
+    codesign \
+      --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" \
+      ./ultraschall-intermediate/Uninstall.command
     if [ $? -ne 0 ]; then
       echo "Failed to sign uninstall script."
       exit -1
@@ -360,7 +450,9 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
     echo "Done."
 
     echo "Signing device removal script..."
-    codesign --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" "./ultraschall-intermediate/Utilities/Remove legacy audio devices.command"
+    codesign \
+      --sign "Developer ID Application: Heiko Panjas (8J2G689FCZ)" \
+      "./ultraschall-intermediate/Utilities/Remove legacy audio devices.command"
     if [ $? -ne 0 ]; then
       echo "Failed to sign device removal script."
       exit -1
@@ -417,10 +509,16 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
 
   #-------------------------------------------------------------------------------
   echo "Finalizing installer disk image..."
-  if [ -f "$ULTRASCHALL_ROOT_DIRECTORY/$ULTRASCHALL_BUILD_NAME.dmg" ]; then
-    rm "$ULTRASCHALL_ROOT_DIRECTORY/$ULTRASCHALL_BUILD_NAME.dmg"
+  if [ ! -d "$ULTRASCHALL_ARTIFACTS_DIRECTORY" ]; then
+    mkdir -p "$ULTRASCHALL_ARTIFACTS_DIRECTORY"
   fi
-  hdiutil convert -format UDRO -o "$ULTRASCHALL_ROOT_DIRECTORY/$ULTRASCHALL_BUILD_NAME.dmg" ultraschall-product/ultraschall-intermediate.dmg
+  if [ -f "$ULTRASCHALL_ARTIFACTS_DIRECTORY/$ULTRASCHALL_BUILD_NAME.dmg" ]; then
+    rm "$ULTRASCHALL_ARTIFACTS_DIRECTORY/$ULTRASCHALL_BUILD_NAME.dmg"
+  fi
+  hdiutil convert \
+    -format UDRO \
+    -o "$ULTRASCHALL_ARTIFACTS_DIRECTORY/$ULTRASCHALL_BUILD_NAME.dmg" \
+    ultraschall-product/ultraschall-intermediate.dmg
   if [ $? -ne 0 ]; then
     echo "Failed to finalize installer disk image."
     exit -1
