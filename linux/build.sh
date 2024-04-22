@@ -364,7 +364,7 @@ if [ -d "artifacts" ]; then
   rm -rf "artifacts"
 fi
 mkdir "artifacts"
-if ! tar -czf "artifacts/ULTRASCHALL_$ULTRASCHALL_BUILD_ID.tar.gz" "$ULTRASCHALL_INSTALLER_DIR"
+if ! tar -czf "artifacts/$ULTRASCHALL_BUILD_ID.tar.gz" "$ULTRASCHALL_INSTALLER_DIR"
 then
   echo "Failed to build final installer package."
   exit
