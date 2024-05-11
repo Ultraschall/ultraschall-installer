@@ -194,7 +194,7 @@ if ($BuildFailed -eq $False) {
     Remove-Item -Recurse -Force $ThemeDirectory/ColorThemes/Default_6.0.ReaperThemeZip
 
     Remove-Item -Force $ThemeDirectory/reaper-kb.ini
-    Copy-Item -Force $ThemeDirectory/osFiles/Win/reaper-kb.ini -Destination $ThemeDirectory
+    Move-Item -Force $ThemeDirectory/reaper-kb_windows.ini $ThemeDirectory/reaper-kb.ini
 
     Remove-Item -Recurse -Force $ThemeDirectory/TrackTemplates
     New-Item -ItemType Directory -Path $ThemeDirectory/TrackTemplates  | Out-Null
