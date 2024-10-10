@@ -4,7 +4,7 @@
   <?define UpgradeCode="D1D96805-203A-4323-B50A-6DE876021B35" ?>
   <!-- The URL for add/remove programs -->
   <?define InfoURL="http://ultraschall.fm/" ?>
-  <?define VersionNumber="5.1.0" ?>
+  <?define VersionNumber="5.1" ?>
   <?define ProductName="$(env.ULTRASCHALL_BUILD_ID)" ?>
   <Product Id="*" Name="$(var.ProductName)" Language="1033" Version="$(var.VersionNumber)" Manufacturer="ultraschall.fm" UpgradeCode="$(var.UpgradeCode)">
     <Package Id="*" InstallerVersion="301" Compressed="yes" Platform="x64" Description="Podcasting Extensions for the REAPER DAW" Comments="Installs the Ultraschall REAPER Extension $(var.VersionNumber)" />
@@ -27,7 +27,7 @@
       <Custom Action="ULTRASCHALL_PreInstallActionId" Before="CostInitialize">NOT REMOVE</Custom>
     </InstallExecuteSequence>
 
-    <Property Id="DiskPrompt" Value="Ultraschall 5.1.0 Installation [1]" />
+    <Property Id="DiskPrompt" Value="Ultraschall 5.1 Installation [1]" />
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="AppDataFolder">
         <Directory Id="ReaperFolder" Name="REAPER">
