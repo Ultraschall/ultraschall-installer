@@ -1,18 +1,60 @@
 #!/bin/sh
 
 if [ -d "$HOME/Library/Application Support/REAPER" ]; then
-  BACKUP_TIMESTAMP=$(date -ju "+%Y%m%dT%H%M%S")
-  BACKUP_FOLDER="$HOME/Library/Application Support/Ultraschall/Backups/$BACKUP_TIMESTAMP"
-  mkdir -p "$BACKUP_FOLDER"
-  cp -r "$HOME/Library/Application Support/REAPER" "$BACKUP_FOLDER"
-  if [ $? -eq 0 ]; then
-    echo "Your current REAPER configuration has been saved to $BACKUP_FOLDER."
-    pushd "$HOME/Library/Application Support/REAPER" > /dev/null
-    # Remove previous REAPER profile except license file
-    find . -not -name "reaper-license.rk" -not -path "." -not -path ".." -exec rm -rf {} +
-    popd "$HOME/Library/Application Support/REAPER" > /dev/null
-  else
-    echo "Failed to backup your current REAPER configuration. Aborting installation..."
-    exit -1
-  fi
+   BACKUP_TIMESTAMP=$(date -ju "+%Y%m%dT%H%M%S")
+   BACKUP_FOLDER="$HOME/Library/Application Support/Ultraschall/Backups/$BACKUP_TIMESTAMP"
+   mkdir -p "$BACKUP_FOLDER"
+   cp -r "$HOME/Library/Application Support/REAPER" "$BACKUP_FOLDER"
+   if [ $? -eq 0 ]; then
+      echo "Your current REAPER configuration has been saved to $BACKUP_FOLDER."
+      pushd "$HOME/Library/Application Support/REAPER" > /dev/null
+      # Remove previous REAPER profile except license file
+      find . -not -name "reaper-license.rk" -not -path "." -not -path ".." -exec rm -rf {} +
+      popd "$HOME/Library/Application Support/REAPER" > /dev/null
+
+      # Restore custom project templates
+      echo "Saving custom project templates..."
+      if [ ! -d "$HOME/Library/Application Support/Ultraschall/.temp/custom_project_templates" ]; then
+         mkdir -p "$HOME/Library/Application Support/Ultraschall/.temp/custom_project_templates"
+      fi
+      for project_template in $HOME/Library/Application\ Support/Ultraschall/Backups/$BACKUP_TIMESTAMP/REAPER/ProjectTemplates/*; do
+         echo "Found $project_template"
+         if [[ "$project_template" != *"StudioLink and Soundboard.RPP"* ]]; then
+            if [[ "$project_template" != *"StudioLink.RPP"* ]]; then    
+               if [[ "$project_template" != *"Ultraschall Soundboard.RPP"* ]]; then
+                  cp "$project_template" "$HOME/Library/Application Support/Ultraschall/.temp/custom_project_templates"
+                  if [ $? -eq 0 ]; then
+                     echo "Successfully saved $project_template"
+                  else
+                     echo "Failed to saved $project_template"
+                  fi
+               fi
+            fi
+         fi
+      done
+
+      # Restore custom track templates
+      echo "Saving custom track templates..."
+      if [ ! -d "$HOME/Library/Application Support/Ultraschall/.temp/custom_track_templates" ]; then
+         mkdir -p "$HOME/Library/Application Support/Ultraschall/.temp/custom_track_templates"
+      fi
+      for track_template in $HOME/Library/Application\ Support/Ultraschall/Backups/$BACKUP_TIMESTAMP/REAPER/TrackTemplates/*; do
+         echo "Found $track_template"
+         if [[ "$track_template" != *"Insert StudioLink track.RTrackTemplate"* ]]; then    
+            if [[ "$track_template" != *"Insert Ultraschall-Soundboard track.RTrackTemplate"* ]]; then    
+               cp "$track_template" "$HOME/Library/Application Support/Ultraschall/.temp/custom_track_templates"    
+                  if [ $? -eq 0 ]; then
+                     echo "Successfully saved $track_template"
+                  else
+                     echo "Failed to saved $track_template"
+                  fi
+            fi
+         fi
+      done
+
+   else
+      echo "Failed to backup your current REAPER configuration. Aborting installation..."
+      exit -1
+   fi
 fi
+
