@@ -344,6 +344,12 @@ menu_submenu_arrow #FDBC00
 EOF
 cp ultraschall-theme/libSwell.colortheme ultraschall-theme/libSwell-user.colortheme
 
+# patch reaper-menu.ini and remove emojis that are not shown in linux
+sed -r -i 's/(item_[0-9]*=-[0-9]* )(.*) (1. Setup$)/\1\3/g' ultraschall-portable/reaper-menu.ini
+sed -r -i 's/(item_[0-9]*=-[0-9]* )(.*) (2. Recording$)/\1\3/g' ultraschall-portable/reaper-menu.ini
+sed -r -i 's/(item_[0-9]*=-[0-9]* )(.*) (3. Production$)/\1\3/g' ultraschall-portable/reaper-menu.ini
+sed -r -i 's/(item_[0-9]*=-[0-9]* )(.*) (Miscellaneous$)/\1\3/g' ultraschall-portable/reaper-menu.ini
+
 # create a tar file
 pushd ultraschall-theme > /dev/null || exit
 tar cvf "../$ULTRASCHALL_INSTALLER_DIR/themes/ultraschall-theme.tar" ./* > /dev/null
