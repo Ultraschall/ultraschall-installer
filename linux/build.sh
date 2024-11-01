@@ -329,9 +329,19 @@ rm -rf ultraschall-theme/osFiles
 # patch color to fix the storyboard view
 sed -i 's/col_main_text=.*/col_main_text=15790320/g' ultraschall-theme/ColorThemes/Ultraschall_5.ReaperTheme
 
-# create libSwell config file (Linux only) and adjust menubar settings
-echo "menubar_height 28" > ultraschall-theme/libSwell.colortheme
-echo "menubar_font_size 15" >> ultraschall-theme/libSwell.colortheme
+# create libSwell config file (Linux only) and adjust menu settings
+cat << EOF > ultraschall-theme/libSwell.colortheme
+menubar_height 28
+menubar_font_size 15
+menu_bg #2B2B2B
+menu_bg_sel #1C1C1C
+menu_shadow #353535
+menu_hilight #2B2B2B
+menu_text #B3B3B3
+menu_text_disabled #FDCB00
+menu_text_sel #FDCB00
+menu_submenu_arrow #FDBC00
+EOF
 cp ultraschall-theme/libSwell.colortheme ultraschall-theme/libSwell-user.colortheme
 
 # create a tar file
