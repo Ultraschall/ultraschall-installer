@@ -327,9 +327,11 @@ cp -r ultraschall-theme/osFiles/Linux/ProjectTemplates ultraschall-theme
 rm -rf ultraschall-theme/osFiles
 
 # patch color to fix the storyboard view
+echo "Patching Theme..."
 sed -i 's/col_main_text=.*/col_main_text=15790320/g' ultraschall-theme/ColorThemes/Ultraschall_5.ReaperTheme
 
 # create libSwell config file (Linux only) and adjust menu settings
+echo "Creating libSwell colortheme file..."
 cat << EOF > ultraschall-theme/libSwell.colortheme
 menubar_height 28
 menubar_font_size 15
@@ -338,11 +340,18 @@ menu_bg_sel #1C1C1C
 menu_shadow #353535
 menu_hilight #2B2B2B
 menu_text #B3B3B3
-menu_text_disabled #FDCB00
+menu_text_disabled #808080
 menu_text_sel #FDCB00
 menu_submenu_arrow #FDBC00
 EOF
 cp ultraschall-theme/libSwell.colortheme ultraschall-theme/libSwell-user.colortheme
+
+# patch reaper-menu.ini and remove emojis that are not shown in linux
+echo "Patching reaper-menu.ini..."
+sed -r -i 's/(item_[0-9]*=-[0-9]* )(.*) (1. Setup$)/\1\3/g' ultraschall-theme/reaper-menu.ini
+sed -r -i 's/(item_[0-9]*=-[0-9]* )(.*) (2. Recording$)/\1\3/g' ultraschall-theme/reaper-menu.ini
+sed -r -i 's/(item_[0-9]*=-[0-9]* )(.*) (3. Production$)/\1\3/g' ultraschall-theme/reaper-menu.ini
+sed -r -i 's/(item_[0-9]*=-[0-9]* )(.*) (Miscellaneous$)/\1\3/g' ultraschall-theme/reaper-menu.ini
 
 # create a tar file
 pushd ultraschall-theme > /dev/null || exit
