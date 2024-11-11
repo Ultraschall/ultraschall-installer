@@ -37,7 +37,7 @@ ULTRASCHALL_CMAKE_TOOL=cmake
 ULTRASCHALL_PANDOC_TOOL=pandoc
 
 ULTRASCHALL_BUILD_PRODUCT="ultraschall"
-ULTRASCHALL_BUILD_VERSION="5.1"
+ULTRASCHALL_BUILD_VERSION="5.1.1"
 ULTRASCHALL_BUILD_DATE=$(date -u "+%Y%m%dT%H%M%S")Z
 ULTRASCHALL_BUILD_ID=$(uuidgen)
 
@@ -82,9 +82,9 @@ fi
 
 # Specify build id
 if [ $ULTRASCHALL_BUILD_RELEASE -eq 1 ]; then
-  ULTRASCHALL_BUILD_ID="Ultraschall-5.1"
+  ULTRASCHALL_BUILD_ID="Ultraschall-5.1.1"
 else
-  ULTRASCHALL_BUILD_ID="ULTRASCHALL_R5.1-preview"
+  ULTRASCHALL_BUILD_ID="ULTRASCHALL_R5.1.1-preview"
 fi
 
 ULTRASCHALL_INSTALLER_DIR="$ULTRASCHALL_BUILD_ID"
@@ -327,12 +327,31 @@ cp -r ultraschall-theme/osFiles/Linux/ProjectTemplates ultraschall-theme
 rm -rf ultraschall-theme/osFiles
 
 # patch color to fix the storyboard view
+echo "Patching Theme..."
 sed -i 's/col_main_text=.*/col_main_text=15790320/g' ultraschall-theme/ColorThemes/Ultraschall_5.ReaperTheme
 
-# create libSwell config file (Linux only) and adjust menubar settings
-echo "menubar_height 28" > ultraschall-theme/libSwell.colortheme
-echo "menubar_font_size 15" >> ultraschall-theme/libSwell.colortheme
+# create libSwell config file (Linux only) and adjust menu settings
+echo "Creating libSwell colortheme file..."
+cat << EOF > ultraschall-theme/libSwell.colortheme
+menubar_height 28
+menubar_font_size 15
+menu_bg #2B2B2B
+menu_bg_sel #1C1C1C
+menu_shadow #353535
+menu_hilight #2B2B2B
+menu_text #B3B3B3
+menu_text_disabled #808080
+menu_text_sel #FDCB00
+menu_submenu_arrow #FDBC00
+EOF
 cp ultraschall-theme/libSwell.colortheme ultraschall-theme/libSwell-user.colortheme
+
+# patch reaper-menu.ini and remove emojis, that are not shown in linux, and make the headings UPPERCASE
+echo "Patching reaper-menu.ini..."
+sed -r -i 's/(item_[0-9]*=-[0-9]* )(.*) (1. SETUP$)/\1\3/g' ultraschall-theme/reaper-menu.ini
+sed -r -i 's/(item_[0-9]*=-[0-9]* )(.*) (2. RECORDING$)/\1\3/g' ultraschall-theme/reaper-menu.ini
+sed -r -i 's/(item_[0-9]*=-[0-9]* )(.*) (3. POST-PRODUCTION$)/\1\3/g' ultraschall-theme/reaper-menu.ini
+sed -r -i 's/(item_[0-9]*=-[0-9]* )(.*) (MISCELLANEOUS$)/\1\3/g' ultraschall-theme/reaper-menu.ini
 
 # create a tar file
 pushd ultraschall-theme > /dev/null || exit

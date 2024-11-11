@@ -5,7 +5,7 @@ Write-Host "*                                                                   
 Write-Host "**********************************************************************"
 
 $BuildDirectory = "./build"
-$BuildId = "ULTRASCHALL_R5.1-preview"
+$BuildId = "ULTRASCHALL_R5.1.1-preview"
 $BuildFailed = $False
 
 if ($args.Count -gt 0) {
@@ -14,7 +14,7 @@ if ($args.Count -gt 0) {
     return
   }
   elseif ($args[0] -eq "--release") {
-    $BuildId = "Ultraschall-5.1"
+    $BuildId = "Ultraschall-5.1.1"
   }
 }
 

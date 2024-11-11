@@ -1,0 +1,27 @@
+#!/bin/sh
+
+if [ -d "$HOME/Library/Application Support/Ultraschall/.temp/custom_project_templates" ]; then
+   for project_template in $HOME/Library/Application\ Support/Ultraschall/.temp/custom_project_templates/*; do
+      cp "$project_template" "$HOME/Library/Application Support/REAPER/ProjectTemplates"
+      if [ $? -eq 0 ]; then
+         echo "Successfully restored $project_template"
+      else
+         echo "Failed to restore $project_template"
+      fi
+   done
+fi
+
+if [ -d "$HOME/Library/Application Support/Ultraschall/.temp/custom_track_templates" ]; then
+   for track_template in $HOME/Library/Application\ Support/Ultraschall/.temp/custom_track_templates/*; do
+      cp "$track_template" "$HOME/Library/Application Support/REAPER/TrackTemplates"
+      if [ $? -eq 0 ]; then
+         echo "Successfully restored $track_template"
+      else
+         echo "Failed to restore $track_template"
+      fi
+   done
+fi
+
+if [ -d "$HOME/Library/Application Support/Ultraschall/.temp" ]; then
+   rm -rf "$HOME/Library/Application Support/Ultraschall/.temp"
+fi
