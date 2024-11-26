@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: install (linux)
-        run sudo apt-get update &&
+        run: sudo apt-get update &&
         run: sudo apt-get install cmake pandoc ninja-build libxrandr-dev libxinerama-dev libxcursor-dev libasound2-dev libcurl4-openssl-dev
         if: matrix.os == 'ubuntu-latest'
 
