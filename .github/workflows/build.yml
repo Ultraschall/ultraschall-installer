@@ -64,19 +64,19 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{needs.configure.outputs.build_id}}-${{ matrix.runs-on }}
+          name: ${{needs.configure.outputs.build_id}}-${{ matrix.os }}
           path: linux/build/artifacts/* 
         if: matrix.os == 'ubuntu-latest'
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{needs.configure.outputs.build_id}}-${{ matrix.runs-on }}
+          name: ${{needs.configure.outputs.build_id}}-${{ matrix.os }}
           path: windows/build/artifacts/*
         if: matrix.os == 'windows-latest'
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{needs.configure.outputs.build_id}}-${{ matrix.runs-on }}
+          name: ${{needs.configure.outputs.build_id}}-${{ matrix.os }}
           path: macos/build/artifacts/*
         if: matrix.os == 'macos-latest'
   release:
