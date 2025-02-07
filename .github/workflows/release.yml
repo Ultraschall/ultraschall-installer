@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       build_timestamp: ${{steps.timestamp.outputs.timestamp}}
-      build_id: V5.1.1_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
+      build_id: V5.1.2_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
     steps:
       - name: configure build id
         id: timestamp

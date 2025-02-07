@@ -37,7 +37,7 @@ $ ./build.sh
 To install Ultraschall, get the installer artifact in `linux/build/artifacts` (tar.gz file):
 
 ```bash
-$ tar xvf ULTRASCHALL_R5.1.1-preview.tar.gz
-$ cd R5.1.1-preview
+$ tar xvf ULTRASCHALL_R5.1.2-preview.tar.gz
+$ cd R5.1.2-preview
 $ ./install.sh
 ```
