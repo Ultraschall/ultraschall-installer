@@ -85,7 +85,6 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: ${{needs.configure.outputs.build_id}}-*
           path: ${{runner.workspace}}/artifacts
           pattern: ${{needs.configure.outputs.build_id}}-*
           merge-multiple: true
