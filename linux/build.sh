@@ -199,7 +199,7 @@ pushd ultraschall-plugin > /dev/null || exit
 echo "Configuring Ultraschall REAPER Plug-in..."
 if ! $ULTRASCHALL_CMAKE_TOOL -Bbuild -GNinja -Wno-dev -DCMAKE_BUILD_TYPE=Release --log-level=ERROR >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
 then
-  cat build.log
+  echo $(<"$ULTRASCHALL_BUILD_LOG")
   echo "Failed to configure Ultraschall REAPER Plug-in."
   exit
 fi
@@ -207,7 +207,7 @@ echo "Done."
 echo "Building Ultraschall REAPER Plug-in..."
 if ! $ULTRASCHALL_CMAKE_TOOL --build build --target reaper_ultraschall --config Release -j >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
 then
-  cat build.log
+  echo $(<"$ULTRASCHALL_BUILD_LOG")
   echo "Failed to build Ultraschall REAPER Plug-in."
   exit
 fi
@@ -218,7 +218,7 @@ pushd ultraschall-soundboard > /dev/null || exit
 echo "Configuring Ultraschall Soundboard..."
 if ! $ULTRASCHALL_CMAKE_TOOL -Bbuild -GNinja -Wno-dev -DCMAKE_BUILD_TYPE=Release --log-level=ERROR >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
 then
-  cat build.log
+  echo $(<"$ULTRASCHALL_BUILD_LOG")
   echo "Failed to configure Ultraschall Soundboard."
   exit
 fi
@@ -226,7 +226,7 @@ echo "Done."
 echo "Building Ultraschall Soundboard..."
 if ! $ULTRASCHALL_CMAKE_TOOL --build build --target UltraschallSoundboard_VST3 --config Release -j >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
 then
-  cat build.log
+  echo $(<"$ULTRASCHALL_BUILD_LOG")
   echo "Failed to build Ultraschall Soundboard."
   exit
 fi
