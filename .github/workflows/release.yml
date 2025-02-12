@@ -60,19 +60,19 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{needs.configure.outputs.build_id}}
+          name: ${{needs.configure.outputs.build_id}}-{{matrix.os}}
           path: linux/build/artifacts/*
         if: matrix.os == 'ubuntu-latest'
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{needs.configure.outputs.build_id}}
+          name: ${{needs.configure.outputs.build_id}}-{{matrix.os}}
           path: windows/build/artifacts/*
         if: matrix.os == 'windows-latest'
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{needs.configure.outputs.build_id}}
+          name: ${{needs.configure.outputs.build_id}}-{{matrix.os}}
           path: macos/build/artifacts/*
         if: matrix.os == 'macos-latest'
   release:
@@ -81,9 +81,9 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: ${{needs.configure.outputs.build_id}}
           path: ${{runner.workspace}}/artifacts
-
+          pattern: ${{needs.configure.outputs.build_id}}-*
+          merge-multiple: true
       - uses: "marvinpinto/action-automatic-releases@v1.2.1"
         with:
           repo_token: "${{secrets.GITHUB_TOKEN}}"
