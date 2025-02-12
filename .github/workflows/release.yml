@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       build_timestamp: ${{steps.timestamp.outputs.timestamp}}
-      build_id: V5.1.1_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
+      build_id: V5.1.2_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
     steps:
       - name: configure build id
         id: timestamp
@@ -60,19 +60,19 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{needs.configure.outputs.build_id}}
+          name: ${{needs.configure.outputs.build_id}}-${{ matrix.os }}
           path: linux/build/artifacts/*
         if: matrix.os == 'ubuntu-latest'
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{needs.configure.outputs.build_id}}
+          name: ${{needs.configure.outputs.build_id}}-${{ matrix.os }}
           path: windows/build/artifacts/*
         if: matrix.os == 'windows-latest'
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{needs.configure.outputs.build_id}}
+          name: ${{needs.configure.outputs.build_id}}-${{ matrix.os }}
           path: macos/build/artifacts/*
         if: matrix.os == 'macos-latest'
   release:
@@ -82,7 +82,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           path: ${{runner.workspace}}/artifacts
-          name: ${{needs.configure.outputs.build_id}}
+          pattern: ${{needs.configure.outputs.build_id}}-*
           merge-multiple: true
       - uses: "marvinpinto/action-automatic-releases@v1.2.1"
         with:
