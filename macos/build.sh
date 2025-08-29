@@ -365,11 +365,27 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   if [ ! -d ultraschall-product ]; then
     mkdir -p ultraschall-product
   fi
+# this is just a test, to see if it builds a version, that does not complain about rosetta
+cat << EOF > requirements.plist
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+        <key>arch</key>
+        <array>
+                <string>x86_64</string>
+                <string>arm64</string>
+        </array>
+</dict>
+</plist>
+EOF
+
   productbuild \
     --distribution $ULTRASCHALL_SCRIPTS_DIRECTORY/distribution.xml \
     --resources $ULTRASCHALL_RESOURCES_DIRECTORY \
     --package-path installer-packages \
-    ultraschall-product/ultraschall-intermediate.pkg
+    ultraschall-product/ultraschall-intermediate.pkg \
+    --product requirements.plist
   if [ $? -ne 0 ]; then
     echo "Failed to build intermediate installer package."
     exit -1
