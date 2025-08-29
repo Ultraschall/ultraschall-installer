@@ -2,7 +2,7 @@
 <installer-gui-script minSpecVersion="1">
   <title>Ultraschall-5.1.2</title>
   <organization>fm.ultraschall</organization>
-  <options customize="never" require-scripts="true" rootVolumeOnly="true" />
+  <options customize="never" require-scripts="true" rootVolumeOnly="true" hostArchitectures="arm64,x86_64"/>
   <domains enable_anywhere="false" enable_localSystem="false" enable_currentUserHome="true" />
   <os-version min="10.11" />
   <background file="installer-background.png" mime-type="image/png" />
