@@ -244,6 +244,7 @@ if [ ! -d ultraschall-api/ultraschall_api ]; then
 fi
 cp -r ultraschall-portable/UserPlugins/ultraschall_api ultraschall-api
 cp ultraschall-portable/UserPlugins/ultraschall_api.lua ultraschall-api/
+cp ultraschall-portable/UserPlugins/reagirl.lua ultraschall-api/
 cp ultraschall-portable/UserPlugins/ultraschall_api_readme.txt ultraschall-api/
 echo "Done."
 
@@ -370,6 +371,7 @@ cp -r ultraschall-soundboard/build/release/Soundboard.vst3 "$ULTRASCHALL_INSTALL
 cp ultraschall-plugin/build/artifacts/reaper_ultraschall.so "$ULTRASCHALL_INSTALLER_DIR/plugins/reaper_ultraschall.so"
 cp -R ultraschall-api/ultraschall_api/ "$ULTRASCHALL_INSTALLER_DIR/plugins/ultraschall_api/"
 cp ultraschall-api/ultraschall_api.lua "$ULTRASCHALL_INSTALLER_DIR/plugins/ultraschall_api.lua"
+cp ultraschall-api/reagirl.lua "$ULTRASCHALL_INSTALLER_DIR/plugins/reagirl.lua"
 cp ultraschall-api/ultraschall_api_readme.txt "$ULTRASCHALL_INSTALLER_DIR/plugins/ultraschall_api_readme.txt"
 echo "Done."
 
