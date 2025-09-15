@@ -28,7 +28,7 @@ Write-Host "Done."
 if ($BuildFailed -eq $False) {
   $WixDirectory = "./wix-tool"
   if ((Test-Path -PathType Container $WixDirectory) -eq $False) {
-    Write-Host "Downloading WiX Toolset..."
+    Write-Host "Downloading WiX installer Toolset..."
     New-Item -ItemType Directory -Path $WixDirectory | Out-Null
     Push-Location $WixDirectory
     Invoke-WebRequest -Uri "https://github.com/wixtoolset/wix3/releases/download/wix3141rtm/wix314-binaries.zip" -OutFile "./wix314-binaries.zip"
@@ -47,6 +47,44 @@ if ($BuildFailed -eq $False) {
   else {
     Write-Host -Foreground Red "Failed to download WiX Toolset."
     $BuildFailed = $True
+  }
+}
+
+if ($BuildFailed -eq $False) {
+  Write-Host "Checking for Pandoc documentation command..."
+  $PandocCommand = "pandoc"
+  if (Get-Command $PandocCommand -ErrorAction SilentlyContinue) { 
+    Write-Host "Done."
+	$PandocProgramPath = $PandocCommand
+  } else { 
+    # pandoc Command is not in PATH
+	$PandocDirectory = "./pandoc-tool"
+	if ((Test-Path -PathType Container $PandocDirectory) -eq $False) {
+	    New-Item -ItemType Directory -Path $PandocDirectory | Out-Null
+	}
+	$PandocCommand = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("$PandocDirectory\pandoc-3.8\pandoc.exe")
+	if ((Test-Path -PathType Container "$PandocDirectory\pandoc3.8\") -eq $False -or (Test-Path -Path $PandocCommand) -eq $False) {
+		$PandocDownloadZip = "./pandoc3.8-binaries.zip"
+		$PandocDownloadSHA = "3c72ee9966d2a35ebb59873967e496f5fe745c15cf9e825947dc745d19b36bad"
+		Push-Location $PandocDirectory
+		if(((Test-Path $PandocDownloadZip) -eq $False) -or (((Get-FileHash $PandocDownloadZip).Hash -eq $PandocDownloadSHA) -eq $False)) {
+	      Write-Host "Downloading Pandoc documentation tool..."
+	      Invoke-WebRequest -Uri "https://github.com/jgm/pandoc/releases/download/3.8/pandoc-3.8-windows-x86_64.zip" -OutFile $PandocDownloadZip
+		} else {
+		  Write-Host "Pandoc documentation tool elready downloaded and verified. Unpacking..."
+		}
+	    Expand-Archive -Force -Path $PandocDownloadZip -DestinationPath "./"
+		$PandocCommand = Get-ChildItem "./pandoc-3.8/pandoc.exe" | Select-Object $_.FullName
+	    Pop-Location
+	}
+	if ((Test-Path -Path $PandocCommand) -eq $False) {
+	  Write-Host -Foreground Red "Failed setting Pandoc documentation tool path."
+      $BuildFailed = $True
+	} else {
+	  $PandocProgramPath = $($PandocCommand)
+      #Write-Host "Pandoc program path set to: $PandocProgramPath"
+      Write-Host "Done."
+	}
   }
 }
 
@@ -140,7 +178,6 @@ if ($BuildFailed -eq $False) {
 
 if ($BuildFailed -eq $False) {
   $ResourcesDirectory = "./ultraschall-resources"
-  $PandocProgramPath = "pandoc"
   Write-Host "Building Ultraschall documentation files..."
   if ((Test-Path -PathType Container $ResourcesDirectory) -eq $False) {
     New-Item -ItemType Directory -Path $ResourcesDirectory | Out-Null
