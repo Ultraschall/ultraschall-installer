@@ -1,6 +1,10 @@
 ## Windows
 
-Building on Windows requires Visual Studio 2019 or later.
+Dependencies:
+
+- Building on Windows requires Visual Studio 2019 or later.
+- Pandoc [https://pandoc.org/installixng.html](https://pandoc.org/installing.html)
+	- the build script will will place a portable version in the build directory if not installed
 
 ```powershell
 PS> cd win32/
