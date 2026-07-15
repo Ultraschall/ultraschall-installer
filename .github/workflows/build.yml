@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       build_timestamp: ${{steps.timestamp.outputs.timestamp}}
-      build_id: R5.1.2_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
+      build_id: R5.2.0_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
     steps:
       - name: configure build id
         id: timestamp
@@ -29,7 +29,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: install (linux)
-        run: sudo apt-get install cmake pandoc ninja-build libxrandr-dev libxinerama-dev libxcursor-dev libasound2-dev libcurl4-openssl-dev libfreetype-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install cmake pandoc ninja-build libxrandr-dev libxinerama-dev libxcursor-dev libasound2-dev libcurl4-openssl-dev libfreetype-dev
         if: matrix.os == 'ubuntu-latest'
 
       - name: install (windows)
