@@ -81,10 +81,11 @@ fi
 # echo "Done."
 
 # Specify build id
+machine=$(uname -m)
 if [ $ULTRASCHALL_BUILD_RELEASE -eq 1 ]; then
-  ULTRASCHALL_BUILD_ID="Ultraschall-5.2.0"
+  ULTRASCHALL_BUILD_ID="Ultraschall-5.2.0-$machine"
 else
-  ULTRASCHALL_BUILD_ID="ULTRASCHALL_R5.2.0-preview"
+  ULTRASCHALL_BUILD_ID="ULTRASCHALL_R5.2.0-${machine}-preview"
 fi
 
 ULTRASCHALL_INSTALLER_DIR="$ULTRASCHALL_BUILD_ID"
