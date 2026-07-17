@@ -37,7 +37,7 @@ ULTRASCHALL_CMAKE_TOOL=cmake
 ULTRASCHALL_PANDOC_TOOL=pandoc
 
 ULTRASCHALL_BUILD_PRODUCT="ultraschall"
-ULTRASCHALL_BUILD_VERSION="5.1.2"
+ULTRASCHALL_BUILD_VERSION="5.2.2"
 ULTRASCHALL_BUILD_DATE=$(date -u "+%Y%m%dT%H%M%S")Z
 ULTRASCHALL_BUILD_ID=$(uuidgen)
 
@@ -54,7 +54,7 @@ ULTRASCHALL_SOUNDBOARD_URL="https://github.com/Ultraschall/ultraschall-soundboar
 ULTRASCHALL_SOUNDBOARD_BRANCH="main"
 
 ULTRASCHALL_PORTABLE_URL="https://github.com/Ultraschall/ultraschall-portable.git"
-ULTRASCHALL_PORTABLE_BRANCH="master"
+ULTRASCHALL_PORTABLE_BRANCH="5_1_2-Update-auf-Reaper-7.77"
 
 ULTRASCHALL_ASSETS_URL="https://github.com/Ultraschall/ultraschall-assets.git"
 ULTRASCHALL_ASSETS_BRANCH="master"
@@ -82,9 +82,9 @@ fi
 
 # Specify build id
 if [ $ULTRASCHALL_BUILD_RELEASE -eq 1 ]; then
-  ULTRASCHALL_BUILD_ID="Ultraschall-5.1.2"
+  ULTRASCHALL_BUILD_ID="Ultraschall-5.2.0"
 else
-  ULTRASCHALL_BUILD_ID="ULTRASCHALL_R5.1.2-preview"
+  ULTRASCHALL_BUILD_ID="ULTRASCHALL_R5.2.0-preview"
 fi
 
 ULTRASCHALL_INSTALLER_DIR="$ULTRASCHALL_BUILD_ID"
@@ -361,14 +361,19 @@ popd > /dev/null || exit
 echo "Done."
 
 echo "Copying Ultraschall plugins..."
-cp ../js-extension/reaper_js_ReaScriptAPI64.so "$ULTRASCHALL_INSTALLER_DIR/plugins/reaper_js_ReaScriptAPI64.so"
-cp ../sws-extension/reaper_sws-x86_64.so "$ULTRASCHALL_INSTALLER_DIR/plugins/reaper_sws-x86_64.so"
-cp ../sws-extension/sws_python64.py "$ULTRASCHALL_INSTALLER_DIR/scripts/sws_python64.py"
-cp ../sws-extension/sws_python.py "$ULTRASCHALL_INSTALLER_DIR/scripts/sws_python.py"
+echo "Copying js plugin"
+cp ultraschall-portable/UserPlugins/reaper_js_ReaScript*.so "$ULTRASCHALL_INSTALLER_DIR/plugins"
+echo "Copying sws extension"
+cp ultraschall-portable/UserPlugins/reaper_sws*.so "$ULTRASCHALL_INSTALLER_DIR/plugins"
+cp ultraschall-portable/UserPlugins/sws_python*.py "$ULTRASCHALL_INSTALLER_DIR/scripts"
+echo "Copying studio-link-plugins"
 cp -r studio-link-plugin.vst "$ULTRASCHALL_INSTALLER_DIR/custom-plugins"
 cp -r studio-link-onair.lv2 "$ULTRASCHALL_INSTALLER_DIR/custom-plugins"
+echo "Copying soundboard plugin"
 cp -r ultraschall-soundboard/build/release/Soundboard.vst3 "$ULTRASCHALL_INSTALLER_DIR/custom-plugins"
+echo "Copying ultraschall plugin"
 cp ultraschall-plugin/build/artifacts/reaper_ultraschall.so "$ULTRASCHALL_INSTALLER_DIR/plugins/reaper_ultraschall.so"
+echo "Copying ultraschall API"
 cp -R ultraschall-api/ultraschall_api/ "$ULTRASCHALL_INSTALLER_DIR/plugins/ultraschall_api/"
 cp ultraschall-api/ultraschall_api.lua "$ULTRASCHALL_INSTALLER_DIR/plugins/ultraschall_api.lua"
 cp ultraschall-api/reagirl.lua "$ULTRASCHALL_INSTALLER_DIR/plugins/reagirl.lua"
