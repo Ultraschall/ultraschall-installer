@@ -232,6 +232,10 @@ then
   exit
 fi
 mkdir -p build/release
+if [ -d ./build/UltraschallSoundboard_artefacts/Release/VST3/Soundboard.vst3/Contents/arm64-linux ]; then
+  echo "renaming arm64-linux to aarch64-linux"
+  mv ./build/UltraschallSoundboard_artefacts/Release/VST3/Soundboard.vst3/Contents/arm64-linux ./build/UltraschallSoundboard_artefacts/Release/VST3/Soundboard.vst3/Contents/aarch64-linux
+fi
 cp -R ./build/UltraschallSoundboard_artefacts/Release/VST3/Soundboard.vst3 ./build/release
 popd > /dev/null || exit
 echo "Done."
