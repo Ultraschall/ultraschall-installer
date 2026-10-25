@@ -10,10 +10,10 @@ on:
 
 jobs:
   configure:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       build_timestamp: ${{steps.timestamp.outputs.timestamp}}
-      build_id: R5.1.2_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
+      build_id: R5.2.0_${{github.run_number}}_${{steps.timestamp.outputs.timestamp}}
     steps:
       - name: configure build id
         id: timestamp
@@ -23,14 +23,22 @@ jobs:
     needs: configure
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-22.04, ubuntu-22.04-arm, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
 
       - name: install (linux)
-        run: sudo apt-get install cmake pandoc ninja-build libxrandr-dev libxinerama-dev libxcursor-dev libasound2-dev libcurl4-openssl-dev libfreetype-dev
-        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install cmake pandoc ninja-build libxrandr-dev libxinerama-dev libxcursor-dev libasound2-dev libcurl4-openssl-dev libfreetype-dev
+        if: matrix.os == 'ubuntu-22.04'
+
+      - name: install (linux arm)
+        run: |
+          sudo apt-get update
+          sudo apt-get install cmake pandoc ninja-build libxrandr-dev libxinerama-dev libxcursor-dev libasound2-dev libcurl4-openssl-dev libfreetype-dev
+        if: matrix.os == 'ubuntu-22.04-arm'
 
       - name: install (windows)
         run: choco install pandoc
@@ -48,7 +56,13 @@ jobs:
         run: |
           cd linux
           ./build.sh
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-22.04'
+
+      - name: build (linux arm)
+        run: |
+          cd linux
+          ./build.sh
+        if: matrix.os == 'ubuntu-22.04-arm'
 
       - name: build (windows)
         run: |
@@ -66,7 +80,13 @@ jobs:
         with:
           name: ${{needs.configure.outputs.build_id}}-${{ matrix.os }}
           path: linux/build/artifacts/*
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-22.04'
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{needs.configure.outputs.build_id}}-${{ matrix.os }}
+          path: linux/build/artifacts/*
+        if: matrix.os == 'ubuntu-22.04-arm'
 
       - uses: actions/upload-artifact@v4
         with:
@@ -81,7 +101,7 @@ jobs:
         if: matrix.os == 'macos-latest'
   release:
     needs: [configure, build]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/download-artifact@v4
         with:
