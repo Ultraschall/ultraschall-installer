@@ -59,8 +59,6 @@ ULTRASCHALL_PORTABLE_BRANCH="5_1_2-Update-auf-Reaper-7.77"
 ULTRASCHALL_ASSETS_URL="https://github.com/Ultraschall/ultraschall-assets.git"
 ULTRASCHALL_ASSETS_BRANCH="master"
 
-STUDIO_LINK_PLUGIN_RELEASE=v21.12.0-beta-5cf3b28
-
 if [ "$1" = "--help" ]; then
   echo "Usage: build.sh [ --release ]"
   exit 0
@@ -253,23 +251,23 @@ cp ultraschall-portable/UserPlugins/reagirl.lua ultraschall-api/
 cp ultraschall-portable/UserPlugins/ultraschall_api_readme.txt ultraschall-api/
 echo "Done."
 
-echo "Downloading StudioLink plugin..."
-#curl -LO https://download.studio.link/releases/$STUDIO_LINK_PLUGIN_RELEASE/linux/vst/studio-link-plugin.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
-if ! curl -LO https://download.studio.link/devel/openssl3/$STUDIO_LINK_PLUGIN_RELEASE/linux/vst/studio-link-plugin.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
-then
-  echo "Failed to download StudioLink plugin."
-  exit
-fi
-rm -rf studio-link-plugin.vst
-if ! unzip -d studio-link-plugin.vst studio-link-plugin.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
-then
-  echo "Failed to extract StudioLink plugin."
-  exit
-fi
-echo "Done."
+# echo "Downloading StudioLink plugin..."
+# #curl -LO https://download.studio.link/releases/$STUDIO_LINK_PLUGIN_RELEASE/linux/vst/studio-link-plugin.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+# if ! curl -LO https://download.studio.link/devel/openssl3/$STUDIO_LINK_PLUGIN_RELEASE/linux/vst/studio-link-plugin.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+# then
+#   echo "Failed to download StudioLink plugin."
+#   exit
+# fi
+# rm -rf studio-link-plugin.vst
+# if ! unzip -d studio-link-plugin.vst studio-link-plugin.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+# then
+#   echo "Failed to extract StudioLink plugin."
+#   exit
+# fi
+# echo "Done."
 
-echo "copy StudioLink OnAir plugin..."
-cp "../studio-link-plugin-onair.zip" "."
+# echo "copy StudioLink OnAir plugin..."
+# cp "../studio-link-plugin-onair.zip" "."
 
 #echo "Downloading StudioLink OnAir plugin..."
 #if ! curl -LO https://download.studio.link/devel/openssl3/$STUDIO_LINK_PLUGIN_RELEASE/linux/studio-link-plugin-onair.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
@@ -278,13 +276,13 @@ cp "../studio-link-plugin-onair.zip" "."
 #   exit
 # fi
 
-rm -rf studio-link-onair.lv2
-if ! unzip studio-link-plugin-onair.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
-then
-  echo "Failed to extract StudioLink OnAir plugin."
-  exit
-fi
-echo "Done."
+# rm -rf studio-link-onair.lv2
+# if ! unzip studio-link-plugin-onair.zip >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
+# then
+#   echo "Failed to extract StudioLink OnAir plugin."
+#   exit
+# fi
+# echo "Done."
 
 echo "Downloading Liberation fonts..."
 if ! curl -LO "https://github.com/liberationfonts/liberation-fonts/files/7261482/liberation-fonts-ttf-2.1.5.tar.gz" >> "$ULTRASCHALL_BUILD_LOG" 2>> "$ULTRASCHALL_BUILD_LOG"
@@ -372,8 +370,9 @@ echo "Copying sws extension"
 cp ultraschall-portable/UserPlugins/reaper_sws*.so "$ULTRASCHALL_INSTALLER_DIR/plugins"
 cp ultraschall-portable/UserPlugins/sws_python*.py "$ULTRASCHALL_INSTALLER_DIR/scripts"
 echo "Copying studio-link-plugins"
-cp -r studio-link-plugin.vst "$ULTRASCHALL_INSTALLER_DIR/custom-plugins"
-cp -r studio-link-onair.lv2 "$ULTRASCHALL_INSTALLER_DIR/custom-plugins"
+# cp -r studio-link-plugin.vst "$ULTRASCHALL_INSTALLER_DIR/custom-plugins"
+# cp -r studio-link-onair.lv2 "$ULTRASCHALL_INSTALLER_DIR/custom-plugins"
+cp -r ultraschall-portable/UserPlugins/FX/studio-link*.lv2 "$ULTRASCHALL_INSTALLER_DIR/custom-plugins"
 echo "Copying soundboard plugin"
 cp -r ultraschall-soundboard/build/release/Soundboard.vst3 "$ULTRASCHALL_INSTALLER_DIR/custom-plugins"
 echo "Copying ultraschall plugin"
