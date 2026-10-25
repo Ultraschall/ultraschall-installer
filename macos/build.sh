@@ -379,9 +379,9 @@ if [ -d $ULTRASCHALL_PAYLOAD_DIRECTORY ]; then
   #-------------------------------------------------------------------------------
   echo "Creating final installer package..."
   if [ $ULTRASCHALL_BUILD_RELEASE -eq 1 ]; then
-    ULTRASCHALL_BUILD_NAME="Ultraschall-5.1.2"
+    ULTRASCHALL_BUILD_NAME="Ultraschall-5.2.0"
   else
-    ULTRASCHALL_BUILD_NAME="ULTRASCHALL_R5.1.2-preview"
+    ULTRASCHALL_BUILD_NAME="ULTRASCHALL_R5.2.0-preview"
   fi
 
 
