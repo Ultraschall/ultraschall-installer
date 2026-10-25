@@ -25,15 +25,15 @@ if [ -d "$HOME/.config/REAPER" ]; then
   echo "Done."
 
   echo "Installing the Ultraschall StudioLink plugin..."
-  mkdir -p "$HOME/.vst3"
-  rm -rf "$HOME/.vst3/studio-link-plugin.vst"
-  cp -fr ./custom-plugins/studio-link-plugin.vst "$HOME/.vst3"
+  mkdir -p "$HOME/.lv2"
+  rm -rf "$HOME/{.vst3,.lv2}/studio-link-plugin*"
+  cp -fr ./custom-plugins/studio-link-plugin*.lv2 "$HOME/.lv2"
   echo "Done."
 
   echo "Installing the Ultraschall StudioLink OnAir plugin..."
   mkdir -p "$HOME/.lv2"
-  rm -rf "$HOME/.lv2/studio-link-onair.lv2"
-  cp -fr ./custom-plugins/studio-link-onair.lv2 "$HOME/.lv2"
+  rm -rf "$HOME/.lv2/studio-link-onair*.lv2"
+  cp -fr ./custom-plugins/studio-link-onair*.lv2 "$HOME/.lv2"
   echo "Done."
 
   echo "Installing the Ultraschall Soundboard plugin..."
