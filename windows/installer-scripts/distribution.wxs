@@ -40,8 +40,8 @@
               <Component Id="VstPluginComponent" Guid="A22C272D-F6F2-4564-B9DD-BF385A80F5B3" Win64="yes">
                 <RemoveFolder Id="RemoveVstPluginComponent" Directory="VstPluginFolder" On="uninstall" />
                 <RegistryValue Root="HKCU" Key="Software\Ultraschall" Name="Uninstall" Type="string" Value="1.0.0.0" KeyPath="yes" />
-                <File Name="studio-link.dll" DiskId="1" Source=".\studio-link\studio-link.dll" />
-                <File Name="studio-link-onair.dll" DiskId="1" Source=".\studio-link-onair\studio-link-onair.dll" />
+                <File Name="StudioLink.vst3" DiskId="1" Source=".\studio-link\StudioLink.vst3" />
+                <File Name="StudioLinkOnAir.vst3" DiskId="1" Source=".\studio-link-onair\StudioLinkOnAir.vst3" />
                 <File Name="Soundboard.vst3" DiskId="1" Source=".\ultraschall-soundboard\Soundboard.vst3" />
               </Component>
             </Directory>
